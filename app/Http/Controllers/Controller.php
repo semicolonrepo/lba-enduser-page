@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use App\Models\CampaignModel;
+use App\Models\CampaignProductsModel;
 
 class Controller extends BaseController
 {
@@ -12,9 +14,30 @@ class Controller extends BaseController
 
     public function index($brand, $campaign)
     {
+        //get data from models
+        $campaignData = CampaignModel::select(
+                        'campaigns.name as campaign',
+                        'brands.name as brand',
+                        'brands.photo as brand_logo',
+                        'template_primary_color',
+                        'template_secondary_color',
+                        'template_header_json',
+                        'template_body_json',
+                        'template_footer_json',
+                    )
+                    ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
+                    ->where('campaigns.id', 2)
+                    ->first();
+
+        $productData = CampaignProductsModel::select('products.*', 'deal_offers.name as type')
+                    ->join('products', 'campaign_products.product_id', '=', 'products.id')
+                    ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
+                    ->where('campaign_id', 2)
+                    ->get();
+
         return view('lba-1.index', [
-            'brand' => $brand,
-            'campaign' => $campaign
+            'data' => $campaignData,
+            'product' => $productData
         ]);
     }
 

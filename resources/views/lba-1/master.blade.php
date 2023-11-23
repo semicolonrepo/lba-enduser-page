@@ -56,8 +56,8 @@
             <div class="col-auto">
               <!-- header logo -->
               <div class="header-logo">
-                <a href="{{ route('lba-1::index', ['brand' => $brand, 'campaign' => $campaign]) }}">
-                  <img src="{{ asset('assets/img/logo.png') }}" class="img-fluid" alt="" style="height: 41px">
+                <a href="{{ route('lba-1::index', ['brand' => $data->brand, 'campaign' => $data->campaign]) }}">
+                  <img src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" class="img-fluid" alt="" style="height: 41px">
                 </a>
               </div>
             </div>
