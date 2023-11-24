@@ -2,7 +2,7 @@
 
 @section('content')
 <!--====================  product image slider ====================-->
-<div class="product-image-slider-wrapper space-mb--30">
+<div class="product-image-slider-wrapper">
   <div class="product-image-single">
     <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$product->photo }}" class="img-fluid" alt="">
   </div>
@@ -10,13 +10,13 @@
 <!--====================  End of product image slider  ====================-->
 <!--====================  product content ====================-->
 <!-- product content header -->
-<div class="product-content-header-area border-bottom--thick space-pb--25">
+<div style="margin-top:-80px" class="product-content-header-area border-bottom--thick space-pt--100 space-pb--25">
   <div class="container">
     <div class="row">
       <div class="col-12">
         <div class="product-content-header">
           <div class="product-content-header__main-info">
-            <h3 class="title">{{ $product->name }}</h3>
+            <h3 class="title" style="font-size: 24px">{{ $product->name }}</h3>
             <div class="price">
               <span class="discounted-price">
                 @if(strtolower($product->type) == 'free')
