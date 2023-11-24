@@ -23,8 +23,8 @@ Route::get('/', function () {
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google::callback');
 
 Route::prefix('/{brand}/{campaign}')->group(function() {
-    Route::get('/', [Controller::class, 'index'])->name('lba-1::index');
-    Route::get('/product', [Controller::class, 'product'])->name('lba-1::product');
+    Route::get('/', [Controller::class, 'index'])->name('index');
+    Route::get('/product', [Controller::class, 'product'])->name('product');
 
     Route::prefix('auth')->group(function() {
         Route::get('/', [Controller::class, 'login'])->name('login');

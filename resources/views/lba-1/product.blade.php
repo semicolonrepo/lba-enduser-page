@@ -2,15 +2,9 @@
 
 @section('content')
 <!--====================  product image slider ====================-->
-<div class="product-image-slider-wrapper space-pb--30 space-mb--30">
+<div class="product-image-slider-wrapper space-mb--30">
   <div class="product-image-single">
-    <img src="{{ asset('assets/lba-1/img/product-slider/product1.png') }}" class="img-fluid" alt="">
-  </div>
-  <div class="product-image-single">
-    <img src="{{ asset('assets/lba-1/img/product-slider/product2.png') }}" class="img-fluid" alt="">
-  </div>
-  <div class="product-image-single">
-    <img src="{{ asset('assets/lba-1/img/product-slider/product3.png') }}" class="img-fluid" alt="">
+    <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$product->photo }}" class="img-fluid" alt="">
   </div>
 </div>
 <!--====================  End of product image slider  ====================-->
@@ -22,9 +16,15 @@
       <div class="col-12">
         <div class="product-content-header">
           <div class="product-content-header__main-info">
-            <h3 class="title">Product Name</h3>
+            <h3 class="title">{{ $product->name }}</h3>
             <div class="price">
-              <span class="discounted-price">Gratis</span>
+              <span class="discounted-price">
+                @if(strtolower($product->type) == 'free')
+                  Gratis
+                @else
+                  Tawaran menarik
+                @endif
+              </span>
             </div>
           </div>
         </div>
@@ -38,7 +38,17 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <p class="section-title space-mb--25">Description Here...</p>
+        <p style="font-weight: 500;" class="section-title space-mb--10">Tentang Produk:</p>
+        <p class="section-title space-mb--25">
+          {{ $product->description }}
+        </p>
+      </div>
+
+      <div class="col-12">
+        <p style="font-weight: 500;" class="section-title space-mt--20 space-mb--10">Syarat & Ketentuan:</p>
+        <p class="section-title space-mb--25">
+          {{ $data->campaign_detail }}
+        </p>
       </div>
     </div>
   </div>
@@ -49,12 +59,16 @@
     <div class="row">
       <div class="col-12">
         <div class="total-shipping">
-          <h2 class="section-title">Total shipping</h2>
-          <ul>
-            <!-- loop voucher list partner here -->
-            <li><input type="radio" name="shippingInput"> Alfamart</li>
-            <li><input type="radio" name="shippingInput"> Indomaret</li>
-            <li><input type="radio" name="shippingInput"> Merchant LetsBuyAsia</li>
+          <h3 style="font-weight: 500;" class="section-title">Pilih Gerai Retail Partner:</h3>
+          <p style="font-style:italic: font-weight: 500; font-size:16px">
+            (Voucher berlaku di gerai retail yang kamu pilih)
+          </p>
+          <ul style="margin-top: -20px;">
+            @foreach ($retailer as $retailPartner)
+              <li style="font-size: 18px; padding-left:12px">
+                <input style="padding-left: 8px" type="radio" name="{{ $retailPartner->id }}"> {{ $retailPartner->name }}
+              </li>
+            @endforeach
           </ul>
         </div>
       </div>
@@ -63,10 +77,10 @@
 </div>
 
 <!-- get voucher button -->
-<a href="{{ route('lba-1::login', ['brand' => $brand, 'campaign' => $campaign]) }}" class="w-100">
+<a href="#" class="w-100">
   <div class="shop-product-button">
     <!-- button use primary color -->
-    <button style="background-color: green" class="buy w-100">
+    <button style="background-color: {{ $data->template_primary_color }}" class="buy w-100">
       Dapatkan Voucher Sekarang
     </button>
   </div>
