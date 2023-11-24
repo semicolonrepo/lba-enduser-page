@@ -15,11 +15,10 @@ class Controller extends BaseController
 
     public function index(Request $request)
     {
-        $slug = $this->getSlugFromURL($request->url());
-
         $campaignData = CampaignModel::select(
                         'campaigns.id',
                         'campaigns.name as campaign',
+                        'campaigns.page_template_id',
                         'brands.name as brand',
                         'brands.photo as brand_logo',
                         'template_primary_color',
@@ -29,7 +28,8 @@ class Controller extends BaseController
                         'template_footer_json',
                     )
             ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
-            ->where('campaigns.slug', $slug)
+            ->where('brands.name', $request->segment(1))
+            ->where('campaigns.slug', $request->segment(2))
         ->first();
 
         if($campaignData != null) {
@@ -39,10 +39,15 @@ class Controller extends BaseController
                 ->where('campaign_id', $campaignData->id)
             ->get();
 
-            return view('lba-1.index', [
-                'data' => $campaignData,
-                'product' => $productData
-            ]);
+            switch($campaignData->page_template_id) {
+                case 1: //template 1
+                    return view('lba-1.index', [
+                        'data' => $campaignData,
+                        'product' => $productData
+                    ]);
+                default:
+                    return view('welcome_custom');
+            }
         }
         else {
             return view('welcome_custom');
@@ -87,18 +92,6 @@ class Controller extends BaseController
             'brand' => $brand,
             'campaign' => $campaign
         ]);
-    }
-
-    /** Private methods */
-    private function getSlugFromURL($url) {
-        $path = parse_url($url, PHP_URL_PATH);
-        $segments = explode('/', trim($path, '/'));
-
-        $brand = $segments[0];
-        $campaign = $segments[1];
-        $slugResult = $brand."-".$campaign;
-
-        return $slugResult;
     }
 
 }
