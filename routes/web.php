@@ -19,6 +19,8 @@ Route::get('/', function () {
     return view('welcome_custom');
 });
 
+Route::get('/preview/{token}', [Controller::class, 'preview'])->name('preview');
+
 Route::prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/', [Controller::class, 'index'])->name('index');
     Route::get('/product', [Controller::class, 'product'])->name('product');
