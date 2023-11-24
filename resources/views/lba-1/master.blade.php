@@ -66,7 +66,7 @@
             <div class="col-auto">
               <!-- header logo -->
               <div class="header-logo">
-                <a href="{{ route('index', ['brand' => $uri['segment1'], 'campaign' => $data->slug]) }}">
+                <a href="{{ route('index', ['brand' => $data->brand, 'campaign' => $data->slug]) }}">
                   <img src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" class="img-fluid" alt="" style="height: 41px">
                 </a>
               </div>
