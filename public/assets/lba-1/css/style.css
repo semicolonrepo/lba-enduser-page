@@ -4214,6 +4214,13 @@ header .header-menu-trigger:focus {
 .products-area {
   background-color: #ffffff;
 }
+.product-content-header-area {
+  background-color: #ffffff;
+}
+.product-content-description {
+  background-color: #ffffff;
+}
+
 /*
 .grand-total {
   padding: 30px 0;
@@ -4221,6 +4228,9 @@ header .header-menu-trigger:focus {
   border-bottom: 1px solid #f1f1f1;
 }
 */
+.grand-total {
+  background-color: #ffffff;
+}
 .grand-total .title-wrap {
   position: relative;
 }
