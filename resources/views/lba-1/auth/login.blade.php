@@ -9,7 +9,7 @@
         <div class="auth-page-social-login">
           <button class="d-flex justify-content-center align-items-center">
             <img src="{{ asset('assets/lba-1/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
-            <a href="#">Login dengan Google</a>
+            <a href="{{ route('google::redirect', ['brand' => $brand, 'campaign' => $campaign]) }}">Login dengan Google</a>
           </button>
         </div>
         <div class="auth-page-social-login mt-3">
