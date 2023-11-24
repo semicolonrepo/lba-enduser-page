@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\CampaignModel;
 use App\Models\CampaignProductsModel;
@@ -12,10 +13,12 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function index($brand, $campaign)
+    public function index(Request $request)
     {
-        //get data from models
+        $slug = $this->getSlugFromURL($request->url());
+
         $campaignData = CampaignModel::select(
+                        'campaigns.id',
                         'campaigns.name as campaign',
                         'brands.name as brand',
                         'brands.photo as brand_logo',
@@ -25,20 +28,25 @@ class Controller extends BaseController
                         'template_body_json',
                         'template_footer_json',
                     )
-                    ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
-                    ->where('campaigns.id', 2)
-                    ->first();
+            ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
+            ->where('campaigns.slug', $slug)
+        ->first();
 
-        $productData = CampaignProductsModel::select('products.*', 'deal_offers.name as type')
-                    ->join('products', 'campaign_products.product_id', '=', 'products.id')
-                    ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
-                    ->where('campaign_id', 2)
-                    ->get();
+        if($campaignData != null) {
+            $productData = CampaignProductsModel::select('products.*', 'deal_offers.name as type')
+                ->join('products', 'campaign_products.product_id', '=', 'products.id')
+                ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
+                ->where('campaign_id', $campaignData->id)
+            ->get();
 
-        return view('lba-1.index', [
-            'data' => $campaignData,
-            'product' => $productData
-        ]);
+            return view('lba-1.index', [
+                'data' => $campaignData,
+                'product' => $productData
+            ]);
+        }
+        else {
+            return view('welcome_custom');
+        }
     }
 
     public function product($brand, $campaign)
@@ -80,4 +88,17 @@ class Controller extends BaseController
             'campaign' => $campaign
         ]);
     }
+
+    /** Private methods */
+    private function getSlugFromURL($url) {
+        $path = parse_url($url, PHP_URL_PATH);
+        $segments = explode('/', trim($path, '/'));
+
+        $brand = $segments[0];
+        $campaign = $segments[1];
+        $slugResult = $brand."-".$campaign;
+
+        return $slugResult;
+    }
+
 }

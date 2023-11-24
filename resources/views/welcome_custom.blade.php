@@ -8,6 +8,6 @@
   <link rel="shortcut icon" href="{{ asset('assets/img/logo.ico') }}" type="image/x-icon">
 </head>
 <body>
-  <h1>Welcome to End User Page</h1>
+  <h1>Page not found</h1>
 </body>
 </html>
