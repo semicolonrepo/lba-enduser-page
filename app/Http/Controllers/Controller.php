@@ -172,6 +172,7 @@ class Controller extends BaseController
                     'campaigns.template_header_json',
                     'campaigns.template_body_json',
                     'campaigns.template_footer_json',
+                    'campaigns.template_background',
                 )
         ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
         ->where('brands.name', $brand)
@@ -196,6 +197,7 @@ class Controller extends BaseController
                     'campaigns.template_header_json',
                     'campaigns.template_body_json',
                     'campaigns.template_footer_json',
+                    'campaigns.template_background',
                 )
         ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
         ->where('campaigns.template_token', $token)

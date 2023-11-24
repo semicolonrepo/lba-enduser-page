@@ -41,7 +41,12 @@
   </style>
 </head>
 
-<body class="mw-500">
+@if($data->template_background != null || $data->template_background != '')
+  <body class="mw-500" style="background-image: url('{{ env('BASE_URL_DASHBOARD').'/assets/pageview/background/'.$data->template_background }}'); background-size: cover; background-attachment: fixed;">
+@else
+  <body class="mw-500">
+@endif
+
   <!--====================  preloader area ====================-->
   <div class="preloader-activate preloader-active">
     <div class="preloader-area-wrap">
@@ -61,7 +66,7 @@
             <div class="col-auto">
               <!-- header logo -->
               <div class="header-logo">
-                <a href="{{ route('index', ['brand' => $data->brand, 'campaign' => $data->campaign]) }}">
+                <a href="{{ route('index', ['brand' => $data->brand, 'campaign' => $data->slug]) }}">
                   <img src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" class="img-fluid" alt="" style="height: 41px">
                 </a>
               </div>

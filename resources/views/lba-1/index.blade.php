@@ -64,7 +64,7 @@
   $body = json_decode($data->template_body_json, true);
   $bodyBlock = $body['blocks'];
 ?>
-<div class="products-area space-mt--20">
+<div class="products-area">
   <div class="container">
     <div class="row">
       <div class="col-12">

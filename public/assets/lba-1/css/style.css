@@ -4211,7 +4211,9 @@ header .header-menu-trigger:focus {
   border: medium none;
   background-color: #00c569;
 }
-
+.products-area {
+  background-color: #ffffff;
+}
 /*
 .grand-total {
   padding: 30px 0;
