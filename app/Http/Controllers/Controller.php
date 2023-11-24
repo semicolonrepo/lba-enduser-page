@@ -18,6 +18,7 @@ class Controller extends BaseController
         $campaignData = CampaignModel::select(
                         'campaigns.id',
                         'campaigns.name as campaign',
+                        'campaigns.description as campaign_detail',
                         'campaigns.page_template_id',
                         'brands.name as brand',
                         'brands.photo as brand_logo',
