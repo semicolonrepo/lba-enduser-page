@@ -160,6 +160,12 @@ textarea:focus:-ms-input-placeholder {
   border-bottom: 3px solid #f1f1f1 !important;
 }
 
+.body-wrapper {
+  border-left: 0.5px solid grey;
+  border-right: 0.5px solid grey;
+  box-shadow: 1px 1px 10px grey;
+}
+
 .body-wrapper.active-overlay {
   overflow: hidden;
 }
