@@ -80,12 +80,14 @@
                 <div class="col-6">
                   <div class="grid-product space-mb--20">
                     <div class="grid-product__image">
-                      <a href="#">
+                      <a href="{{ route('product', ['brand' => $uri['segment1'], 'campaign' => $uri['segment2'], 'id' => $stock->id]) }}">
                         <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="">
                       </a>
                     </div>
                     <div class="grid-product__content">
-                      <h3 class="title"><a href="#">{{$stock->name}}</a></h3>
+                      <h3 class="title">
+                          <a href="{{ route('product', ['brand' => $uri['segment1'], 'campaign' => $uri['segment2'], 'id' => $stock->id]) }}">{{$stock->name}}</a>
+                        </h3>
                       <div class="price space-mt--10">
                         <span class="discounted-price">
                           @if(strtolower($stock->type) == 'free')
