@@ -6,9 +6,14 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>LetsBuyAsia</title>
+  <title>LetsBuyAsia - {{ $data->campaign }}</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="{{ $data->campaign }}">
+  <meta property="og:description" content="{{ $data->campaign_detail }}">
+  <meta property="og:image" content="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}">
+  <meta property="og:url" content="{{ url()->full() }}">
+  <meta property="og:type" content="website">
   <!-- Favicon -->
   <link rel="shortcut icon" href="{{ asset('assets/img/logo.ico') }}" type="image/x-icon">
   <!-- CSS ============================================ -->
