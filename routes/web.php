@@ -20,6 +20,7 @@ Route::get('/', function () {
     return view('welcome_custom');
 });
 
+Route::get('/preview/{token}', [Controller::class, 'preview'])->name('preview');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google::callback');
 
 Route::prefix('/{brand}/{campaign}')->group(function() {
