@@ -8,8 +8,8 @@
   $header = json_decode($data->template_header_json, true);
   $headerBlock = $header['blocks'];
 ?>
-<div class="space-pb--30" style="background-color: {{$data->template_primary_color}} !important"> <!-- use primary color for header -->
-  
+<div class="space-pb--30" style="background-color: {{ $data->template_primary_color }} !important"> <!-- use primary color for header -->
+
   @foreach ($headerBlock as $block)
 
     @if ($block['type'] == 'carousel')
@@ -32,7 +32,7 @@
                       </div>
                   </div>
                 @endforeach
-                
+
               </div>
             </div>
           </div>
@@ -44,9 +44,9 @@
         <div class="container">
           <div class="row">
             <div class="col-12">
-              
+
               @include('lba-1.component.text')
-              
+
               @include('lba-1.component.biolink')
 
             </div>
@@ -81,7 +81,7 @@
                   <div class="grid-product space-mb--20">
                     <div class="grid-product__image">
                         @if(!$is_preview)
-                            <a href="{{ route('product', ['brand' => $uri['segment1'], 'campaign' => $uri['segment2'], 'id' => $stock->id]) }}">{{$stock->name}}
+                            <a href="{{ route('product::show', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}">{{$stock->name}}
                         @else
                             <a href="#">{{$stock->name}}
                         @endif
@@ -91,7 +91,7 @@
                     <div class="grid-product__content">
                       <h3 class="title">
                       @if(!$is_preview)
-                          <a href="{{ route('product', ['brand' => $uri['segment1'], 'campaign' => $uri['segment2'], 'id' => $stock->id]) }}">{{$stock->name}}</a>
+                          <a href="{{ route('product::show', ['brand' =>  Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}">{{$stock->name}}</a>
                       @else
                           <a href="#">{{$stock->name}}</a>
                       @endif
@@ -133,7 +133,7 @@
   $footer = json_decode($data->template_footer_json, true);
   $footerBlock = $footer['blocks'];
 ?>
-<div style="background-color: {{$data->template_secondary_color}} !important" class="category-slider-area space-pb--25 ">
+<div style="background-color: {{ $data->template_secondary_color }} !important;" class="category-slider-area space-pb--25 ">
   <div class="container">
     <div class="row">
       <div class="col-12">
