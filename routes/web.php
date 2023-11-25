@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CampaignController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,19 +22,14 @@ Route::get('/', function () {
     return view('welcome_custom');
 });
 
-Route::get('/preview/{token}', [Controller::class, 'preview'])->name('preview');
+Route::get('/preview/{token}', [CampaignController::class, 'preview'])->name('preview');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google::callback');
 
 Route::prefix('/{brand}/{campaign}')->group(function() {
-    Route::get('/', [Controller::class, 'index'])->name('index');
-    Route::get('/product', [Controller::class, 'product'])->name('product');
+    Route::get('/', [CampaignController::class, 'index'])->name('index');
 
-    Route::prefix('auth')->group(function() {
-        Route::get('/', [Controller::class, 'login'])->name('login');
-        Route::get('/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
-        Route::get('/phone-number', [Controller::class, 'phoneNumber'])->name('lba-1::login::phone-number');
-        Route::get('/otp', [Controller::class, 'otp'])->name('lba-1::login::otp');
-    });
+    Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show');
+    Route::get('/product/{productId}/get-voucher', [ProductController::class, 'getVoucher'])->name('product::getVoucher');
 
-    Route::get('/voucher-redeem', [Controller::class, 'voucherRedeem'])->name('voucher-redeem');
+    Route::get('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
 });
