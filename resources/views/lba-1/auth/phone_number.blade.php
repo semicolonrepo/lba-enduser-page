@@ -7,13 +7,14 @@
       <div class="col-12">
         <!-- Auth form -->
         <div class="auth-form">
-          <form>
+          <form action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId]) }}" method="post">
+          @csrf
             <div class="auth-form__single-field space-mb--30">
               <label for="mobileNumber">No Handphone (Whatsapp)</label>
-              <input type="number" name="mobileNumber" id="mobileNumber" placeholder="081xxxxxxxxx">
+              <input type="number" name="phone_number" id="mobileNumber" placeholder="081xxxxxxxxx">
             </div>
-            <button type="button" class="auth-form__button" style="background: green"> <!-- button color use primary color -->
-              <a href="{{ route('lba-1::login::otp', ['brand' => $brand, 'campaign' => $campaign]) }}">Kirim OTP ke Whatsapp</a>
+            <button type="submit" class="auth-form__button" style="background: green"> <!-- button color use primary color -->
+              Kirim OTP ke Whatsapp
             </button>
           </form>
         </div>

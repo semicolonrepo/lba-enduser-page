@@ -7,16 +7,17 @@
       <div class="col-12">
         <!-- Auth form -->
         <div class="auth-form">
-          <form action="#">
+          <form action="{{ route('otp::validate::post', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId, 'phoneNumber' => $phoneNumber]) }}" method="post">
+            @csrf
             <div class="auth-form__single-field space-mb--30">
               <label for="otpCode">Input 6 Digit Kode OTP</label>
-              <input type="number" name="otpCode" id="otpCode" placeholder="XXXXXX">
+              <input type="number" name="otp_number" id="otpCode" placeholder="XXXXXX">
             </div>
             <div class="auth-form__single-field space-mb--40">
               <p class="auth-form__info-text">Tidak terima OTP? <a href="#">Kirim ulang</a></p>
             </div>
-            <button type="button" class="auth-form__button" style="background: green"> <!-- button color use primary color -->
-              <a href="{{ route('lba-1::voucher-redeem', ['brand' => $brand, 'campaign' => $campaign]) }}">Validasi Kode OTP</a>
+            <button type="submit" class="auth-form__button" style="background: green"> <!-- button color use primary color -->
+              Validasi Kode OTP
             </button>
           </form>
         </div>

@@ -3,15 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerUser;
-use Illuminate\Http\Request;
+use App\Services\CampaignService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
-    public function redirect($brand, $campaign) {
+    public function __construct(
+        private CampaignService $campaignService,
+    ) {}
+
+    public function login($brand, $campaign, $productId) {
+        $campaignData = $this->campaignService->getCampaign($brand, $campaign);
+
+        switch($campaignData->page_template_id) {
+            case 1:
+                return view('lba-1.auth.login', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ]);
+            default:
+                return view('welcome_custom', ['message' => 'Campaign not found.']);
+        }
+    }
+
+    public function redirect($brand, $campaign, $productId) {
         session(['brand_session' => $brand]);
         session(['campaign_session' => $campaign]);
+        session(['product_id_session' => $productId]);
 
         return Socialite::driver('google')
             ->redirect();
@@ -21,35 +44,28 @@ class GoogleAuthController extends Controller
         try {
             $brandSession = session('brand_session');
             $campaignSession = session('campaign_session');
+            $productIdSession = session('product_id_session');
 
             $googleUser = Socialite::driver('google')->user();
 
-            $customerUser = CustomerUser::where('google_id', $googleUser->getId())->first();
+            $authGmailId = DB::table('auth_gmail')->insertGetId([
+                'uuid' => Str::uuid(),
+                'name' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'google_id' => $googleUser->getId(),
+            ]);
 
-            if (!$customerUser) {
-                $newUser = CustomerUser::create([
-                    'name' => $googleUser->getName(),
-                    'email' => $googleUser->getEmail(),
-                    'google_id' => $googleUser->getId(),
-                ]);
+            $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
+            Session::put('customer_user_gmail', $authGmailUuid, 60);
 
-                Auth::guard('customer_user')->login($newUser);
-
-                return redirect()->route('voucher-redeem', [
-                    'brand' => $brandSession,
-                    'campaign' => $campaignSession,
-                ]);
-            } else {
-                Auth::guard('customer_user')->login($customerUser);
-
-                return redirect()->route('voucher-redeem', [
-                    'brand' => $brandSession,
-                    'campaign' => $campaignSession,
-                ]);
-            }
+            return redirect()->route('voucher::claim', [
+                'brand' => $brandSession,
+                'campaign' => $campaignSession,
+                'productId' => $productIdSession,
+            ]);
 
         } catch (\Throwable $th) {
-            dd($th);
+            return redirect()->back()->with('failed', 'terjadi kesalahan');
         }
     }
 }

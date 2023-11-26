@@ -26,7 +26,7 @@
     <div class="row">
       <div class="col-12">
         <p class="section-title space-mb--25 text-center" style="font-weight:700; font-size:24px; color: green">
-          IDNLB0793ZK
+            {{$voucher->code}}
         </p>
       </div>
     </div>
@@ -38,11 +38,11 @@
     <div class="row">
       <div class="col-12">
         <p class="text-center space-mb--15" style="font-size: 16px;">
-          Voucher berlaku hingga {expired_date} dan dapat digunakan di {retail_partner} terdekat.
+          Voucher berlaku hingga {{ date('d M Y', strtotime($voucher->expires_at)) }} dan dapat digunakan di {{ $voucher->provider_name }} terdekat.
         </p>
 
         <p class="text-center space-mb--5" style="font-size: 16px;">
-          Kami juga telah mengirimkan kode voucher beserta cara pemakaian nya melalui {email} dan {no handphone} kamu ya.
+          Kami juga telah mengirimkan kode voucher beserta cara pemakaian nya melalui @if($voucher->email) {{$voucher->email}} @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) {{$voucher->phone_number}} @endif nomor kamu ya.
         </p>
       </div>
     </div>
