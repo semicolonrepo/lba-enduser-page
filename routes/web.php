@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\VoucherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +31,16 @@ Route::prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/', [CampaignController::class, 'index'])->name('index');
 
     Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show');
-    Route::get('/product/{productId}/get-voucher', [ProductController::class, 'getVoucher'])->name('product::getVoucher');
 
+    Route::get('/product/{productId}/voucher/view/{voucherCode}', [VoucherController::class, 'show'])->name('voucher::show');
+    Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
+    Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
+
+    Route::get('/product/{productId}/otp/login', [OneTimePasswordController::class, 'login'])->name('otp::login');
+    Route::post('/product/{productId}/otp/send', [OneTimePasswordController::class, 'send'])->name('otp::send');
+    Route::get('/product/{productId}/otp/send/{phoneNumber}', [OneTimePasswordController::class, 'validateGet'])->name('otp::validate::get');
+    Route::post('/product/{productId}/otp/send/{phoneNumber}', [OneTimePasswordController::class, 'validatePost'])->name('otp::validate::post');
+
+    Route::get('/product/{productId}/google/login', [GoogleAuthController::class, 'login'])->name('google::login');
     Route::get('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
 });

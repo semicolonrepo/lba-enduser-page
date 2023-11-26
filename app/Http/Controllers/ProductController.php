@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CampaignProductsModel;
 use App\Models\VouchersModel;
 use App\Services\CampaignService;
+use App\Services\VoucherService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -14,6 +15,7 @@ class ProductController extends Controller
     ) {}
 
     public function show($brand, $campaign, $productId) {
+        // session()->flush();
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
         if($campaignData && $productId) {
@@ -28,12 +30,21 @@ class ProductController extends Controller
                 $retailPartner = VouchersModel::select('providers.id', 'providers.name')
                     ->join('providers', 'vouchers.provider_id', '=', 'providers.id')
                     ->where('vouchers.campaign_id', $campaignData->id)
-                ->get();
+                    ->where('providers.is_active', true)
+                    ->distinct('providers.name')
+                    ->get();
+
+                $retailInternal = VouchersModel::select('providers.id', 'providers.name')
+                    ->leftJoin('providers', 'vouchers.provider_id', '=', 'providers.id')
+                    ->where('vouchers.campaign_id', $campaignData->id)
+                    ->whereNull('vouchers.provider_id')
+                    ->get();
 
                 $sentData = [
                     'data' => $campaignData,
                     'product' => $productData,
-                    'retailer' => $retailPartner
+                    'retailer' => $retailPartner,
+                    'internal' => $retailInternal,
                 ];
 
                 switch($campaignData->page_template_id) {
@@ -48,9 +59,5 @@ class ProductController extends Controller
         }
 
         return view('welcome_custom', ['message' => 'Campaign not found.']);
-    }
-
-    function getVoucher($brand, $campaign, $productId) {
-
     }
 }

@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CampaignProductsModel;
-use App\Models\VouchersModel;
 use App\Services\CampaignService;
-use Illuminate\Http\Request;
 
 class CampaignController extends Controller
 {

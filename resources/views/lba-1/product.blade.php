@@ -4,7 +4,7 @@
 <!--====================  product image slider ====================-->
 <div class="product-image-slider-wrapper">
   <div class="product-image-single">
-    <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$product->photo }}" class="img-fluid" alt="">
+    <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'. $product->photo }}" class="img-fluid" alt="">
   </div>
 </div>
 <!--====================  End of product image slider  ====================-->
@@ -57,33 +57,41 @@
 <div class="grand-total">
   <div class="container">
     <div class="row">
-      <div class="col-12">
-        <div class="total-shipping">
-          <h3 style="font-weight: 500;" class="section-title">Pilih Gerai Retail Partner:</h3>
-          <p style="font-style:italic: font-weight: 500; font-size:16px">
-            (Voucher berlaku di gerai retail yang kamu pilih)
-          </p>
-          <ul style="margin-top: -20px;">
-            @foreach ($retailer as $retailPartner)
-              <li style="font-size: 18px; padding-left:12px">
-                <input style="padding-left: 8px" type="radio" name="{{ $retailPartner->id }}"> {{ $retailPartner->name }}
-              </li>
-            @endforeach
-          </ul>
-        </div>
-      </div>
+        <form action="{{ route('voucher::claim', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post" id="form-get-product">
+            @csrf
+            <div class="col-12">
+                <div class="total-shipping">
+                <h3 style="font-weight: 500;" class="section-title">Pilih Gerai Retail Partner:</h3>
+                <p style="font-style:italic: font-weight: 500; font-size:16px">
+                    (Voucher berlaku di gerai retail yang kamu pilih)
+                </p>
+                <ul style="margin-top: -20px;">
+                    @foreach ($retailer as $retailPartner)
+                    <li style="font-size: 18px; padding-left:12px">
+                        <input style="padding-left: 8px" type="radio" name="partner" value="{{ $retailPartner->id }}"> {{ $retailPartner->name }}
+                    </li>
+                    @endforeach
+                    @if($internal->isNotEmpty())
+                    <li style="font-size: 18px; padding-left:12px">
+                        <input style="padding-left: 8px" type="radio" name="partner" value="internal"> Merchant Partner Kami
+                    </li>
+                    @endif
+                </ul>
+                </div>
+            </div>
+        </form>
     </div>
   </div>
 </div>
 
 <!-- get voucher button -->
-<a href="#" class="w-100">
+<!-- <a href="#" class="w-100"> -->
   <div class="shop-product-button">
     <!-- button use primary color -->
-    <button style="background-color: {{ $data->template_primary_color }}" class="buy w-100">
-      Dapatkan Voucher Sekarang
+    <button form="form-get-product" type="submit" style="background-color: {{ $data->template_primary_color }}" class="buy w-100">
+        Dapatkan Voucher Sekarang
     </button>
   </div>
-</a>
+<!-- </a> -->
 <!--====================  End of product content  ====================-->
 @endsection
