@@ -91,7 +91,6 @@
 
     </header>
     <!--====================  End of header area  ====================-->
-    <a href="{{ route('test') }}">test</a>
     @yield('content')
   </div>
 
