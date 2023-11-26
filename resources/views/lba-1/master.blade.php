@@ -57,7 +57,8 @@
   </div>
   <!--====================  End of preloader area  ====================-->
 
-  <div class="body-wrapper space-pt--70">
+  <div class="body-wrapper space-pt--70" @if (session('success')) data-notif-success="{{session('success')}}" @else data-notif-success="" @endif 
+    @if (session('failed')) data-notif-failed="{{session('failed')}}" @else data-notif-failed="" @endif>
     <!--====================  header area ====================-->
     <header>
       <div class="header-wrapper border-bottom">
@@ -90,7 +91,6 @@
 
     </header>
     <!--====================  End of header area  ====================-->
-
     @yield('content')
   </div>
 
@@ -112,8 +112,35 @@
   <!--
   <script src="assets/js/plugins/plugins.min.js"></script>
   -->
+  <script src="{{ asset('assets/plugins/sweetalert.min.js') }}"></script>
   <!-- Main JS -->
   <script src="{{ asset('assets/lba-1/js/main.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      const messageNotifSuccess = $('body .body-wrapper').data("notif-success");
+      const messageNotifFailed = $('body .body-wrapper').data("notif-failed");
+
+      if (messageNotifSuccess != "") {
+        swal({
+          title: "Berhasil",
+          text: messageNotifSuccess,
+          icon: "success",
+          buttons: false,
+          timer: 5000,
+        });
+      }
+
+      if (messageNotifFailed != "") {
+        swal({
+          title: "Oops...",
+          text: messageNotifFailed,
+          icon: "error",
+          buttons: false,
+          timer: 5000,
+        });
+      }
+    });
+  </script>
 </body>
 
 <!-- Mirrored from htmldemo.net/rick/rick/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Nov 2023 04:06:27 GMT -->
