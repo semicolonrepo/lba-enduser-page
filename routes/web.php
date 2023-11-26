@@ -28,9 +28,9 @@ Route::get('/preview/{token}', [CampaignController::class, 'preview'])->name('pr
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google::callback');
 
 Route::prefix('/{brand}/{campaign}')->group(function() {
-    Route::get('/', [CampaignController::class, 'index'])->name('index');
+    Route::get('/', [CampaignController::class, 'index'])->name('index')->middleware('activity.log');
 
-    Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show');
+    Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show')->middleware('activity.log');
 
     Route::get('/product/{productId}/voucher/view/{voucherCode}', [VoucherController::class, 'show'])->name('voucher::show');
     Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
