@@ -19,6 +19,7 @@ class CampaignService
                     'campaigns.page_template_id',
                     'campaigns.slug',
                     'brands.name as brand',
+                    'brands.id as brand_id',
                     'brands.photo as brand_logo',
                     'campaigns.template_primary_color',
                     'campaigns.template_secondary_color',
