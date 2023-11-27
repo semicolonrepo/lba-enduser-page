@@ -77,7 +77,7 @@
             </div>
             <div class="col-auto">
               <!-- header menu trigger -->
-              <button class="header-menu-trigger" id="header-menu-trigger">
+              <button id="share-button" class="header-menu-trigger" id="header-menu-trigger">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
                   class="bi bi-share-fill" viewBox="0 0 16 16">
                   <path
@@ -140,6 +140,27 @@
         });
       }
     });
+  </script>
+
+  <script id="rendered-js" >
+  const shareButton = document.querySelector('#share-button');
+
+  shareButton.addEventListener('click', event => {
+    if (navigator.share) {
+      navigator.share({
+          url: '{{ url()->full() }}',
+          title: '{{$data->campaign}}',
+          text: '{{$data->campaign}}'
+      })
+      .then(() => {
+        console.log('Thanks for sharing!');
+      })
+      .catch(console.error);
+    } else {
+      //shareDialog.classList.add('is-open');
+      console.log('error share');
+    }
+  });
   </script>
 </body>
 
