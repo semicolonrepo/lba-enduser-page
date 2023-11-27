@@ -21,7 +21,7 @@
 </div>
 
 <!-- product content description -->
-<div class="product-content-description border-bottom--thick space-pt--25 space-pb--25 space-mb--25">
+<div class="product-content-description border-bottom--thick space-pt--25 space-pb--25">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -33,16 +33,16 @@
   </div>
 </div>
 
-<div class="space-pb--25">
+<div class="space-pb--25" style="background: white">
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <p class="text-center space-mb--15" style="font-size: 16px;">
-          Voucher berlaku hingga {{ date('d M Y', strtotime($voucher->expires_at)) }} dan dapat digunakan di {{ $voucher->provider_name }} terdekat.
+        <p class="text-center space-mt--30 space-mb--15" style="font-size: 16px;">
+          Voucher <b>berlaku hingga {{ date('d M Y', strtotime($voucher->expires_at)) }}</b> dan dapat digunakan di <b>{{ $voucher->provider_name }} terdekat</b>.
         </p>
 
         <p class="text-center space-mb--5" style="font-size: 16px;">
-          Kami juga telah mengirimkan kode voucher beserta cara pemakaian nya melalui @if($voucher->email) {{$voucher->email}} @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) {{$voucher->phone_number}} @endif nomor kamu ya.
+          Kami juga telah mengirimkan kode voucher beserta <b>cara pemakaian nya</b> melalui @if($voucher->email) <b>{{$voucher->email}}</b> @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) <b>{{$voucher->phone_number}}</b> @endif nomor kamu ya.
         </p>
       </div>
     </div>
@@ -50,7 +50,7 @@
 </div>
 
 <!--====================  Start footer component ====================-->
-<div class="category-slider-area space-pb--25 "> <!-- use secondary color for footer -->
+<div class="category-slider-area space-pb--25" style="background: white"> <!-- use secondary color for footer -->
   <div class="container">
     <div class="row">
       <div class="col-12">
