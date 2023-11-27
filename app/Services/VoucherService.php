@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Notifications\ClaimVoucher;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class VoucherService
 {
@@ -103,18 +106,18 @@ class VoucherService
         $authGmail = DB::table('auth_gmail')
             ->where('uuid', session('customer_user_gmail'))->first();
 
-        $countVouvherUsedRaw = "SELECT COUNT(*) FROM voucher_generates as subquery WHERE subquery.voucher_id = vouchers.id";
+        $countVouvherUsedRaw = "SELECT COUNT(*) FROM voucher_generates as subquery WHERE subquery.voucher_id = vouchers.id AND (1=1";
         $arrayVoucherUsedBinding = [];
         $campaignAuths = $this->campaignService->getCampaignAuths($campaignId);
         $authByGmail = (clone $campaignAuths)->where('auth_settings.code', 'GMAIL')->first();
         if ($authByGmail) {
-            $countVouvherUsedRaw .= " AND subquery.email = ?";
+            $countVouvherUsedRaw .= " OR subquery.email = ?";
             $arrayVoucherUsedBinding[] = $authGmail->email;
         }
 
         $authByWA = (clone $campaignAuths)->where('auth_settings.code', 'WHATSAPP')->first();
         if ($authByWA) {
-            $countVouvherUsedRaw .= " AND subquery.phone_number = ?";
+            $countVouvherUsedRaw .= " OR subquery.phone_number = ?";
             $arrayVoucherUsedBinding[] = $authWA->phone_number;
         }
 
@@ -130,7 +133,7 @@ class VoucherService
                 'vouchers.limit_usage_user',
                 'vouchers.provider_id',
                 'providers.name',
-            )->havingRaw("($countVouvherUsedRaw) < vouchers.limit_usage_user", $arrayVoucherUsedBinding);
+            )->havingRaw("($countVouvherUsedRaw)) < vouchers.limit_usage_user", $arrayVoucherUsedBinding);
 
         if ($partner === 'internal') {
             $voucher = (clone $voucherSql)
@@ -152,11 +155,17 @@ class VoucherService
         DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
         ->update([
             "product_id" => $productId,
-            "email" => $authGmail->email ?? null,
-            "phone_number" => $authWA->phone_number ?? null,
+            "email" => ($authByGmail) ? $authGmail->email : null,
+            "phone_number" =>($authByWA) ? $authWA->phone_number : null,
             "claim_date" => date('Y-m-d H:i:s'),
         ]);
 
+        $voucher = $this->showVoucher($voucher->code);
+        $notifiable = (new AnonymousNotifiable());
+        if ($voucher->email) {
+            $notifiable->route('mail', $voucher->email);
+        }
+        Notification::send($notifiable, new ClaimVoucher($voucher));
         session()->forget('partner_id');
 
         return $voucher;
@@ -166,7 +175,10 @@ class VoucherService
        return DB::table('voucher_generates')
         ->join('vouchers', 'vouchers.id', '=', 'voucher_generates.voucher_id')
         ->join('campaigns', 'campaigns.id', '=', 'vouchers.campaign_id')
+        ->leftJoin('brands', 'brands.id', '=', 'campaigns.brand_id')
         ->leftJoin('providers', 'providers.id', '=', 'vouchers.provider_id')
+        ->leftJoin('products', 'products.id', '=', 'voucher_generates.product_id')
+        ->leftJoin('auth_gmail', 'auth_gmail.email', '=', 'voucher_generates.email')
         ->where('voucher_generates.code', $voucherGenerateCode)
         ->where('voucher_generates.is_active', true)
         ->where('vouchers.is_active', true)
@@ -182,7 +194,12 @@ class VoucherService
             'vouchers.title as voucher_title',
             'vouchers.limit_usage_user',
             'vouchers.expires_at',
+            'vouchers.description',
             'providers.name as provider_name',
+            'products.name as product_name',
+            'brands.name as brand_name',
+            'brands.photo as brand_photo',
+            'auth_gmail.name as auth_gmail_name'
         )->first();
     }
 }
