@@ -24,6 +24,12 @@ class OneTimePasswordController extends Controller
                     'campaign' => $campaign,
                     'productId' => $productId,
                 ]);
+            case 2:
+                return view('lba-2.auth.phone_number', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ]);
             default:
                 return view('welcome_custom', ['message' => 'Campaign not found.']);
         }
@@ -68,6 +74,13 @@ class OneTimePasswordController extends Controller
         switch($campaignData->page_template_id) {
             case 1:
                 return view('lba-1.auth.otp', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                    'phoneNumber' => $phoneNumber,
+                ]);
+            case 2:
+                return view('lba-2.auth.otp', [
                     'brand' => $brand,
                     'campaign' => $campaign,
                     'productId' => $productId,

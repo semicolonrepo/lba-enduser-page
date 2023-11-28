@@ -50,6 +50,8 @@ class ProductController extends Controller
                 switch($campaignData->page_template_id) {
                     case 1:
                         return view('lba-1.product', $sentData);
+                    case 2:
+                        return view('lba-2.product', $sentData);
                     default:
                         return view('welcome_custom', ['message' => 'Campaign not found.']);
                 }

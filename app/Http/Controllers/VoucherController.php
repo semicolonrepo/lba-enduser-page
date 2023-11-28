@@ -45,6 +45,11 @@ class VoucherController extends Controller
                         'voucher' => $voucher,
                         'data' => $campaignData,
                     ]);
+                case 2:
+                    return view('lba-2.voucher_redeem', [
+                        'voucher' => $voucher,
+                        'data' => $campaignData,
+                    ]);
                 default:
                     return view('welcome_custom', ['message' => 'Campaign not found.']);
             }

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
-<!-- Mirrored from htmldemo.net/rick/rick/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Nov 2023 04:06:11 GMT -->
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -163,7 +161,5 @@
   });
   </script>
 </body>
-
-<!-- Mirrored from htmldemo.net/rick/rick/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Nov 2023 04:06:27 GMT -->
 
 </html>
