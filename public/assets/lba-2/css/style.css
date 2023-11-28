@@ -826,11 +826,21 @@ nav a.button-collapse {
   padding: 1px 0px 0px; }
 
 .slick-product {
-  margin-bottom: 0px; }
+  /*margin-bottom: 0px;*/ 
+}
+
+.slick-track {
+  display: flex;
+}
+.slick-track .slick-slide {
+  display: flex;
+  height: auto;
+}
 
 /*---------- FEATURED PRODUCT ----------*/
 .section.product-item.si-featured {
-  padding-top: 10px; }
+  padding-top: 10px;
+}
 
 .section.product-item.si-featured .section-title {
   padding-top: 0px; }

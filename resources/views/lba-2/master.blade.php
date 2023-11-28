@@ -9,7 +9,7 @@
 <meta name="apple-touch-fullscreen" content="yes">
 <meta name="HandheldFriendly" content="True">
 <meta property="og:title" content="{{ $data->campaign }}">
-<meta property="og:description" content="{{ $data->campaign_detail }}">
+<meta property="og:description" content="{{ $data->campaign }}">
 <meta property="og:image" content="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}">
 <meta property="og:url" content="{{ url()->full() }}">
 <meta property="og:type" content="website">
@@ -39,9 +39,9 @@
 
 <!-- BEGIN PRELOADING -->
 <div class="preloading">
-  <div class="wrap-preload">
-    <div class="cssload-loader"></div>
-  </div>
+    <div class="wrap-preload">
+        <div class="cssload-loader"></div>
+    </div>
 </div>
 <!-- END PRELOADING -->
 
@@ -49,23 +49,23 @@
 <header id="header" style="background-color: {{$data->template_primary_color}}"> <!-- primary color -->
 	<div class="nav-wrapper container">
 	  <div class="header-logo">
-		<a href="#" class="nav-logo">
-			<img style="height:30px" src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" /> <!-- logo brand here -->
-		</a>
+            <a href="#" class="nav-logo">
+                <img style="height:30px" src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" /> <!-- logo brand here -->
+            </a>
 	  </div>
 	</div>
-	</header>
+</header>
 
-<!-- content -->
-@yield('content')
+    <!-- content -->
+    @yield('content')
 
-<!-- default footer (not remove) -->
-<div class="container">
-  <div class="row copyright">
-	Powered by<br>
-    <span>LetsBuyAsia</span>
-  </div>
-</div>
+    <!-- default footer (not remove) -->
+    <div class="container">
+    <div class="row copyright">
+        Powered by<br>
+        <span>LetsBuyAsia</span>
+    </div>
+    </div>
 </footer>
 <!-- END FOOTER COMPONENT -->
 

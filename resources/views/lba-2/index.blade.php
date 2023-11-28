@@ -50,74 +50,72 @@
         <div class="section product-item si-featured">
             <div class="container">
                 <div class="row slick-product">
-                <div class="col s12">
-                    <div id="featured-product" class="featured-product">
-                    
-                    <!-- Product item -->
-                    @foreach ($product as $stock)
-                        <div>
-                            <div class="col-slick-product">
-                            <div class="box-product">
-                                <div class="bp-top">
-                                <div class="product-list-img">
-                                    <div class="pli-one">
-                                    <div class="pli-two">
-                                        <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" alt="img">
+                    <div class="col s12">
+                        <div id="featured-product" class="featured-product">
+                        
+                            <!-- Product item -->
+                            @foreach ($product as $stock)
+                            <div>
+                                <div class="col-slick-product">
+                                    <div class="box-product">
+                                        <div class="bp-top">
+                                            <div class="product-list-img">
+                                                <div class="pli-one">
+                                                <div class="pli-two">
+                                                    <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" alt="img">
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <h5>
+                                                @if(!$is_preview)
+                                                    <a href="{{ route('product::show', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}">{{$stock->name}}
+                                                @else
+                                                    <a href="#">{{$stock->name}}
+                                                @endif
+                                                    </a>
+                                            </h5>
+                                            <div style="color: green" class="item-info">
+                                                @if(strtolower($stock->type) == 'free')
+                                                    Gratis
+                                                @else
+                                                    Tawaran menarik
+                                                @endif
+                                            </div>
+                                            <div class="stock-item"></div>
+                                        </div>
+                                        <div class="bp-bottom">
+                                            @if(!$is_preview)
+                                                <a href="{{ route('product::show', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}"><button class="btn button-add-cart">Ambil</button></a>
+                                            @else
+                                                <a href="#"><button class="btn button-add-cart">Ambil</button></a>
+                                            @endif
+                                        </div>
                                     </div>
-                                    </div>
-                                </div>
-                                <h5>
-                                    @if(!$is_preview)
-                                        <a href="{{ route('product::show', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}">{{$stock->name}}
-                                    @else
-                                        <a href="#">{{$stock->name}}
-                                    @endif
-                                        </a>
-                                </h5>
-                                <div style="color: green" class="item-info">
-                                    @if(strtolower($stock->type) == 'free')
-                                        Gratis
-                                    @else
-                                        Tawaran menarik
-                                    @endif
-                                </div>
-                                <div class="stock-item"></div>
-                                </div>
-                                <div class="bp-bottom">
-                                    @if(!$is_preview)
-                                        <a href="{{ route('product::show', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}"><button class="btn button-add-cart">Ambil</button></a>
-                                    @else
-                                        <a href="#"><button class="btn button-add-cart">Ambil</button></a>
-                                    @endif
                                 </div>
                             </div>
-                            </div>
+                            @endforeach
+                            <!-- End Product item-->
+                        
                         </div>
-                    @endforeach
-                    <!-- End Product item-->
-                    
                     </div>
-                </div>
                 </div>
             </div>
         </div>
         <!-- END LIST PRODUCT -->
-        @endif
-
-        @if ($block2['type'] != 'product')
+        @else
         <!-- OTHER ADDITIONAL IN FOOTER COMPONENT -->
         <div class="section promo">
             <div class="container">
                 <div class="col s12">
                 
-                <!-- Image Component -->
-                @include('lba-2.component.image')
-                
-                <!-- Text Component -->
-                @include('lba-2.component.text')
-                
-                <!-- Video component -->
-                @include('lba-2.component.embed')
+                    <!-- Image Component -->
+                    @include('lba-2.component.image')
+                    
+                    <!-- Text Component -->
+                    @include('lba-2.component.text')
+                    
+                    <!-- Video component -->
+                    @include('lba-2.component.embed')
                 
                 </div>
             </div>
