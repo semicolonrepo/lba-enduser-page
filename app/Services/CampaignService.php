@@ -31,6 +31,9 @@ class CampaignService
         ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
         ->where('brands.name', $brand)
         ->where('campaigns.slug', $campaignSlug)
+        ->where('campaigns.is_active', true)
+        ->where('campaigns.is_publish', true)
+        ->where('campaigns.expires_at', '>', date('Y-m-d H:i:s'))
         ->first();
 
         return $campaignData;

@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\ActivityLogMiddleware;
 use App\Http\Middleware\GetVoucherAuthMiddleware;
+use App\Http\Middleware\ValidateCampaignMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -67,6 +68,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'voucherAuth' => GetVoucherAuthMiddleware::class,
+        'validate.campaign' => ValidateCampaignMiddleware::class,
         'activity.log' => ActivityLogMiddleware::class,
     ];
 }

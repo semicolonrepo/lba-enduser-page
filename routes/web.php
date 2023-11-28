@@ -27,7 +27,7 @@ Route::get('/', function () {
 Route::get('/preview/{token}', [CampaignController::class, 'preview'])->name('preview');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google::callback');
 
-Route::prefix('/{brand}/{campaign}')->group(function() {
+Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/', [CampaignController::class, 'index'])->name('index')->middleware('activity.log');
 
     Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show')->middleware('activity.log');
@@ -44,3 +44,4 @@ Route::prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/product/{productId}/google/login', [GoogleAuthController::class, 'login'])->name('google::login');
     Route::get('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
 });
+
