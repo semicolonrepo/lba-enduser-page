@@ -64,6 +64,12 @@ body {
   background-color: white;
 }
 
+#homepage {
+  box-shadow: 
+        -10px 0 10px -10px rgba(0, 0, 0, 0.5), /* Left shadow */
+         10px 0 10px -10px rgba(0, 0, 0, 0.5); /* Right shadow */
+}
+
 p {
   margin: 5px 0;
   line-height: 20px; }
