@@ -40,14 +40,14 @@
       <div class="col-12">
         <p style="font-weight: 500;" class="section-title space-mb--10">Tentang Produk:</p>
         <p class="section-title space-mb--25">
-          {{ $product->description }}
+          {!! $product->description !!}
         </p>
       </div>
 
       <div class="col-12">
         <p style="font-weight: 500;" class="section-title space-mt--20 space-mb--10">Syarat & Ketentuan:</p>
         <p class="section-title space-mb--25">
-          {{ $data->campaign_detail }}
+          {!! $data->campaign_detail !!}
         </p>
       </div>
     </div>
@@ -62,7 +62,7 @@
             <div class="col-12">
                 <div class="total-shipping">
                 <h3 style="font-weight: 500;" class="section-title">Pilih Gerai Retail Partner:</h3>
-                <p style="font-style:italic: font-weight: 500; font-size:16px">
+                <p style="font-style:italic; font-weight: 500; font-size:16px;">
                     (Voucher berlaku di gerai retail yang kamu pilih)
                 </p>
                 <ul style="margin-top: -20px;">
