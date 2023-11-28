@@ -2,16 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>LetsBuyAsia - {{ $data->campaign }}</title>
+<title>LetsBuyAsia - Login</title>
 <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-touch-fullscreen" content="yes">
 <meta name="HandheldFriendly" content="True">
-<meta property="og:title" content="{{ $data->campaign }}">
-<meta property="og:description" content="{{ $data->campaign }}">
-<meta property="og:image" content="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}">
-<meta property="og:url" content="{{ url()->full() }}">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <!-- CSS  -->
@@ -58,16 +54,6 @@
 
     <!-- content -->
     @yield('content')
-
-    <!-- default footer (not remove) -->
-    <div class="container">
-    <div class="row copyright">
-        Powered by<br>
-        <span>LetsBuyAsia</span>
-    </div>
-    </div>
-</footer>
-<!-- END FOOTER COMPONENT -->
 
 
 <!-- Script -->
