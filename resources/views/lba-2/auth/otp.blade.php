@@ -21,13 +21,13 @@
 			<p class="center text-size-normal">Masukan Kode OTP</p>
           </div>
           <div class="row" style="margin-top: 20px">
-            <div class="input-field col s12 m6 l4 offset-m3 offset-l4">
+            <div class="input-field col s12">
               <input id="code" type="number" name="otp_number" class="validate" placeholder="XXXXXX">
               <label for="code">Kode OTP</label>
             </div>
           </div>
           <div class="row">
-            <div class="input-field col s12 m6 l4 offset-m3 offset-l4 center">
+            <div class="input-field col s12 center">
               <button style="margin-top:0px;" class="waves-effect waves-light btn" type="submit">Validasi Kode OTP</button>
             </div>
           </div>
