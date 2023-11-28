@@ -39,15 +39,11 @@ class VoucherController extends Controller
         $voucher = $this->voucherService->showVoucher($voucherCode);
 
         if ($voucherCode && $campaignData) {
-            switch($campaignData->page_template_id) {
-                case 1:
-                    return view('lba-1.voucher_redeem', [
-                        'voucher' => $voucher,
-                        'data' => $campaignData,
-                    ]);
-                default:
-                    return view('welcome_custom', ['message' => 'Campaign not found.']);
-            }
+            $viewTemplate = $campaignData->page_template_code . '.voucher_redeem';
+            return view($viewTemplate, [
+                'voucher' => $voucher,
+                'data' => $campaignData,
+            ]);
         }
 
         return redirect()->back();
