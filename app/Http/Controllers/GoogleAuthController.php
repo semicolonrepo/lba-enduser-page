@@ -24,6 +24,7 @@ class GoogleAuthController extends Controller
             'brand' => $brand,
             'campaign' => $campaign,
             'productId' => $productId,
+            'data' => $campaignData,
         ]);
     }
 

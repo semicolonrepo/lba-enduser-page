@@ -22,6 +22,7 @@ class OneTimePasswordController extends Controller
             'brand' => $brand,
             'campaign' => $campaign,
             'productId' => $productId,
+            'data' => $campaignData,
         ]);
     }
 
@@ -67,6 +68,7 @@ class OneTimePasswordController extends Controller
             'campaign' => $campaign,
             'productId' => $productId,
             'phoneNumber' => $phoneNumber,
+            'data' => $campaignData,
         ]);
     }
 
