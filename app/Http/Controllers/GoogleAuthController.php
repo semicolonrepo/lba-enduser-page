@@ -26,6 +26,12 @@ class GoogleAuthController extends Controller
                     'campaign' => $campaign,
                     'productId' => $productId,
                 ]);
+            case 2:
+                return view('lba-2.auth.login', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ]);
             default:
                 return view('welcome_custom', ['message' => 'Campaign not found.']);
         }

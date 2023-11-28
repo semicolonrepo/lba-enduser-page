@@ -25,6 +25,8 @@ class CampaignController extends Controller
             switch($campaignData->page_template_id) {
                 case 1:
                     return view('lba-1.index', $sentData);
+                case 2:
+                    return view('lba-2.index', $sentData);
                 default:
                     return view('welcome_custom', ['message' => 'Campaign not found.']);
             }
@@ -48,6 +50,8 @@ class CampaignController extends Controller
             switch($campaignData->page_template_id) {
                 case 1:
                     return view('lba-1.index', $sentData);
+                case 2:
+                    return view('lba-2.index', $sentData);
                 default:
                     return view('welcome_custom', ['message' => 'Campaign not found.']);
             }
