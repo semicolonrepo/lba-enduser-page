@@ -27,7 +27,9 @@ class CampaignService
                     'campaigns.template_body_json',
                     'campaigns.template_footer_json',
                     'campaigns.template_background',
+                    'page_templates.code as page_template_code',
                 )
+        ->join('page_templates', 'page_templates.id', '=', 'campaigns.page_template_id')
         ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
         ->where('brands.name', $brand)
         ->where('campaigns.slug', $campaignSlug)
@@ -54,7 +56,9 @@ class CampaignService
             'campaigns.template_body_json',
             'campaigns.template_footer_json',
             'campaigns.template_background',
+            'page_templates.code as page_template_code',
         )
+        ->join('page_templates', 'page_templates.id', '=', 'campaigns.page_template_id')
         ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
         ->where('campaigns.template_token', $token)
         ->first();

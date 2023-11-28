@@ -17,22 +17,12 @@ class OneTimePasswordController extends Controller
     public function login($brand, $campaign, $productId) {
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
-        switch($campaignData->page_template_id) {
-            case 1:
-                return view('lba-1.auth.phone_number', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                ]);
-            case 2:
-                return view('lba-2.auth.phone_number', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                ]);
-            default:
-                return view('welcome_custom', ['message' => 'Campaign not found.']);
-        }
+        $viewTemplate = $campaignData->page_template_code . '.auth.phone_number';
+        return view($viewTemplate, [
+            'brand' => $brand,
+            'campaign' => $campaign,
+            'productId' => $productId,
+        ]);
     }
 
     public function send(Request $request, $brand, $campaign, $productId) {
@@ -71,24 +61,13 @@ class OneTimePasswordController extends Controller
             $phoneNumber = '62' . substr($phoneNumber, 1);
         }
 
-        switch($campaignData->page_template_id) {
-            case 1:
-                return view('lba-1.auth.otp', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                    'phoneNumber' => $phoneNumber,
-                ]);
-            case 2:
-                return view('lba-2.auth.otp', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                    'phoneNumber' => $phoneNumber,
-                ]);
-            default:
-                return view('welcome_custom', ['message' => 'Campaign not found.']);
-        }
+        $viewTemplate = $campaignData->page_template_code . '.auth.otp';
+        return view($viewTemplate, [
+            'brand' => $brand,
+            'campaign' => $campaign,
+            'productId' => $productId,
+            'phoneNumber' => $phoneNumber,
+        ]);
     }
 
     public function validatePost(Request $request, $brand, $campaign, $productId, $phoneNumber) {

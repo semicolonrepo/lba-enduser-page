@@ -22,14 +22,8 @@ class CampaignController extends Controller
                 'product' => $productData,
             ];
 
-            switch($campaignData->page_template_id) {
-                case 1:
-                    return view('lba-1.index', $sentData);
-                case 2:
-                    return view('lba-2.index', $sentData);
-                default:
-                    return view('welcome_custom', ['message' => 'Campaign not found.']);
-            }
+            $viewTemplate = $campaignData->page_template_code . '.index';
+            return view($viewTemplate, $sentData);
         }
 
         return view('welcome_custom', ['message' => 'Campaign not found.']);
@@ -47,14 +41,8 @@ class CampaignController extends Controller
                 'product' => $productData,
             ];
 
-            switch($campaignData->page_template_id) {
-                case 1:
-                    return view('lba-1.index', $sentData);
-                case 2:
-                    return view('lba-2.index', $sentData);
-                default:
-                    return view('welcome_custom', ['message' => 'Campaign not found.']);
-            }
+            $viewTemplate = $campaignData->page_template_code . '.index';
+            return view($viewTemplate, $sentData);
         }
 
         return view('welcome_custom', ['message' => 'Campaign not found.']);

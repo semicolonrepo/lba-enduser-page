@@ -47,14 +47,8 @@ class ProductController extends Controller
                     'internal' => $retailInternal,
                 ];
 
-                switch($campaignData->page_template_id) {
-                    case 1:
-                        return view('lba-1.product', $sentData);
-                    case 2:
-                        return view('lba-2.product', $sentData);
-                    default:
-                        return view('welcome_custom', ['message' => 'Campaign not found.']);
-                }
+                $viewTemplate = $campaignData->page_template_code . '.product';
+                return view($viewTemplate, $sentData);
             } else {
                 return view('welcome_custom', ['message' => 'Product not found.']);
             }

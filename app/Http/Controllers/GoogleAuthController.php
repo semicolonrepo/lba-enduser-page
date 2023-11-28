@@ -19,22 +19,12 @@ class GoogleAuthController extends Controller
     public function login($brand, $campaign, $productId) {
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
-        switch($campaignData->page_template_id) {
-            case 1:
-                return view('lba-1.auth.login', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                ]);
-            case 2:
-                return view('lba-2.auth.login', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                ]);
-            default:
-                return view('welcome_custom', ['message' => 'Campaign not found.']);
-        }
+        $viewTemplate = $campaignData->page_template_code . '.auth.login';
+        return view($viewTemplate, [
+            'brand' => $brand,
+            'campaign' => $campaign,
+            'productId' => $productId,
+        ]);
     }
 
     public function redirect($brand, $campaign, $productId) {
