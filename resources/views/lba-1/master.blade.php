@@ -33,9 +33,16 @@
   <!-- Main Style CSS -->
   <link rel="stylesheet" href="{{ asset('assets/lba-1/css/style.css') }}">
 
+  <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+128&display=swap" rel="stylesheet">
   <style>
     .mw-500 {max-width: 500px; margin: 0 auto;}
     .bg-auth {width: 500px; height: 100%; position: absolute; object-fit: cover; z-index: -1;}
+    
+    .code128 {
+        font-family: "Libre Barcode 128";
+        font-size: 3rem;
+        transform: scaleY(1.5);
+    }
   </style>
 </head>
 
