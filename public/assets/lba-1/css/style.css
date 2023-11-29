@@ -31,6 +31,7 @@
 =============================================*/
 /*-- Google Font --*/
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700&amp;display=swap");
+@import url("https://cdn.rawgit.com/mfd/f3d96ec7f0e8f034cc22ea73b3797b59/raw/856f1dbb8d807aabceb80b6d4f94b464df461b3e/gotham.css");
 *,
 *::after,
 *::before {
@@ -44,7 +45,7 @@ body {
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "GothamPro", sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 1.7;
@@ -57,7 +58,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Roboto", sans-serif;
+  font-family: "GothamPro", sans-serif;
   font-weight: 500;
   line-height: 1;
   margin-top: 0;
