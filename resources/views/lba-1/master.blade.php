@@ -64,7 +64,7 @@
   <!--====================  End of preloader area  ====================-->
 
   <div class="body-wrapper space-pt--70" @if (session('success')) data-notif-success="{{session('success')}}" @else data-notif-success="" @endif 
-    @if (session('failed')) data-notif-failed="{{session('failed')}}" @else data-notif-failed="" @endif>
+    @if (session('failed')) data-notif-failed="{{session('failed')}}" @else data-notif-failed="" @endif data-primary-color="{{ $data->template_primary_color }}">
     <!--====================  header area ====================-->
     <header>
       <div class="header-wrapper border-bottom">
