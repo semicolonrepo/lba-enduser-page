@@ -15,7 +15,6 @@ class ProductController extends Controller
     ) {}
 
     public function show($brand, $campaign, $productId) {
-        session()->forget('partner_id');
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
         if($campaignData && $productId) {

@@ -51,6 +51,7 @@ class VoucherService
         ->join('campaigns', 'campaigns.id', '=', 'vouchers.campaign_id')
         ->leftJoin('providers', 'providers.id', '=', 'vouchers.provider_id')
         ->leftJoin('voucher_usages', 'voucher_usages.voucher_generate_id', '=', 'voucher_generates.id')
+        ->leftJoin('campaign_products', 'campaign_products.campaign_id', '=', 'campaigns.id')
         ->where('vouchers.campaign_id', $campaignId)
         ->where('voucher_generates.is_active', true)
         ->whereNull('voucher_generates.claim_date')
@@ -106,7 +107,7 @@ class VoucherService
         $authGmail = DB::table('auth_gmail')
             ->where('uuid', session('customer_user_gmail'))->first();
 
-        $countVouvherUsedRaw = "SELECT COUNT(*) FROM voucher_generates as subquery WHERE subquery.voucher_id = vouchers.id AND (1=1";
+        $countVouvherUsedRaw = "SELECT COUNT(*) FROM voucher_generates as subquery WHERE subquery.voucher_id = vouchers.id AND (1!=1";
         $arrayVoucherUsedBinding = [];
         $campaignAuths = $this->campaignService->getCampaignAuths($campaignId);
         $authByGmail = (clone $campaignAuths)->where('auth_settings.code', 'GMAIL')->first();
@@ -137,12 +138,14 @@ class VoucherService
 
         if ($partner === 'internal') {
             $voucher = (clone $voucherSql)
+                ->where('campaign_products.product_id', $productId)
                 ->whereNull('vouchers.provider_id')
                 ->first();
         }
 
         if (!empty($partner) && $partner !== 'internal') {
             $voucher = (clone $voucherSql)
+                ->where('campaign_products.product_id', $productId)
                 ->where('vouchers.provider_id', $partner)
                 ->first();
         }
@@ -152,21 +155,23 @@ class VoucherService
             return false;
         }
 
-        DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
-        ->update([
-            "product_id" => $productId,
-            "email" => ($authByGmail) ? $authGmail->email : null,
-            "phone_number" =>($authByWA) ? $authWA->phone_number : null,
-            "claim_date" => date('Y-m-d H:i:s'),
-        ]);
+        DB::transaction(function () use ($voucher, $productId, $authByGmail, $authByWA, $authGmail, $authWA) {
+            DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
+            ->update([
+                "product_id" => $productId,
+                "email" => ($authByGmail) ? $authGmail->email : null,
+                "phone_number" =>($authByWA) ? $authWA->phone_number : null,
+                "claim_date" => date('Y-m-d H:i:s'),
+            ]);
 
-        $voucher = $this->showVoucher($voucher->code);
-        $notifiable = (new AnonymousNotifiable());
-        if ($voucher->email) {
-            $notifiable->route('mail', $voucher->email);
-        }
-        Notification::send($notifiable, new ClaimVoucher($voucher));
-        session()->forget('partner_id');
+            $voucher = $this->showVoucher($voucher->code);
+            $notifiable = (new AnonymousNotifiable());
+            if ($voucher->email) {
+                $notifiable->route('mail', $voucher->email);
+            }
+            Notification::send($notifiable, new ClaimVoucher($voucher));
+            session()->forget('partner_id');
+        });
 
         return $voucher;
     }
