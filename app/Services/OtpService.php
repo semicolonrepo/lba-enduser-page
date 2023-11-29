@@ -65,32 +65,88 @@ class OtpService
         });
     }
 
-    public function sendOtp($otpTypeId, $phoneNumber) {
-        $otpType = $this->getOtpType($otpTypeId);
+    public function sendOtp ($phoneNumber) {
+        $currentTime = date('Y-m-d H:i:s');
+        $url = 'https://service-chat.qontak.com/oauth/token';
+        $ch = curl_init($url);
+        $payload = json_encode( [
+            "username"=> "firda@letsbuyasia.com",
+            "password"=> "A1220fird@!",
+            "grant_type"=> "password",
+            "client_id"=> "RRrn6uIxalR_QaHFlcKOqbjHMG63elEdPTair9B9YdY",
+            "client_secret"=> "Sa8IGIh_HpVK1ZLAF0iFf7jU760osaUNV659pBIZR00"
+        ]);
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true);
+        $auth = curl_exec($ch);
+        curl_close($ch);
+        $resultAuth = json_decode($auth);
+
+        DB::table('third_party_logs')->insert([
+            'third_party_code' => 'QONTAK_AUTH',
+            'url' => $url,
+            'request_body' => $payload,
+            'response_body' => $auth,
+            'created_at' => $currentTime,
+            'updated_at' => $currentTime,
+        ]);
 
         $otpCode = random_int(10000, 99999);
-        $requestBody = array(
-            'userkey' => $otpType->user_key,
-            'passkey' => $otpType->pass_key,
-            'to' => $phoneNumber,
-            'message' => "Untuk dapat lanjut menggunakan Voucher, harap masukan: $otpCode"
-        );
+        $url = 'https://service-chat.qontak.com/api/open/v1/broadcasts/whatsapp/direct';
+        $ch = curl_init($url);
+        $payload = json_encode([
+            "to_number"=> (string) $phoneNumber,
+            "to_name"=> (string) $phoneNumber,
+            "message_template_id"=> "b6018076-9319-4723-b84d-7591d72e0f78",
+            "channel_integration_id"=> "25d03edb-006f-4758-8c16-8e44b9c92ca2",
+            "language"=> [
+                "code"=> "id"
+            ],
+            "parameters"=> [
+                "body"=> [
+                    [
+                        "key" => "1",
+                        "value"=> "kode",
+                        "value_text"=> (string) $otpCode,
+                    ]
+                ],
+                "buttons"=> [
+                    [
+                        "index"=> "0",
+                        "type"=> "url",
+                        "value"=> (string) $otpCode
+                    ]
+                ]
+            ]
+        ]);
 
-        $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_URL, $otpType->url);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
-        curl_setopt($curlHandle, CURLOPT_POST, 1);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $requestBody);
-        $response = curl_exec($curlHandle);
-        $results = json_decode($response, true);
-        curl_close($curlHandle);
+        $authorization = "Authorization: Bearer $resultAuth->access_token";
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload);
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', $authorization));
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true);
+        $otp = curl_exec($ch);
+        $resultOtp = json_decode($otp);
+        curl_close($ch);
 
-        if ($results['status'] == 1) {
-            $this->storeOtp($otpType->third_party_code, $otpType->url, json_encode($requestBody), $response, $otpCode, $otpTypeId, $phoneNumber);
+        DB::table('third_party_logs')->insert([
+            'third_party_code' => 'QONTAK_OTP',
+            'url' => $url,
+            'request_body' => $payload,
+            'response_body' => $otp,
+            'created_at' => $currentTime,
+            'updated_at' => $currentTime,
+        ]);
+
+        if ($resultOtp->status === 'success') {
+            DB::table('one_time_passwords')->insert([
+                'code' => $otpCode,
+                'one_time_password_type_id' => 2,
+                'phone_number' => $phoneNumber,
+                'expires_at' => date('Y-m-d H:i:s', strtotime($currentTime) + 300),
+                'created_at' => $currentTime,
+                'updated_at' => $currentTime
+            ]);
 
             return true;
         }

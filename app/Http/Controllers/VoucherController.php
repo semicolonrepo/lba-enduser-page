@@ -28,7 +28,11 @@ class VoucherController extends Controller
                 ]);
             }
 
-            return redirect()->back()->with('failed', 'Voucher sudah diclaim atau habis!');
+            return redirect()->route('product::show',[
+                'brand' => $brand,
+                'campaign' => $campaign,
+                'productId' => $productId,
+            ])->with('failed', 'Voucher sudah diclaim atau habis!');
         } catch (\Throwable $th) {
             return redirect()->back()->with('failed', 'Terjadi kesalahan!');
         }
