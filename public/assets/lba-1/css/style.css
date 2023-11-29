@@ -3679,6 +3679,7 @@ header .header-menu-trigger:focus {
 .auth-page-body .auth-form {
   padding: 40px 20px;
   background-color: #ffffff;
+  border-radius: 6px;
 }
 .auth-page-body .auth-form__single-field label {
   font-size: 14px;
@@ -3746,6 +3747,7 @@ header .header-menu-trigger:focus {
   border: none;
   background: none;
   background-color: #00c569;
+  border-radius: 6px;
 }
 .auth-page-body .auth-form__info-text {
   color: #6e6e6e;
