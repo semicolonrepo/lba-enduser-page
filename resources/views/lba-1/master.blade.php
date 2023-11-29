@@ -113,6 +113,7 @@
   <script src="{{ asset('assets/plugins/sweetalert.min.js') }}"></script>
   <!-- Main JS -->
   <script src="{{ asset('assets/lba-1/js/main.js') }}"></script>
+  <script src="{{ asset('assets/lba-1/js/colorUtils.js') }}"></script>
   <script>
     $(document).ready(function() {
       const messageNotifSuccess = $('body .body-wrapper').data("notif-success");

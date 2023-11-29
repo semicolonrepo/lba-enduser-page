@@ -88,7 +88,7 @@
 <!-- <a href="#" class="w-100"> -->
   <div class="shop-product-button">
     <!-- button use primary color -->
-    <button form="form-get-product" type="submit" style="background-color: {{ $data->template_primary_color }}" class="buy w-100">
+    <button form="form-get-product" type="submit" style="background-color: {{ $data->template_primary_color }} !important" class="buy w-100">
         Dapatkan Voucher Sekarang
     </button>
   </div>
