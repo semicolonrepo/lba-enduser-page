@@ -1,6 +1,19 @@
 @extends('lba-1.master')
 
 @section('content')
+
+<?php
+require_once base_path('vendor/autoload.php');
+use Hbgl\Barcode\Code128Encoder;
+
+try {
+  $encoded_voucher = Code128Encoder::encode($voucher->code);
+  $hasEncoded = true;
+} catch (\Exception $e) {
+  $hasEncoded = false;
+}
+?>
+
 <div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--70">
   <div class="container">
     <div class="row">
@@ -21,12 +34,17 @@
 </div>
 
 <!-- product content description -->
-<div class="product-content-description border-bottom--thick space-pt--25 space-pb--25">
+<div class="product-content-description border-bottom--thick space-pt--25">
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <p class="section-title space-mb--25 text-center" style="font-weight:700; font-size:24px; color: green">
+        <p class="section-title text-center" style="font-weight:700; font-size:24px; color: green">
             {{$voucher->code}}
+            @if($hasEncoded) 
+            <br><div class="code128 text-center">{{ htmlspecialchars($encoded_voucher) }}</div>
+            @else
+            <p></p>
+            @endif
         </p>
       </div>
     </div>
