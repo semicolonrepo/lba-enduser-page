@@ -61,22 +61,28 @@
             @csrf
             <div class="col-12">
                 <div class="total-shipping">
-                <h3 style="font-weight: 500;" class="section-title">Pilih Gerai Retail Partner:</h3>
-                <p style="font-style:italic; font-weight: 500; font-size:16px;">
-                    (Voucher berlaku di gerai retail yang kamu pilih)
-                </p>
-                <ul style="margin-top: -20px;">
-                    @foreach ($retailer as $retailPartner)
-                    <li style="font-size: 18px; padding-left:12px">
-                        <input style="padding-left: 8px" type="radio" name="partner" value="{{ $retailPartner->id }}"> {{ $retailPartner->name }}
-                    </li>
-                    @endforeach
-                    @if($internal->isNotEmpty())
-                    <li style="font-size: 18px; padding-left:12px">
-                        <input style="padding-left: 8px" type="radio" name="partner" value="internal"> Merchant Partner Kami
-                    </li>
-                    @endif
-                </ul>
+                    <h3 style="font-weight: 500;" class="section-title">Pilih Gerai Retail Partner:</h3>
+                    <p style="font-style:italic; font-weight: 500; font-size:16px;">
+                        (Voucher berlaku di gerai retail yang kamu pilih)
+                    </p>
+                    <div class="row" id="list-partner" style="row-gap: 16px">
+                        @foreach ($retailer as $retailPartner)
+                        <div class="col-6">
+                            <label for="{{ $retailPartner->id }}" class="select-partner">
+                                <img src="{{ env('BASE_URL_DASHBOARD').'/assets/provider/images/'.$retailPartner->photo }}" height="45px">
+                                <input type="radio" name="partner" class="d-none partner" value="{{ $retailPartner->id }}" id="{{ $retailPartner->id }}">
+                            </label>
+                        </div>
+                        @endforeach
+                        @if($internal->isNotEmpty())
+                        <div class="col-6">
+                            <label for="internal" class="select-partner">
+                                <p class="m-0 internal-partner">Merchant Partner Kami</p>
+                                <input type="radio" name="partner" class="d-none partner" value="internal" id="internal">
+                            </label>
+                        </div>
+                        @endif
+                    </div>
                 </div>
             </div>
         </form>

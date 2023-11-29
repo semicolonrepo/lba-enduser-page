@@ -32,6 +32,7 @@
 			-->
   <!-- Main Style CSS -->
   <link rel="stylesheet" href="{{ asset('assets/lba-1/css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('assets/lba-1/css/custom.css') }}">
 
   <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+128&display=swap" rel="stylesheet">
   <style>
@@ -121,6 +122,7 @@
   <!-- Main JS -->
   <script src="{{ asset('assets/lba-1/js/main.js') }}"></script>
   <script src="{{ asset('assets/lba-1/js/colorUtils.js') }}"></script>
+  <script src="{{ asset('assets/lba-1/js/select-partner.js') }}"></script>
   <script>
     $(document).ready(function() {
       const messageNotifSuccess = $('body .body-wrapper').data("notif-success");
