@@ -45,13 +45,11 @@ class ClaimVoucher extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        if ($this->voucher->email) {
-            return (new MailMessage)
-            ->subject('Claim Voucher Letsbuyasia!')
-            ->view('emails.claim_voucher', [
-                'voucher' => $this->voucher,
-            ]);
-        }
+        return (new MailMessage)
+        ->subject('Claim Voucher Letsbuyasia!')
+        ->view('emails.claim_voucher', [
+            'voucher' => $this->voucher,
+        ]);
     }
 
     /**

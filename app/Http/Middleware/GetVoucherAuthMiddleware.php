@@ -27,7 +27,7 @@ class GetVoucherAuthMiddleware
         $campaign =  $request->route('campaign');
         $productId =  $request->route('productId');
 
-        if (!session('partner_id')) {
+        if ($partnerId) {
             session(['partner_id' => $partnerId]);
         }
 
