@@ -38,7 +38,7 @@ class OneTimePasswordController extends Controller
 
         try {
             $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
-            $sendOpt = $this->otpService->sendOtp($otpType->id, $phoneNumber);
+            $sendOpt = $this->otpService->sendOtp($phoneNumber);
 
             if ($sendOpt) {
                 return redirect()->route('otp::validate::get', [

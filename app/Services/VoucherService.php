@@ -141,16 +141,12 @@ class VoucherService
                 ->where('campaign_products.product_id', $productId)
                 ->whereNull('vouchers.provider_id')
                 ->first();
-        }
-
-        if (!empty($partner) && $partner !== 'internal') {
+        } else if (!empty($partner) && $partner !== 'internal') {
             $voucher = (clone $voucherSql)
                 ->where('campaign_products.product_id', $productId)
                 ->where('vouchers.provider_id', $partner)
                 ->first();
-        }
-
-        if (!$voucher) {
+        } else {
             session()->forget('partner_id');
             return false;
         }

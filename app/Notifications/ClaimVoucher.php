@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Channels\QontakGatewayChannel;
 use App\Channels\ZenzivaGatewayChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,7 +30,7 @@ class ClaimVoucher extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail', ZenzivaGatewayChannel::class];
+        return ['mail', QontakGatewayChannel::class];
     }
 
     /**
