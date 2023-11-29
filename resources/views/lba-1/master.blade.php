@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta property="og:title" content="{{ $data->campaign }}">
-  <meta property="og:description" content="{{ $data->campaign_detail }}">
+  <meta property="og:description" content="{{ $data->campaign }}">
   <meta property="og:image" content="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}">
   <meta property="og:url" content="{{ url()->full() }}">
   <meta property="og:type" content="website">
