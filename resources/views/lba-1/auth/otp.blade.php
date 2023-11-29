@@ -14,7 +14,12 @@
               <input type="number" name="otp_number" id="otpCode" placeholder="XXXXXX">
             </div>
             <div class="auth-form__single-field space-mb--40">
-              <p class="auth-form__info-text">Tidak terima OTP? <a href="#">Kirim ulang</a></p>
+              <p class="auth-form__info-text">
+                Tidak terima OTP? 
+                <a href="{{ route('otp::resend', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId, 'phoneNumber' => $phoneNumber]) }}">
+                  Kirim ulang
+                </a>
+              </p>
             </div>
             <button type="submit" class="auth-form__button" style="background: green"> <!-- button color use primary color -->
               Validasi Kode OTP
