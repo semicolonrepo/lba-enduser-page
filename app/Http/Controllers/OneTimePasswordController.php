@@ -55,6 +55,21 @@ class OneTimePasswordController extends Controller
         }
     }
 
+    public function resend($brand, $campaign, $productId, $phoneNumber) {
+        try {
+            $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
+            $sendOpt = $this->otpService->sendOtp($otpType->id, $phoneNumber);
+
+            if ($sendOpt) {
+                return redirect()->back()->with('success', 'Otp berhasil dikirim ulang!');
+            }
+
+            return redirect()->back()->with('failed', 'Otp mengalami gangguan silahkan coba kembali!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('failed', 'Terjadi kesalahan!');
+        }
+    }
+
     public function validateGet($brand, $campaign, $productId, $phoneNumber) {
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
