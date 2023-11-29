@@ -26,7 +26,7 @@ class ProductController extends Controller
 
             if($productData) {
 
-                $retailPartner = VouchersModel::select('providers.id', 'providers.name')
+                $retailPartner = VouchersModel::select('providers.id', 'providers.name', 'providers.photo')
                     ->join('providers', 'vouchers.provider_id', '=', 'providers.id')
                     ->where('vouchers.campaign_id', $campaignData->id)
                     ->where('providers.is_active', true)
