@@ -5,7 +5,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <span class="auth-page-separator text-center space-mt--20 space-mb--20">Login dengan Email & No. Handphone</span>
+        <span class="auth-page-separator text-center space-mt--20 space-mb--20">Login untuk melanjutkan</span>
         <div class="auth-page-social-login">
           <button class="d-flex justify-content-center align-items-center">
             <img src="{{ asset('assets/lba-1/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">

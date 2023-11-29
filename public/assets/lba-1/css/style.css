@@ -3017,6 +3017,7 @@ header .header-menu-trigger:focus {
 
 /* grid product */
 .grid-product {
+  border-radius: 6px;
   padding: 15px;
   background-color: #f8f9f9;
   -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -3782,7 +3783,7 @@ header .header-menu-trigger:focus {
   padding: 15px 0;
   /* color: #000000; */
   border: 1px solid #dddddd;
-  border-radius: 5px;
+  border-radius: 8px;
   /*background-color: transparent;*/
 }
 .auth-page-social-login button:last-child {

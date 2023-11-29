@@ -64,7 +64,7 @@
   $body = json_decode($data->template_body_json, true);
   $bodyBlock = $body['blocks'];
 ?>
-<div class="products-area">
+<div class="products-area space-pb--25">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -80,11 +80,7 @@
                 <div class="col-6">
                   <div class="grid-product space-mb--20">
                     <div class="grid-product__image">
-                        @if(!$is_preview)
-                            <a href="{{ route('product::show', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}">{{$stock->name}}
-                        @else
-                            <a href="#">{{$stock->name}}
-                        @endif
+                        
                         <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="">
                       </a>
                     </div>

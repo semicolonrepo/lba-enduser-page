@@ -36,7 +36,14 @@
   </style>
 </head>
 
-<body class="bg-login mw-500" style="background-image: url('https://s40424.pcdn.co/in/wp-content/uploads/2022/02/digital-marketing-2.jpg.optimal.jpg')">
+<!--<body class="bg-login mw-500" style="background-image: url('https://s40424.pcdn.co/in/wp-content/uploads/2022/02/digital-marketing-2.jpg.optimal.jpg')">-->
+
+@if($data->template_background != null || $data->template_background != '')
+  <body class="bg-login mw-500" style="background-image: url('{{ env('BASE_URL_DASHBOARD').'/assets/pageview/background/'.$data->template_background }}'); background-size: cover; background-attachment: fixed;">
+@else
+  <body class="bg-login mw-500">
+@endif
+
   <!--====================  preloader area ====================-->
   <div class="preloader-activate preloader-active">
     <div class="preloader-area-wrap">
@@ -46,7 +53,7 @@
     </div>
   </div>
   <!--====================  End of preloader area  ====================-->
-  <div class="body-wrapper bg-color--login space-pt--70 space-pb--25">
+  <div class="body-wrapper space-pt--70 space-pb--25" style="background-color: #1B743A">
     <!-- auth page header -->
     <div class="auth-page-header space-mb--50">
       <div class="container">
@@ -80,6 +87,7 @@
   -->
   <!-- Main JS -->
   <script src="{{ asset('assets/lba-1/js/main.js') }}"></script>
+  <script src="{{ asset('assets/lba-1/js/colorUtils.js') }}"></script>
 </body>
 
 <!-- Mirrored from htmldemo.net/rick/rick/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Nov 2023 04:06:31 GMT -->
