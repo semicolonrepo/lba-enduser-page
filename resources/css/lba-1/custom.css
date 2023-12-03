@@ -1,0 +1,45 @@
+.mw-500 {
+  max-width: 500px; 
+  margin: 0 auto;
+}
+
+.bg-auth {
+  width: 500px; 
+  height: 100%; 
+  position: absolute; 
+  object-fit: cover; 
+  z-index: -1;
+}
+
+.code128 {
+  font-family: "Libre Barcode 128";
+  font-size: 3rem;
+  transform: scaleY(1.5);
+}
+
+.select-partner {
+  border: 2px solid #f1f1f1;
+  border-radius: 6px;
+  background: white;
+  padding: 6px;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.internal-partner {
+  height: 45px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.term-condition-link {
+  display: unset !important;
+  padding: unset !important;
+  text-align: unset !important;
+  text-transform: unset !important;
+  background-color: unset !important;
+}
