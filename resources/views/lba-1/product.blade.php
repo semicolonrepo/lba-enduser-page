@@ -90,7 +90,7 @@
             </div>
             <div class="col12">
                 <div class="form-check pb-2">
-                    <input class="form-check-input" type="checkbox" id="check-term-condition">
+                    <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}">
                     <label class="form-check-label" for="check-term-condition">
                         I have read and agreed to the
                         <a href="{{ route('term-condition') }}" class="term-condition-link link-primary" target="_blank">
@@ -108,7 +108,8 @@
 <!-- <a href="#" class="w-100"> -->
   <div class="shop-product-button">
     <!-- button use primary color -->
-    <button form="form-get-product" id="get-voucher" type="submit" style="background-color: {{ $data->template_primary_color }} !important; opacity: 0.6; cursor: unset" class="buy w-100" disabled>
+    <button form="form-get-product" id="get-voucher" type="submit" class="buy w-100" disabled 
+      style="background-color: #9CA3AF; cursor: unset">
         Dapatkan Voucher Sekarang
     </button>
   </div>
