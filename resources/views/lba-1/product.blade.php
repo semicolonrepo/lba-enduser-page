@@ -19,10 +19,13 @@
             <h3 class="title" style="font-size: 24px">{{ $product->name }}</h3>
             <div class="price">
               <span class="discounted-price">
-                @if(strtolower($product->type) == 'free')
+                @if($product->normal_price == 0)
                   Gratis
+                @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
+                  <p>Rp. {{$product->normal_price}}</p>
                 @else
-                  Tawaran menarik
+                    <p style="text-decoration: line-through;">Rp. {{$product->normal_price}}</p>
+                    <p>Rp. {{$product->normal_price -  $product->subsidi_price}}</p>
                 @endif
               </span>
             </div>
@@ -89,7 +92,7 @@
                 <div class="form-check pb-2">
                     <input class="form-check-input" type="checkbox" id="check-term-condition">
                     <label class="form-check-label" for="check-term-condition">
-                        I have read and agreed to the 
+                        I have read and agreed to the
                         <a href="{{ route('term-condition') }}" class="term-condition-link link-primary" target="_blank">
                             Terms and Conditions
                         </a>
