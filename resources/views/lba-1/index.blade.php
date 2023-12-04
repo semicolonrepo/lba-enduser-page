@@ -80,7 +80,7 @@
                 <div class="col-6">
                   <div class="grid-product space-mb--20">
                     <div class="grid-product__image">
-                        
+
                         <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="">
                       </a>
                     </div>
@@ -94,11 +94,14 @@
                         </h3>
                       <div class="price space-mt--10">
                         <span class="discounted-price">
-                          @if(strtolower($stock->type) == 'free')
+                        @if($stock->normal_price == 0)
                             Gratis
-                          @else
-                            Tawaran menarik
-                          @endif
+                        @elseif($stock->normal_price != 0 && $stock->subsidi_price == 0)
+                            <p>Rp. {{$stock->normal_price}}</p>
+                        @else
+                            <p style="text-decoration: line-through;">Rp. {{$stock->normal_price}}</p>
+                            <p>Rp. {{$stock->normal_price -  $stock->subsidi_price}}</p>
+                        @endif
                         </span>
                       </div>
                     </div>
