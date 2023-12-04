@@ -99,8 +99,8 @@
                         @elseif($stock->normal_price != 0 && $stock->subsidi_price == 0)
                             <p>Rp. {{$stock->normal_price}}</p>
                         @else
-                            <p style="text-decoration: line-through;">Rp. {{$stock->normal_price}}</p>
-                            <p>Rp. {{$stock->normal_price -  $stock->subsidi_price}}</p>
+                            <p style="text-decoration: line-through; color: red;">Rp. {{$stock->normal_price}}</p>
+                            <p style="margin-top: -8px;">Rp. {{$stock->normal_price -  $stock->subsidi_price}}</p>
                         @endif
                         </span>
                       </div>
