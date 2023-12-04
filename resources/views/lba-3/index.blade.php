@@ -1,4 +1,4 @@
-@extends('lba-1.master')
+@extends('lba-3.master')
 
 @section('content')
 
@@ -8,12 +8,12 @@
   $header = json_decode($data->template_header_json, true);
   $headerBlock = $header['blocks'];
 ?>
-<div class="space-pb--30" style="background-color: {{ $data->template_primary_color }} !important"> <!-- use primary color for header -->
+<div class="space-pb--30" style="border-radius: 12px; background-color: white !important"> <!-- use primary color for header -->
 
   @foreach ($headerBlock as $block)
 
     @if ($block['type'] == 'carousel')
-      <div class="hero-slider bg-color--grey space-y--10">
+      <div class="hero-slider">
         <div class="container">
           <div class="row row-10">
             <div class="col-12">
@@ -45,9 +45,9 @@
           <div class="row">
             <div class="col-12">
 
-              @include('lba-1.component.text')
+              @include('lba-3.component.text')
 
-              @include('lba-1.component.biolink')
+              @include('lba-3.component.biolink')
 
             </div>
           </div>
@@ -63,6 +63,9 @@
 <?php
   $body = json_decode($data->template_body_json, true);
   $bodyBlock = $body['blocks'];
+
+  $footer = json_decode($data->template_footer_json, true);
+  $footerBlock = $footer['blocks'];
 ?>
 <div class="products-area space-pb--25">
   <div class="container">
@@ -78,10 +81,9 @@
 
                 @foreach ($product as $stock)
                 <div class="col-6">
-                  <div class="grid-product space-mb--20">
+                  <div class="grid-product space-mb--20" style="border:1px {{$data->template_primary_color}} solid">
                     <div class="grid-product__image">
-
-                        <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="">
+                        <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="" style="height: 150px">
                       </a>
                     </div>
                     <div class="grid-product__content">
@@ -92,18 +94,15 @@
                           <a href="#">{{$stock->name}}</a>
                       @endif
                         </h3>
-                      <div class="price space-mt--10">
+                      <!--<div class="price space-mt--10">
                         <span class="discounted-price">
-                        @if($stock->normal_price == 0)
+                          @if(strtolower($stock->type) == 'free')
                             Gratis
-                        @elseif($stock->normal_price != 0 && $stock->subsidi_price == 0)
-                            <p>Rp. {{$stock->normal_price}}</p>
-                        @else
-                            <p style="text-decoration: line-through; color: red;">Rp. {{$stock->normal_price}}</p>
-                            <p style="margin-top: -8px;">Rp. {{$stock->normal_price -  $stock->subsidi_price}}</p>
-                        @endif
+                          @else
+                            Tawaran menarik
+                          @endif
                         </span>
-                      </div>
+                      </div>-->
                     </div>
                   </div>
                 </div>
@@ -113,13 +112,24 @@
             </div>
           @endif
 
-          @include('lba-1.component.text')
+          @include('lba-3.component.text')
 
-          @include('lba-1.component.embed')
+          @include('lba-3.component.embed')
 
-          @include('lba-1.component.image')
+          @include('lba-3.component.image')
 
         @endforeach
+
+        <!-- footer component -->
+        <div class="border-top space-mt--10">
+          @foreach ($footerBlock as $block3)
+
+            @include('lba-3.component.text')
+
+            @include('lba-3.component.biolink')
+
+          @endforeach
+        </div>
 
       </div>
     </div>
@@ -127,26 +137,12 @@
 </div>
 <!--====================  End of body component  ====================-->
 
-<!--====================  Start footer component ====================-->
-<?php
-  $footer = json_decode($data->template_footer_json, true);
-  $footerBlock = $footer['blocks'];
-?>
-<div style="background-color: {{ $data->template_secondary_color }} !important;" class="category-slider-area space-pb--25 ">
+<div class="category-slider-area space-pb--25 ">
   <div class="container">
     <div class="row">
       <div class="col-12">
-
-        @foreach ($footerBlock as $block3)
-
-          @include('lba-1.component.text')
-
-          @include('lba-1.component.biolink')
-
-        @endforeach
-
-        <p class="powered-by section-title text-center">Powered by</p>
-        <p class="text-center space-mb--20">
+        <p class="text-center space-mb--20 space-mt--20">
+          <span class="powered-by-text text-center">Powered by</span><br>
           <a href="https://letsbuyasia.com" target="_blank">
             <img style="height:30px" src="https://app-dev.letsbuyasia.id/assets/img/logo-text.png" />
           </a>
@@ -155,5 +151,4 @@
     </div>
   </div>
 </div>
-<!--====================  End of footer Component  ====================-->
 @endsection
