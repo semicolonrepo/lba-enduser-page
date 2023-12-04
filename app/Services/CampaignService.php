@@ -67,7 +67,7 @@ class CampaignService
     }
 
     public function getProducts($campaignId) {
-        $products = CampaignProductsModel::select('products.*', 'deal_offers.name as type')
+        $products = CampaignProductsModel::select('products.*', 'deal_offers.name as type', 'campaign_products.normal_price', 'campaign_products.subsidi_price')
         ->join('products', 'campaign_products.product_id', '=', 'products.id')
         ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
         ->where('campaign_id', $campaignId)
