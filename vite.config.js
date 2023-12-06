@@ -10,6 +10,9 @@ export default defineConfig({
 
                 'resources/css/lba-1/custom.css',
                 'resources/js/lba-1/product.js',
+
+                'resources/css/lba-2/custom.css',
+                'resources/js/lba-2/product.js',
             ],
             refresh: true,
         }),

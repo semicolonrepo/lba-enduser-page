@@ -9,6 +9,11 @@
     "isEntry": true,
     "src": "resources/css/lba-1/custom.css"
   },
+  "resources/css/lba-2/custom.css": {
+    "file": "assets/custom-b659ecdd.css",
+    "isEntry": true,
+    "src": "resources/css/lba-2/custom.css"
+  },
   "resources/js/app.js": {
     "file": "assets/app-ddee773b.js",
     "isEntry": true,
@@ -18,5 +23,10 @@
     "file": "assets/product-c9229ecf.js",
     "isEntry": true,
     "src": "resources/js/lba-1/product.js"
+  },
+  "resources/js/lba-2/product.js": {
+    "file": "assets/product-7193466a.js",
+    "isEntry": true,
+    "src": "resources/js/lba-2/product.js"
   }
 }
