@@ -32,7 +32,6 @@
 			-->
   <!-- Main Style CSS -->
   <link rel="stylesheet" href="{{ asset('assets/lba-1/css/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets/lba-1/css/custom.css') }}">
   <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+128&display=swap" rel="stylesheet">
   @vite('resources/css/lba-1/custom.css')
 </head>
