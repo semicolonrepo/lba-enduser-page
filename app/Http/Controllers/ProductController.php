@@ -22,6 +22,7 @@ class ProductController extends Controller
                 ->join('products', 'campaign_products.product_id', '=', 'products.id')
                 ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
                 ->where('products.id', $productId)
+                ->where('campaign_products.campaign_id', $campaignData->id)
                 ->first();
 
             if($productData) {
@@ -39,11 +40,19 @@ class ProductController extends Controller
                     ->whereNull('vouchers.provider_id')
                     ->get();
 
+                $merchantCities = VouchersModel::select('indonesia_cities.name')
+                    ->join('voucher_term_indonesia_cities', 'voucher_term_indonesia_cities.voucher_id', 'vouchers.id')
+                    ->join('indonesia_cities', 'indonesia_cities.id', 'voucher_term_indonesia_cities.indonesia_city_id')
+                    ->where('vouchers.campaign_id', $campaignData->id)
+                    ->distinct()
+                    ->get();
+
                 $sentData = [
                     'data' => $campaignData,
                     'product' => $productData,
                     'retailer' => $retailPartner,
                     'internal' => $retailInternal,
+                    'merchantCities' => $merchantCities
                 ];
 
                 $viewTemplate = $campaignData->page_template_code . '.product';

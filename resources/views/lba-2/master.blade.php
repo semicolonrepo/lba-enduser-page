@@ -32,19 +32,8 @@
 			-->
   <!-- Main Style CSS -->
   <link rel="stylesheet" href="{{ asset('assets/lba-2/css/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets/lba-2/css/custom.css') }}">
-
   <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+128&display=swap" rel="stylesheet">
-  <style>
-    .mw-500 {max-width: 500px; margin: 0 auto;}
-    .bg-auth {width: 500px; height: 100%; position: absolute; object-fit: cover; z-index: -1;}
-    
-    .code128 {
-        font-family: "Libre Barcode 128";
-        font-size: 3rem;
-        transform: scaleY(1.5);
-    }
-  </style>
+  @vite('resources/css/lba-2/custom.css')
 </head>
 
 @if($data->template_background != null || $data->template_background != '')
@@ -170,6 +159,8 @@
     }
   });
   </script>
+
+  @yield('js')
 </body>
 
 </html>
