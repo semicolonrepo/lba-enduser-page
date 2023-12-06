@@ -20,17 +20,24 @@
               <div class="hero-slider-wrapper">
 
                 @foreach ($block['data']['items'] as $item)
-                  <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
-                      <div class="container">
-                          <div class="row">
-                              <div class="col-12">
-                                  <div class="hero-slider-content">
-                                      <p class="hero-slider-content__text">{{ $item['caption'] }}</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+
+                  @if ($item['caption'] != null || $item['caption'] != '')
+                  <a href="{{ $item['caption'] }}" target="_blank">
+                  @endif
+                    <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
+                        <!--<div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="hero-slider-content">
+                                        <p class="hero-slider-content__text">{{ $item['caption'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                  @if ($item['caption'] != null || $item['caption'] != '')
+                  </a>
+                  @endif
                 @endforeach
 
               </div>

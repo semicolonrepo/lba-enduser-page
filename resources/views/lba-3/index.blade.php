@@ -29,7 +29,7 @@
 
                 @foreach ($block['data']['items'] as $item)
                   @if ($item['caption'] != null || $item['caption'] != '')
-                  <a href="{{ $item['caption'] }}" id="checkLink" target="_blank">
+                  <a href="{{ $item['caption'] }}" target="_blank">
                   @endif
                     <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
                         <!--<div class="container">
