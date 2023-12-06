@@ -1,72 +1,123 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="no-js" lang="zxx">
+
+<!-- Mirrored from htmldemo.net/rick/rick/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Nov 2023 04:06:30 GMT -->
+
 <head>
-<meta charset="UTF-8">
-<title>LetsBuyAsia - Login</title>
-<meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-touch-fullscreen" content="yes">
-<meta name="HandheldFriendly" content="True">
-<meta property="og:type" content="website">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<!-- CSS  -->
-<link rel="stylesheet" href="{{ asset('assets/lba-2/lib/font-awesome/web-fonts-with-css/css/fontawesome-all.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/lba-2/css/materialize.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/lba-2/css/normalize.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/lba-2/css/style.css') }}">
-<!-- materialize icon -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<!-- Owl carousel -->
-<link rel="stylesheet" href="{{ asset('assets/lba-2/lib/owlcarousel/assets/owl.carousel.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/lba-2/lib/owlcarousel/assets/owl.theme.default.min.css') }}">
-<!-- Slick CSS -->
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/lba-2/lib/slick/slick/slick.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/lba-2/lib/slick/slick/slick-theme.css') }}">
-<!-- Magnific Popup core CSS file -->
-<link rel="stylesheet" href="{{ asset('assets/lba-2/lib/Magnific-Popup-master/dist/magnific-popup.css') }}">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>LetsBuyAsia</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{{ asset('assets/img/logo.ico') }}" type="image/x-icon">
+  <!-- CSS ============================================ -->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/lba-2/css/bootstrap.min.css') }}">
+  <!-- FontAwesome CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/lba-2/css/font-awesome.min.css') }}">
+  <!-- Slick CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/lba-2/css/plugins/slick.min.css') }}">
+  <!-- Animate CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/lba-2/css/plugins/cssanimation.min.css') }}">
+  <!-- IonRange slider CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/lba-2/css/plugins/ion.rangeSlider.min.css') }}">
+  <!-- Vendor & Plugins CSS (Please remove the comment from below vendor.min.css & plugins.min.css for better website load performance and remove css files from above) -->
+  <!--
+			<link rel="stylesheet" href="assets/css/vendor.min.css">
+			<link rel="stylesheet" href="assets/css/plugins/plugins.min.css">
+  -->
+  <!-- Main Style CSS -->
+  <link rel="stylesheet" href="{{ asset('assets/lba-2/css/style.css') }}">
+
+  <style>
+    .mw-500 {max-width: 500px; margin: 0 auto;}
+    .bg-auth {width: 500px; height: 100%; position: absolute; object-fit: cover; z-index: -1;}
+  </style>
 </head>
 
+<!--<body class="bg-login mw-500" style="background-image: url('https://s40424.pcdn.co/in/wp-content/uploads/2022/02/digital-marketing-2.jpg.optimal.jpg')">-->
+
 @if($data->template_background != null || $data->template_background != '')
-    <body id="homepage" style="background-image: url('{{ env('BASE_URL_DASHBOARD').'/assets/pageview/background/'.$data->template_background }}'); background-size: cover; background-attachment: fixed;">
+  <body class="bg-login mw-500" style="background-image: url('{{ env('BASE_URL_DASHBOARD').'/assets/pageview/background/'.$data->template_background }}'); background-size: cover; background-attachment: fixed;">
 @else
-    <body id="homepage">
+  <body class="bg-login mw-500">
 @endif
 
-<!-- BEGIN PRELOADING -->
-<div class="preloading">
-    <div class="wrap-preload">
-        <div class="cssload-loader"></div>
+  <!--====================  preloader area ====================-->
+  <div class="preloader-activate preloader-active">
+    <div class="preloader-area-wrap">
+      <div class="spinner d-flex justify-content-center align-items-center h-100">
+        <div class="img-loader"></div>
+      </div>
     </div>
-</div>
-<!-- END PRELOADING -->
+  </div>
+  <!--====================  End of preloader area  ====================-->
+  <div class="body-wrapper space-pt--70 space-pb--25" style="background-color: #1B743A" @if (session('success')) data-notif-success="{{session('success')}}" @else data-notif-success="" @endif 
+    @if (session('failed')) data-notif-failed="{{session('failed')}}" @else data-notif-failed="" @endif>
+    <!-- auth page header -->
+    <div class="auth-page-header space-mb--50">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h3 class="auth-page-header__title">Welcome to LetsBuyAsia</h3>
+            <p class="auth-page-header__text">Number #1 online-to-offline platform</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<!-- HEADER COMPONENT -->
-<header id="header" style="background-color: {{$data->template_primary_color}}"> <!-- primary color -->
-	<div class="nav-wrapper container">
-	  <div class="header-logo">
-            <a href="{{ route('index', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug]) }}" class="nav-logo">
-                <img style="height:30px" src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" /> <!-- logo brand here -->
-            </a>
-	  </div>
-	</div>
-</header>
-
-    <!-- content -->
     @yield('content')
+  </div>
+  <!-- JS ============================================ -->
+  <!-- Modernizer JS -->
+  <script src="{{ asset('assets/lba-2/js/modernizr-2.8.3.min.js') }}"></script>
+  <!-- jQuery JS -->
+  <script src="{{ asset('assets/lba-2/js/jquery.min.js') }}"></script>
+  <!-- Bootstrap JS -->
+  <script src="{{ asset('assets/lba-2/js/bootstrap.min.js') }}"></script>
+  <!-- IonRanger JS -->
+  <script src="{{ asset('assets/lba-2/js/plugins/ion.rangeSlider.min.js') }}"></script>
+  <!-- SVG inject JS -->
+  <script src="{{ asset('assets/lba-2/js/plugins/svg-inject.min.js') }}"></script>
+  <!-- Slick slider JS -->
+  <script src="{{ asset('assets/lba-2/js/plugins/slick.min.js') }}"></script>
+  <!-- Plugins JS (Please remove the comment from below plugins.min.js for better website load performance and remove plugin js files from above) -->
+  <!--
+  <script src="assets/js/plugins/plugins.min.js"></script>
+  -->
+  <!-- Main JS -->
+  <script src="{{ asset('assets/lba-2/js/main.js') }}"></script>
+  <script src="{{ asset('assets/lba-2/js/colorUtils.js') }}"></script>
+  <script src="{{ asset('assets/plugins/sweetalert.min.js') }}"></script>
+  <script>
+    $(document).ready(function() {
+      const messageNotifSuccess = $('body .body-wrapper').data("notif-success");
+      const messageNotifFailed = $('body .body-wrapper').data("notif-failed");
 
+      if (messageNotifSuccess != "") {
+        swal({
+          title: "Berhasil",
+          text: messageNotifSuccess,
+          icon: "success",
+          buttons: false,
+          timer: 5000,
+        });
+      }
 
-<!-- Script -->
-<script src="{{ asset('assets/lba-2/js/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/lba-2/js/materialize.min.js') }}"></script>
-<!-- Owl carousel -->
-<script src="{{ asset('assets/lba-2/lib/owlcarousel/owl.carousel.min.js') }}"></script>
-<!-- Magnific Popup core JS file -->
-<script src="{{ asset('assets/lba-2/lib/Magnific-Popup-master/dist/jquery.magnific-popup.js') }}"></script>
-<!-- Slick JS -->
-<script src="{{ asset('assets/lba-2/lib/slick/slick/slick.min.js') }}"></script>
-<!-- Custom script -->
-<script src="{{ asset('assets/lba-2/js/custom.js') }}"></script>
+      if (messageNotifFailed != "") {
+        swal({
+          title: "Oops...",
+          text: messageNotifFailed,
+          icon: "error",
+          buttons: false,
+          timer: 5000,
+        });
+      }
+    });
+  </script>
 </body>
+
+<!-- Mirrored from htmldemo.net/rick/rick/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 19 Nov 2023 04:06:31 GMT -->
 
 </html>
