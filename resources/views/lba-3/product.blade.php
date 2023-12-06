@@ -10,7 +10,7 @@
 <!--====================  End of product image slider  ====================-->
 <!--====================  product content ====================-->
 <!-- product content header -->
-<div style="margin-top:-80px" class="product-content-header-area border-bottom--thick space-pt--100 space-pb--25">
+<div style="margin-top:-80px" class="product-content-header-area space-pt--100 space-pb--25">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -18,11 +18,14 @@
           <div class="product-content-header__main-info">
             <h3 class="title" style="font-size: 24px">{{ $product->name }}</h3>
             <div class="price">
-              <span class="discounted-price">
-                @if(strtolower($product->type) == 'free')
+            <span class="discounted-price">
+                @if($product->normal_price == 0)
                   Gratis
+                @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
+                  <p>Rp. {{$product->normal_price}}</p>
                 @else
-                  Tawaran menarik
+                    <p style="text-decoration: line-through; color: red;">Rp. {{$product->normal_price}}</p>
+                    <p style="margin-top: -20px;">Rp. {{$product->normal_price -  $product->subsidi_price}}</p>
                 @endif
               </span>
             </div>
@@ -34,7 +37,7 @@
 </div>
 
 <!-- product content description -->
-<div class="product-content-description border-bottom--thick space-pt--25 space-pb--25">
+<div class="product-content-description space-pt--25 space-pb--25">
   <div class="container">
     <div class="row">
       <div class="col-12">

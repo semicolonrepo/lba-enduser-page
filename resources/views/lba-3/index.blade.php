@@ -7,8 +7,16 @@
 <?php
   $header = json_decode($data->template_header_json, true);
   $headerBlock = $header['blocks'];
+
+  $countHeader = count($header['blocks']);
+  $containsCarousel = in_array('carousel', array_column($header['blocks'], 'type') ?? []);
 ?>
-<div class="space-pb--30" style="border-radius: 12px; background-color: white !important"> <!-- use primary color for header -->
+
+@if ($countHeader == 1 && $containsCarousel)
+  <div style="border-radius: 12px; background-color: white !important"> <!-- use primary color for header -->
+@else
+  <div class="space-pb--15" style="border-radius: 12px; background-color: white !important"> <!-- use primary color for header -->
+@endif
 
   @foreach ($headerBlock as $block)
 
@@ -17,20 +25,26 @@
         <div class="container">
           <div class="row row-10">
             <div class="col-12">
-              <div class="hero-slider-wrapper">
+              <div class="hero-slider-wrapper" style="margin-left:-12px; margin-right:-12px; margin-bottom:-8px;">
 
                 @foreach ($block['data']['items'] as $item)
-                  <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
-                      <div class="container">
-                          <div class="row">
-                              <div class="col-12">
-                                  <div class="hero-slider-content">
-                                      <p class="hero-slider-content__text">{{ $item['caption'] }}</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+                  @if ($item['caption'] != null || $item['caption'] != '')
+                  <a href="{{ $item['caption'] }}" id="checkLink" target="_blank">
+                  @endif
+                    <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
+                        <!--<div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="hero-slider-content">
+                                        <p class="hero-slider-content__text">{{ $item['caption'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                  @if ($item['caption'] != null || $item['caption'] != '')
+                  </a>
+                  @endif
                 @endforeach
 
               </div>
@@ -94,15 +108,18 @@
                           <a href="#">{{$stock->name}}</a>
                       @endif
                         </h3>
-                      <!--<div class="price space-mt--10">
+                        <div class="price space-mt--10">
                         <span class="discounted-price">
-                          @if(strtolower($stock->type) == 'free')
+                        @if($stock->normal_price == 0)
                             Gratis
-                          @else
-                            Tawaran menarik
-                          @endif
+                        @elseif($stock->normal_price != 0 && $stock->subsidi_price == 0)
+                            <p>Rp. {{$stock->normal_price}}</p>
+                        @else
+                            <p style="text-decoration: line-through; color: red;">Rp. {{$stock->normal_price}}</p>
+                            <p style="margin-top: -8px;">Rp. {{$stock->normal_price -  $stock->subsidi_price}}</p>
+                        @endif
                         </span>
-                      </div>-->
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -121,15 +138,17 @@
         @endforeach
 
         <!-- footer component -->
-        <div class="border-top space-mt--10">
-          @foreach ($footerBlock as $block3)
+        @if (count($footerBlock) > 0)
+          <div class="border-top space-mt--10">
+            @foreach ($footerBlock as $block3)
 
-            @include('lba-3.component.text')
+              @include('lba-3.component.text')
 
-            @include('lba-3.component.biolink')
+              @include('lba-3.component.biolink')
 
-          @endforeach
-        </div>
+            @endforeach
+          </div>
+        @endif
 
       </div>
     </div>

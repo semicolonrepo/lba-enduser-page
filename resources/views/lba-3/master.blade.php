@@ -170,6 +170,20 @@
     }
   });
   </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var link = document.getElementById('checkLink');
+    var href = link.getAttribute('href');
+
+    // Check if the href starts with 'http://' or 'https://'
+    if (!/^https?:\/\//i.test(href)) {
+      // If not, add 'http://' to the beginning
+      href = 'http://' + href;
+      link.setAttribute('href', href);
+    }
+  });
+</script>
 </body>
 
 </html>
