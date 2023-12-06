@@ -3186,6 +3186,7 @@ header .header-menu-trigger:focus {
 /* shop product image slider */
 .product-image-slider-wrapper {
   position: relative;
+  border-radius: 12px;
 }
 .product-image-slider-wrapper .product-image-single img {
   margin: 0 auto;
