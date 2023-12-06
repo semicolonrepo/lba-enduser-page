@@ -1,4 +1,4 @@
-@extends('lba-3.master')
+@extends('lba-2.master')
 
 @section('content')
 
