@@ -3733,12 +3733,12 @@ header .header-menu-trigger:focus {
 
 /* auth page body */
 .auth-page-body .auth-form {
-  padding: 40px 20px;
+  padding: 35px 20px;
   background-color: #ffffff;
   border-radius: 6px;
 }
 .auth-page-body .auth-form__single-field label {
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 20px;
   color: #02011e;
 }
@@ -3835,7 +3835,7 @@ header .header-menu-trigger:focus {
   font-size: 18px;
   line-height: 1;
   display: block;
-  color: #fff;
+  color: #000000;
 }
 
 .auth-page-social-login button {
@@ -4557,3 +4557,35 @@ header .header-menu-trigger:focus {
 }
 
 /*=====  End of checkout  ======*/
+
+.auth-page-footer {
+  height: 380px;
+  background: #ffffff;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.auth-page-body {
+  height: 380px;
+  background: #ffffff;
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+.auth-text-title {
+  margin-top: 45px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.auth-text-header {
+  font-size: 21px;
+  font-weight: 650;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.auth-text-body {
+  font-size: 18px;
+  text-align: center;
+}
