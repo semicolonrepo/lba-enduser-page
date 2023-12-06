@@ -14,7 +14,7 @@ try {
 }
 ?>
 
-<div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--70">
+<div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--70" style="border-top-left-radius: 12px; border-top-right-radius: 12px">
   <div class="container">
     <div class="row">
       <div class="col-12">
