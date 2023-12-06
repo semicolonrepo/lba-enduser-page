@@ -90,7 +90,7 @@
   </div>
 </div>
 
-<div class="grand-total space-pb--15" style="border-radius: 0 0 10px 10px">
+<div class="grand-total space-pb--15" style="border-radius: 0 0 12px 12px">
   <div class="container">
     <div class="row">
       <form action="{{ route('voucher::claim', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post" id="form-get-product">
