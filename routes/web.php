@@ -31,6 +31,7 @@ Route::get('/term-condition', [TermConditionController::class, 'index'])->name('
 
 Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/', [CampaignController::class, 'index'])->name('index')->middleware('activity.log');
+    Route::get('/cover', [CampaignController::class, 'cover'])->name('cover')->middleware('activity.log');
 
     Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show')->middleware('activity.log');
 

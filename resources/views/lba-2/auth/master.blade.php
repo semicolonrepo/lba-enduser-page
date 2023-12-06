@@ -45,7 +45,7 @@
 <header id="header" style="background-color: {{$data->template_primary_color}}"> <!-- primary color -->
 	<div class="nav-wrapper container">
 	  <div class="header-logo">
-            <a href="{{ route('index', ['brand' => $data->brand, 'campaign' => $data->slug]) }}" class="nav-logo">
+            <a href="{{ route('index', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug]) }}" class="nav-logo">
                 <img style="height:30px" src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" /> <!-- logo brand here -->
             </a>
 	  </div>
