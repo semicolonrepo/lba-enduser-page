@@ -30,5 +30,5 @@
             ?>            
             
             @if($issetText)
-                <p>{!! $text !!}</p>
+                <p class="space-mt--10">{!! $text !!}</p>
             @endif

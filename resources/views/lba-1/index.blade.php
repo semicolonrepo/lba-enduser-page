@@ -20,17 +20,24 @@
               <div class="hero-slider-wrapper">
 
                 @foreach ($block['data']['items'] as $item)
-                  <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
-                      <div class="container">
-                          <div class="row">
-                              <div class="col-12">
-                                  <div class="hero-slider-content">
-                                      <p class="hero-slider-content__text">{{ $item['caption'] }}</p>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+
+                  @if ($item['caption'] != null || $item['caption'] != '')
+                  <a href="{{ $item['caption'] }}" target="_blank">
+                  @endif
+                    <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
+                        <!--<div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="hero-slider-content">
+                                        <p class="hero-slider-content__text">{{ $item['caption'] }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                  @if ($item['caption'] != null || $item['caption'] != '')
+                  </a>
+                  @endif
                 @endforeach
 
               </div>
@@ -80,7 +87,7 @@
                 <div class="col-6">
                   <div class="grid-product space-mb--20">
                     <div class="grid-product__image">
-                        
+
                         <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="">
                       </a>
                     </div>
@@ -94,11 +101,14 @@
                         </h3>
                       <div class="price space-mt--10">
                         <span class="discounted-price">
-                          @if(strtolower($stock->type) == 'free')
+                        @if($stock->normal_price == 0)
                             Gratis
-                          @else
-                            Tawaran menarik
-                          @endif
+                        @elseif($stock->normal_price != 0 && $stock->subsidi_price == 0)
+                            <p>Rp. {{$stock->normal_price}}</p>
+                        @else
+                            <p style="text-decoration: line-through; color: red;">Rp. {{$stock->normal_price}}</p>
+                            <p style="margin-top: -8px;">Rp. {{$stock->normal_price -  $stock->subsidi_price}}</p>
+                        @endif
                         </span>
                       </div>
                     </div>

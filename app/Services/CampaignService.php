@@ -27,6 +27,8 @@ class CampaignService
                     'campaigns.template_body_json',
                     'campaigns.template_footer_json',
                     'campaigns.template_background',
+                    'campaigns.template_cover_json',
+                    'campaigns.template_thankyou_json',
                     'page_templates.code as page_template_code',
                 )
         ->join('page_templates', 'page_templates.id', '=', 'campaigns.page_template_id')
@@ -56,6 +58,8 @@ class CampaignService
             'campaigns.template_body_json',
             'campaigns.template_footer_json',
             'campaigns.template_background',
+            'campaigns.template_cover_json',
+            'campaigns.template_thankyou_json',
             'page_templates.code as page_template_code',
         )
         ->join('page_templates', 'page_templates.id', '=', 'campaigns.page_template_id')
@@ -67,7 +71,7 @@ class CampaignService
     }
 
     public function getProducts($campaignId) {
-        $products = CampaignProductsModel::select('products.*', 'deal_offers.name as type')
+        $products = CampaignProductsModel::select('products.*', 'deal_offers.name as type', 'campaign_products.normal_price', 'campaign_products.subsidi_price')
         ->join('products', 'campaign_products.product_id', '=', 'products.id')
         ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
         ->where('campaign_id', $campaignId)

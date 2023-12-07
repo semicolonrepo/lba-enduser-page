@@ -7,6 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
+use hisorange\BrowserDetect\Parser as Browser;
 
 class ActivityLogMiddleware
 {
@@ -39,8 +40,12 @@ class ActivityLogMiddleware
             'product_id' => $request->route('productId') ?? null,
             'brand_id' => $campaignData->brand_id,
             'campaign_id' => $campaignData->id,
+            'full_url' => $request->fullUrl(),
+            'device_type' => Browser::deviceType(),
+            'platform_name' => Browser::platformName(),
+            'device_model' => Browser::deviceModel(),
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
         ];
 
         DB::table('activity_logs')

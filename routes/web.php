@@ -8,6 +8,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\TermConditionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +27,11 @@ Route::get('/', function () {
 
 Route::get('/preview/{token}', [CampaignController::class, 'preview'])->name('preview');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google::callback');
+Route::get('/term-condition', [TermConditionController::class, 'index'])->name('term-condition');
 
 Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/', [CampaignController::class, 'index'])->name('index')->middleware('activity.log');
+    Route::get('/cover', [CampaignController::class, 'cover'])->name('cover')->middleware('activity.log');
 
     Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show')->middleware('activity.log');
 

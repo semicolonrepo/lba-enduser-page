@@ -2932,6 +2932,25 @@ header .header-menu-trigger:focus {
   color: #02011e;
 }
 
+.cover-hero-slider-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: auto !important;
+  height: 600px;
+  /*margin: 5px;*/
+  border-radius: 8px;
+  -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 /*=====  End of hero slider  ======*/
 /*=============================================
 =            category slider            =
@@ -3349,6 +3368,32 @@ header .header-menu-trigger:focus {
 .shop-product-button button.buy {
   color: #ffffff;
   background-color: #d11402;
+}
+
+.cover-product-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-right: -12px;
+  margin-left: -12px;
+}
+.cover-product-button button {
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  /*line-height: 1;*/
+  display: block;
+  /*-ms-flex-preferred-size: 50%;
+      flex-basis: 50%;*/
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  margin-top: -10px;
+  border: none;
+  background: none;
+}
+.cover-product-button button.next {
+  color: #ffffff;
 }
 
 /* shop header */
