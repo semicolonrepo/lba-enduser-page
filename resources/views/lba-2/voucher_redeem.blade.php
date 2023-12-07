@@ -12,9 +12,11 @@ try {
 } catch (\Exception $e) {
   $hasEncoded = false;
 }
+
+$thankpage = json_decode($data->template_thankyou_json, true);
 ?>
 
-<div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--70" style="border-top-left-radius: 12px; border-top-right-radius: 12px">
+<div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--30" style="border-top-left-radius: 12px; border-top-right-radius: 12px">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -62,6 +64,22 @@ try {
         <p class="text-center space-mb--5" style="font-size: 16px;">
           Kami juga telah mengirimkan kode voucher beserta <b>cara pemakaian nya</b> melalui @if($voucher->email) <b>{{$voucher->email}}</b> @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) <b>{{$voucher->phone_number}}</b> @endif nomor kamu ya.
         </p>
+
+        @php
+        if($thankpage != null) {
+        $thankBlock = $thankpage['blocks'];
+        @endphp
+          @foreach ($thankBlock as $block)
+            @if ($block['type'] == 'paragraph')
+              @if ($block['data']['text'] != '')
+              <p class="text-center" style="font-size: 16px;">{!! $block['data']['text'] !!}</p>
+              @endif
+            @endif
+          @endforeach
+        @php
+        }
+        @endphp
+
       </div>
     </div>
   </div>
