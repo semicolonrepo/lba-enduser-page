@@ -24,11 +24,19 @@ class CampaignController extends Controller
             ];
 
             $cover = json_decode($campaignData->template_cover_json, true);
-            $containsCarousel = in_array('carousel', array_column($cover['blocks'], 'type') ?? []);
-            if($containsCarousel && count($cover['blocks'][0]['data']['items']) > 0 ) {
-                //show cover page
-                $viewTemplate = $campaignData->page_template_code . '.cover';
-                return view($viewTemplate, $sentData);
+            if($cover != null) {
+                $containsCarousel = in_array('carousel', array_column($cover['blocks'], 'type') ?? []);
+                if($containsCarousel && count($cover['blocks'][0]['data']['items']) > 0 ) {
+                    //show cover page
+                    $viewTemplate = $campaignData->page_template_code . '.cover';
+                    return view($viewTemplate, $sentData);
+                }else {
+                    //redirect to index
+                    return redirect()->route('index', [
+                        'brand' => Str::slug($campaignData->brand),
+                        'campaign' => $campaignData->slug,
+                    ]);
+                }
             }else {
                 //redirect to index
                 return redirect()->route('index', [
@@ -73,16 +81,26 @@ class CampaignController extends Controller
             ];
 
             $cover = json_decode($campaignData->template_cover_json, true);
-            $containsCarousel = in_array('carousel', array_column($cover['blocks'], 'type') ?? []);
-            if($containsCarousel && count($cover['blocks'][0]['data']['items']) > 0 ) {
-                //redirect to coverpage
-                $viewTemplate = $campaignData->page_template_code . '.cover';
+            if($cover != null) {
+                $containsCarousel = in_array('carousel', array_column($cover['blocks'], 'type') ?? []);
+                if($containsCarousel && count($cover['blocks'][0]['data']['items']) > 0 ) {
+                    //redirect to coverpage
+                    $viewTemplate = $campaignData->page_template_code . '.cover';
+                    return view($viewTemplate, $sentData);
+                }else {
+                    //redirect to index
+                    return redirect()->route('index', [
+                        'brand' => Str::slug($campaignData->brand),
+                        'campaign' => $campaignData->slug,
+                    ]);
+                }
             }else {
-                //redirect to homepage
-                $viewTemplate = $campaignData->page_template_code . '.index';
+                //redirect to index
+                return redirect()->route('index', [
+                    'brand' => Str::slug($campaignData->brand),
+                    'campaign' => $campaignData->slug,
+                ]);
             }
-
-            return view($viewTemplate, $sentData);
         }
 
         return view('welcome_custom', ['message' => 'Campaign not found.']);
