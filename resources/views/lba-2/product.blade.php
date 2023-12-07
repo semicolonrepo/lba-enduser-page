@@ -7,9 +7,9 @@
   <div class="container space-pt--15">
     <div class="row justify-content-center">
       <div class="col-8">
-        <div class="grid-product px-5" style="border:1px {{$data->template_primary_color}} solid">
+        <div class="grid-product px-3 px-md-5" style="border:1px {{$data->template_primary_color}} solid">
           <div class="grid-product__image">
-            <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'. $product->photo }}" class="img-fluid" alt="" style="height: 200px">
+            <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'. $product->photo }}" class="img-fluid" alt="" style="height: 200px; object-fit: cover;">
           </div>
           <div class="grid-product__content text-center">
             <h3 class="title fw-bold">{{ $product->name }}</h3>
