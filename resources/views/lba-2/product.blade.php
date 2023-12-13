@@ -31,9 +31,9 @@
               @if($product->normal_price == 0)
                 GRATIS
               @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
-                <p>Rp. {{$product->normal_price}}</p>
+                <p>{{ formatCurrency($product->normal_price) }}</p>
               @else
-                <p>SEKARANG HANYA <span class="d-inline-block">Rp. {{$product->normal_price -  $product->subsidi_price}}</span></p>
+                <p>SEKARANG HANYA <span class="d-inline-block">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</span></p>
               @endif
             </h3>
           </div>
