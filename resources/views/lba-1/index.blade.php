@@ -104,10 +104,10 @@
                         @if($stock->normal_price == 0)
                             Gratis
                         @elseif($stock->normal_price != 0 && $stock->subsidi_price == 0)
-                            <p>Rp. {{$stock->normal_price}}</p>
+                            <p class="text-black fw-bold">{{ formatCurrency($stock->normal_price) }}</p>
                         @else
-                            <p style="text-decoration: line-through; color: red;">Rp. {{$stock->normal_price}}</p>
-                            <p style="margin-top: -8px;">Rp. {{$stock->normal_price -  $stock->subsidi_price}}</p>
+                            <p style="text-decoration: line-through; color: red; font-size: 14px">{{ formatCurrency($stock->normal_price) }}</p>
+                            <p class="text-black fw-bold" style="margin-top: -8px;">{{ formatCurrency($stock->normal_price -  $stock->subsidi_price) }}</p>
                         @endif
                         </span>
                       </div>

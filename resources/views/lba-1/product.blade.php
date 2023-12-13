@@ -22,10 +22,10 @@
                 @if($product->normal_price == 0)
                   Gratis
                 @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
-                  <p>Rp. {{$product->normal_price}}</p>
+                  <p class="text-black fw-bold">{{ formatCurrency($product->normal_price) }}</p>
                 @else
-                    <p style="text-decoration: line-through; color: red;">Rp. {{$product->normal_price}}</p>
-                    <p style="margin-top: -20px;">Rp. {{$product->normal_price -  $product->subsidi_price}}</p>
+                  <p style="text-decoration: line-through; color: red; font-size: 19px">{{ formatCurrency($product->normal_price) }}</p>
+                  <p class="text-black fw-bold" style="margin-top: -20px;">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</p>
                 @endif
               </span>
             </div>
