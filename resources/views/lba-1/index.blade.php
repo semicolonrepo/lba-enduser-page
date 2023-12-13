@@ -84,7 +84,10 @@
               <div class="row row-10">
 
                 @foreach ($product as $stock)
-                <div class="col-6">
+                @php
+                    $urlProduct = route('product::show', ['brand' =>  Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]);
+                @endphp
+                <div class="col-6" style="cursor: pointer;" onclick="window.location.href='{{$urlProduct}}';">
                   <div class="grid-product space-mb--20">
                     <div class="grid-product__image">
 
@@ -94,9 +97,9 @@
                     <div class="grid-product__content">
                       <h3 class="title">
                       @if(!$is_preview)
-                          <a href="{{ route('product::show', ['brand' =>  Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]) }}">{{$stock->name}}</a>
+                          <p>{{$stock->name}}</p>
                       @else
-                          <a href="#">{{$stock->name}}</a>
+                          <p>{{$stock->name}}</p>
                       @endif
                         </h3>
                       <div class="price space-mt--10">
