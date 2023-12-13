@@ -47,7 +47,7 @@
         </p>
       </div>
 
-      <div class="col-12">
+      <div class="col-12 campaign-term-condition">
         <p style="font-weight: 500;" class="section-title space-mt--20 space-mb--10">Syarat & Ketentuan:</p>
         <p class="section-title space-mb--25">
           {!! $data->campaign_detail !!}
