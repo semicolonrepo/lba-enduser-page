@@ -62,14 +62,14 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="auth-text-title">
+        {{-- <div class="auth-text-title">
           <div class="auth-text-header">Welcome to LetsBuyAsia</div>
           <div class="auth-text-body">Number #1</div>
           <div class="auth-text-body">Online to Offline Platform</div>
-        </div>
+        </div> --}}
         
         <!-- Auth form -->
-        <div class="auth-form" style="margin-top: -55px">
+        <div class="auth-form">
           <form action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId]) }}" method="post">
           @csrf
             <div class="auth-form__single-field space-mb--20">
