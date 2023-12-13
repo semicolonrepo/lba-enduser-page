@@ -111,7 +111,6 @@
   <!-- Main JS -->
   <script src="{{ asset('assets/lba-2/js/main.js') }}"></script>
   <script src="{{ asset('assets/lba-2/js/colorUtils.js') }}"></script>
-  <script src="{{ asset('assets/lba-2/js/select-partner.js') }}"></script>
   <script>
     $(document).ready(function() {
       const messageNotifSuccess = $('body .body-wrapper').data("notif-success");
