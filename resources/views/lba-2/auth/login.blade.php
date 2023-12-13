@@ -62,12 +62,12 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="auth-text-title">
+        {{-- <div class="auth-text-title">
           <div class="auth-text-header">Welcome to LetsBuyAsia</div>
           <div class="auth-text-body">Number #1</div>
           <div class="auth-text-body">Online to Offline Platform</div>
-        </div>
-        <span class="auth-page-separator text-center space-mt--20 space-mb--20">Login untuk melanjutkan</span>
+        </div> --}}
+        <span class="auth-page-separator text-center space-mt--40 space-mb--20">Login untuk melanjutkan</span>
         <div class="auth-page-social-login" style="margin-top:-8px">
           <button class="d-flex justify-content-center align-items-center">
             <img src="{{ asset('assets/lba-2/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">

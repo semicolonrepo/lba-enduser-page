@@ -33,7 +33,7 @@
               @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
                 <p>Rp. {{$product->normal_price}}</p>
               @else
-                <p>SEKARANG HANYA Rp. {{$product->normal_price -  $product->subsidi_price}}</p>
+                <p>SEKARANG HANYA <span class="d-inline-block">Rp. {{$product->normal_price -  $product->subsidi_price}}</span></p>
               @endif
             </h3>
           </div>
@@ -44,35 +44,37 @@
 </div>
 
 <!-- product content description -->
-<div class="product-content-description space-pb--25">
+@if ($product->description)
+<div class="product-content-description space-pb--25 pt-3">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-10">
         <p class="section-title fw-bold m-0">Tentang Produk:</p>
-        <p class="section-title space-mb--25">
+        <p class="section-title space-mb--25 lh-sm" style="font-size: 16px">
           {!! $product->description !!}
         </p>
       </div>
     </div>
   </div>
 </div>
+@endif
 
 <div class="accordion accordion-flush">
   <div class="accordion-item">
     <h2 class="accordion-header" id="term-condition">
-      <button class="accordion-button accordion-lba-2" type="button" data-bs-toggle="collapse" data-bs-target="#panel-term-condition" aria-expanded="false" aria-controls="panel-term-condition">
+      <button class="accordion-button accordion-lba-2 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panel-term-condition" aria-expanded="false" aria-controls="panel-term-condition">
         Syarat dan Ketentuan
       </button>
     </h2>
     <div id="panel-term-condition" class="accordion-collapse collapse show" aria-labelledby="term-condition">
-      <div class="accordion-body">
+      <div class="accordion-body campaign-term-condition">
         {!! $data->campaign_detail !!}
       </div>
     </div>
   </div>
   <div class="accordion-item">
     <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-      <button class="accordion-button accordion-lba-2 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+      <button class="accordion-button accordion-lba-2 collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
         Lokasi Merchant
       </button>
     </h2>

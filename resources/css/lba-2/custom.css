@@ -56,3 +56,7 @@ body, h1, h2, h3, h4, h5, h6 {
   border-color: unset !important;
   box-shadow: unset !important;
 }
+
+.campaign-term-condition > * {
+  font-family: inherit !important;
+}
