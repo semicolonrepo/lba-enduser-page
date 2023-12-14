@@ -12,9 +12,11 @@ class ProductController extends Controller
 {
     public function __construct(
         private CampaignService $campaignService,
+        private VoucherService $voucherService,
     ) {}
 
     public function show($brand, $campaign, $productId) {
+        $validateAuth = $this->voucherService->validateAuth($brand, $campaign);
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
         if($campaignData && $productId) {
@@ -52,7 +54,8 @@ class ProductController extends Controller
                     'product' => $productData,
                     'retailer' => $retailPartner,
                     'internal' => $retailInternal,
-                    'merchantCities' => $merchantCities
+                    'merchantCities' => $merchantCities,
+                    'authData' => $validateAuth,
                 ];
 
                 $viewTemplate = $campaignData->page_template_code . '.product';
