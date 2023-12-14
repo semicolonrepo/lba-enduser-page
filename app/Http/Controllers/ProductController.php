@@ -50,6 +50,7 @@ class ProductController extends Controller
                     ->get();
 
                 $sentData = [
+                    'brand' => $brand,
                     'data' => $campaignData,
                     'product' => $productData,
                     'retailer' => $retailPartner,
