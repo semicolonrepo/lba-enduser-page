@@ -81,21 +81,35 @@ class VoucherService
         $campaignData = $this->campaignService->getCampaign($brandSlug, $campaignSlug);
         $campaignAuths = $this->campaignService->getCampaignAuths($campaignData->id);
 
+        $needAuthGmail = false;
+        $needAuthWA = false;
         $customerGmailSession = session('customer_user_gmail');
         $authByGmail = (clone $campaignAuths)->where('auth_settings.code', 'GMAIL')->first();
+        if ($authByGmail) {
+            $needAuthGmail = true;
+        }
+
         if (!$customerGmailSession && $authByGmail) {
             $isAuthGmail = false;
         }
 
         $customerWaSession = session('customer_user_wa');
         $authByWA = (clone $campaignAuths)->where('auth_settings.code', 'WHATSAPP')->first();
+        if ($authByWA) {
+            $needAuthWA = true;
+        }
+
         if (!$customerWaSession && $authByWA) {
             $isAuthWA = false;
         }
 
         return (object) [
+            'needAuthGmail' => $needAuthGmail,
             'isAuthGmail' => $isAuthGmail,
+            'userGmail' =>  $customerGmailSession,
+            'needAuthWA' => $needAuthWA,
             'isAuthWA' => $isAuthWA,
+            'userWA' => $customerWaSession,
         ];
     }
 
