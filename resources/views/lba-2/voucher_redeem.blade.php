@@ -83,19 +83,19 @@ $thankpage = json_decode($data->template_thankyou_json, true);
       </div>
       <div class="col-12 mt-4 gap-2 d-flex flex-column">
         <div class="shop-product-button">
-          <a href="#" class="w-100">
+          <a href="https://t.me/discounthunters_info" target="_blank" class="w-100">
             <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
               Join Komunitas
             </button>
           </a>
         </div>
-        <div class="shop-product-button">
+        {{-- <div class="shop-product-button">
           <a href="#" class="w-100">
             <button class="buy w-100" style="background-color: unset; color: #4e4e4e; border: 1px solid {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
               Cek Promo Lainnya
             </button>
           </a>
-        </div>
+        </div> --}}
       </div>
     </div>
   </div>
