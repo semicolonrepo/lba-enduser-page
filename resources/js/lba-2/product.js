@@ -2,6 +2,7 @@ $(document).ready(function () {
   const primaryColor = $(".body-wrapper").data("primary-color");
 
   $(".partner").change(function() {
+    $("#partner-selected").val($(this).val());
     const termConditionChecked = $("#check-term-condition:checked").length;
 
     $("#list-partner .select-partner").css("border-color", "");
