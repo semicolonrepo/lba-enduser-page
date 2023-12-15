@@ -175,6 +175,11 @@ class VoucherService
             return false;
         }
 
+        if (!$voucher) {
+            session()->forget('partner_id');
+            return false;
+        }
+
         DB::transaction(function () use ($voucher, $productId, $authByGmail, $authByWA, $authGmail, $authWA) {
             DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
             ->update([
