@@ -141,13 +141,14 @@
 
           @if ($authData->needAuthWA)
             <form action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post">
+                @csrf
               <div class="form-group mt-2">
                 <label class="w-100 text-center fs-6">WhatsApp Number :</label>
-                <input type="text" class="form-control" style="height: 45px" value="{{ $authData->userWA }}" {{ $authData->isAuthWA ? 'disabled' : 'required' }}>
+                <input type="text" name="phone_number" class="form-control" style="height: 45px" value="{{ $authData->userWA }}" {{ $authData->isAuthWA ? 'disabled' : 'required' }}>
               </div>
               @if (!$authData->isAuthWA)
                 <div class="shop-product-button mt-3 mb-2">
-                  <button type="submit" class="buy w-100" 
+                  <button type="submit" class="buy w-100"
                     style="border-radius: 10px; line-height: 1; background-color: {{ $data->template_primary_color }}">
                     Kirim OTP Ke WhatsApp
                   </button>
@@ -157,9 +158,8 @@
           @endif
         </div>
       </div>
-        
-      @if ((($authData->needAuthGmail && $authData->isAuthGmail) || !$authData->needAuthGmail) &&
-        (($authData->needAuthWA && $authData->isAuthWA) || !$authData->needAuthWA))
+
+      @if ($authData->isAuthGmail && $authData->isAuthWA)
         <form action="{{ route('voucher::claim', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post" id="form-get-product">
           @csrf
           <div class="col12">
@@ -177,7 +177,7 @@
             <!-- get voucher button -->
             <div class="shop-product-button">
               <!-- button use primary color -->
-              <button form="form-get-product" id="get-voucher" type="submit" class="buy w-100" disabled 
+              <button form="form-get-product" id="get-voucher" type="submit" class="buy w-100" disabled
                 style="background-color: #9CA3AF; cursor: unset; border-radius: 10px; line-height: 1">
                   Dapatkan Voucher Sekarang
               </button>
