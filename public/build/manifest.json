@@ -20,12 +20,12 @@
     "src": "resources/js/app.js"
   },
   "resources/js/lba-1/product.js": {
-    "file": "assets/product-68f52056.js",
+    "file": "assets/product-29300760.js",
     "isEntry": true,
     "src": "resources/js/lba-1/product.js"
   },
   "resources/js/lba-2/product.js": {
-    "file": "assets/product-29300760.js",
+    "file": "assets/product-edbff3e5.js",
     "isEntry": true,
     "src": "resources/js/lba-2/product.js"
   }

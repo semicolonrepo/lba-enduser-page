@@ -141,7 +141,7 @@
 
           @if ($authData->needAuthWA)
             <form action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post">
-                @csrf
+              @csrf
               <div class="form-group mt-2">
                 <label class="w-100 text-center fs-6">WhatsApp Number :</label>
                 <input type="text" name="phone_number" class="form-control" style="height: 45px" value="{{ $authData->userWA }}" {{ $authData->isAuthWA ? 'disabled' : 'required' }}>
@@ -162,6 +162,7 @@
       @if ($authData->isAuthGmail && $authData->isAuthWA)
         <form action="{{ route('voucher::claim', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post" id="form-get-product">
           @csrf
+          <input type="hidden" name="partner" id="partner-selected">
           <div class="col12">
             <div class="form-check pb-2">
               <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}">
