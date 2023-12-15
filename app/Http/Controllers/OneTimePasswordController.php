@@ -103,6 +103,16 @@ class OneTimePasswordController extends Controller
             $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
             $validateOtp = $this->otpService->validateOtp($otpType->id, $phoneNumber, $otpNumber);
 
+            $campaignData = $this->campaignService->getCampaign($brand, $campaign);
+
+            if ($campaignData->page_template_id == 2) {
+                return redirect()->route('product::show', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ]);
+            }
+
             if ($validateOtp) {
                 return redirect()->route('voucher::claim', [
                     'brand' => $brand,

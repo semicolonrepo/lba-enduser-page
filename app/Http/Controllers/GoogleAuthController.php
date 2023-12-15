@@ -55,6 +55,16 @@ class GoogleAuthController extends Controller
             $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
             Session::put('customer_user_gmail', $authGmailUuid, 60);
 
+            $campaignData = $this->campaignService->getCampaign($brandSession, $campaignSession);
+
+            if ($campaignData->page_template_id == 2) {
+                return redirect()->route('product::show', [
+                    'brand' => $brandSession,
+                    'campaign' => $campaignSession,
+                    'productId' => $productIdSession,
+                ]);
+            }
+
             return redirect()->route('voucher::claim', [
                 'brand' => $brandSession,
                 'campaign' => $campaignSession,

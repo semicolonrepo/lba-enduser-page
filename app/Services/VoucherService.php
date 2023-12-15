@@ -81,21 +81,45 @@ class VoucherService
         $campaignData = $this->campaignService->getCampaign($brandSlug, $campaignSlug);
         $campaignAuths = $this->campaignService->getCampaignAuths($campaignData->id);
 
+        $needAuthGmail = false;
+        $needAuthWA = false;
         $customerGmailSession = session('customer_user_gmail');
         $authByGmail = (clone $campaignAuths)->where('auth_settings.code', 'GMAIL')->first();
+        if ($authByGmail) {
+            $needAuthGmail = true;
+        }
+
+        if ($customerGmailSession) {
+            $authGmail = DB::table('auth_gmail')
+            ->where('uuid', session('customer_user_gmail'))->first();
+        }
+
         if (!$customerGmailSession && $authByGmail) {
             $isAuthGmail = false;
         }
 
         $customerWaSession = session('customer_user_wa');
         $authByWA = (clone $campaignAuths)->where('auth_settings.code', 'WHATSAPP')->first();
+        if ($authByWA) {
+            $needAuthWA = true;
+        }
+
+        if ($customerWaSession) {
+            $authWA = DB::table('auth_wa')
+            ->where('uuid', session('customer_user_wa'))->first();
+        }
+
         if (!$customerWaSession && $authByWA) {
             $isAuthWA = false;
         }
 
         return (object) [
+            'needAuthGmail' => $needAuthGmail,
             'isAuthGmail' => $isAuthGmail,
+            'userGmail' => $authGmail->email ?? null,
+            'needAuthWA' => $needAuthWA,
             'isAuthWA' => $isAuthWA,
+            'userWA' => $authWA->phone_number ?? null,
         ];
     }
 
@@ -147,6 +171,11 @@ class VoucherService
                 ->where('vouchers.provider_id', $partner)
                 ->first();
         } else {
+            session()->forget('partner_id');
+            return false;
+        }
+
+        if (!$voucher) {
             session()->forget('partner_id');
             return false;
         }
