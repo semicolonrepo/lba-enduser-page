@@ -89,6 +89,11 @@ class VoucherService
             $needAuthGmail = true;
         }
 
+        if ($customerGmailSession) {
+            $authGmail = DB::table('auth_gmail')
+            ->where('uuid', session('customer_user_gmail'))->first();
+        }
+
         if (!$customerGmailSession && $authByGmail) {
             $isAuthGmail = false;
         }
@@ -99,6 +104,11 @@ class VoucherService
             $needAuthWA = true;
         }
 
+        if ($customerWaSession) {
+            $authWA = DB::table('auth_wa')
+            ->where('uuid', session('customer_user_wa'))->first();
+        }
+
         if (!$customerWaSession && $authByWA) {
             $isAuthWA = false;
         }
@@ -106,10 +116,10 @@ class VoucherService
         return (object) [
             'needAuthGmail' => $needAuthGmail,
             'isAuthGmail' => $isAuthGmail,
-            'userGmail' =>  $customerGmailSession,
+            'userGmail' => $authGmail->email ?? null,
             'needAuthWA' => $needAuthWA,
             'isAuthWA' => $isAuthWA,
-            'userWA' => $customerWaSession,
+            'userWA' => $authWA->phone_number ?? null,
         ];
     }
 

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\CampaignService;
 use App\Services\VoucherService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class VoucherController extends Controller
 {
@@ -39,7 +37,7 @@ class VoucherController extends Controller
     }
 
     public function show($brand, $campaign, $productId, $voucherCode) {
-        $campaignData = $this->campaignService-> getCampaign($brand, $campaign);
+        $campaignData = $this->campaignService->getCampaign($brand, $campaign);
         $voucher = $this->voucherService->showVoucher($voucherCode);
 
         if ($voucherCode && $campaignData) {
