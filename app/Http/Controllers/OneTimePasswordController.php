@@ -31,12 +31,17 @@ class OneTimePasswordController extends Controller
             'phone_number' => 'required',
         ]);
         $phoneNumber = $request->input('phone_number');
+        $partnerId = $request->input('partner');
 
         if (strpos($phoneNumber, '0') === 0) {
             $phoneNumber = '62' . substr($phoneNumber, 1);
         }
 
         try {
+            if ($partnerId) {
+                session(['partner_id' => $partnerId]);
+            }
+
             $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
             $sendOpt = $this->otpService->sendOtp($phoneNumber);
 
@@ -93,17 +98,12 @@ class OneTimePasswordController extends Controller
         ]);
 
         $otpNumber = $request->input('otp_number');
-        $partnerId = $request->input('partner');
 
         if (strpos($phoneNumber, '0') === 0) {
             $phoneNumber = '62' . substr($phoneNumber, 1);
         }
 
         try {
-            if ($partnerId) {
-                session(['partner_id' => $partnerId]);
-            }
-
             $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
             $validateOtp = $this->otpService->validateOtp($otpType->id, $phoneNumber, $otpNumber);
 
