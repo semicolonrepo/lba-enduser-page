@@ -7,6 +7,7 @@ use App\Services\CampaignService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -28,10 +29,14 @@ class GoogleAuthController extends Controller
         ]);
     }
 
-    public function redirect($brand, $campaign, $productId) {
+    public function redirect(Request $request, $brand, $campaign, $productId) {
         session(['brand_session' => $brand]);
         session(['campaign_session' => $campaign]);
         session(['product_id_session' => $productId]);
+
+        if ($request->has('partner')) {
+            session(['partner_id' => $request->query('partner')]);
+        }
 
         return Socialite::driver('google')
             ->redirect();
@@ -54,16 +59,6 @@ class GoogleAuthController extends Controller
 
             $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
             Session::put('customer_user_gmail', $authGmailUuid, 60);
-
-            $campaignData = $this->campaignService->getCampaign($brandSession, $campaignSession);
-
-            if ($campaignData->page_template_id == 2) {
-                return redirect()->route('product::show', [
-                    'brand' => $brandSession,
-                    'campaign' => $campaignSession,
-                    'productId' => $productIdSession,
-                ]);
-            }
 
             return redirect()->route('voucher::claim', [
                 'brand' => $brandSession,

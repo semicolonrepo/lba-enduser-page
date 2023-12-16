@@ -62,11 +62,11 @@
 <div class="accordion accordion-flush">
   <div class="accordion-item">
     <h2 class="accordion-header" id="term-condition">
-      <button class="accordion-button accordion-lba-2 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panel-term-condition" aria-expanded="false" aria-controls="panel-term-condition">
+      <button class="accordion-button accordion-lba-2 collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panel-term-condition" aria-expanded="false" aria-controls="panel-term-condition">
         Syarat dan Ketentuan
       </button>
     </h2>
-    <div id="panel-term-condition" class="accordion-collapse collapse show" aria-labelledby="term-condition">
+    <div id="panel-term-condition" class="accordion-collapse collapse" aria-labelledby="term-condition">
       <div class="accordion-body campaign-term-condition">
         {!! $data->campaign_detail !!}
       </div>
@@ -97,29 +97,40 @@
     <div class="row">
       <div class="col-12">
         <div class="total-shipping pb-2">
-          <h3 class="section-title fw-bold text-center mb-3">Pilih Lokasi Penukaran Voucher</h3>
+          <h3 class="section-title fw-bold text-center mb-1">Pilih Lokasi Penukaran Voucher</h3>
+          <h6 class="text-center mb-3">Klik pada logo merchant</h6>
           <div class="row" id="list-partner" style="row-gap: 16px">
             @foreach ($retailer as $retailPartner)
             <div class="col-6">
-              <label for="{{ $retailPartner->id }}" class="select-partner">
+              <label for="{{ $retailPartner->id }}" class="select-partner" data-partner-checked="{{ session('partner') == $retailPartner->id ? 'true' : 'false' }}">
                 <img src="{{ env('BASE_URL_DASHBOARD').'/assets/provider/images/'.$retailPartner->photo }}" height="45px">
-                <input type="radio" name="partner" class="d-none partner" value="{{ $retailPartner->id }}" id="{{ $retailPartner->id }}">
+                <input type="radio" name="partner" class="d-none partner" value="{{ $retailPartner->id }}" id="{{ $retailPartner->id }}" {{ session('partner') == $retailPartner->id ? 'checked' : '' }}>
               </label>
             </div>
             @endforeach
             @if($internal->isNotEmpty())
             <div class="col-6">
-              <label for="internal" class="select-partner">
+              <label for="internal" class="select-partner" data-partner-checked="{{ session('partner') == 'internal' ? 'true' : 'false' }}">
                 <p class="m-0 internal-partner">Merchant Partner Kami</p>
-                <input type="radio" name="partner" class="d-none partner" value="internal" id="internal">
+                <input type="radio" name="partner" class="d-none partner" value="internal" id="internal" {{ session('partner') == 'internal' ? 'checked' : '' }}>
               </label>
             </div>
             @endif
           </div>
         </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+          <label class="form-check-label" for="check-term-condition">
+            I have read and agreed to the
+            <a href="{{ route('term-condition') }}" class="term-condition-link link-primary" target="_blank">
+              Terms and Conditions
+            </a>
+          </label>
+        </div>
       </div>
       <div class="col-12">
-        <div class="total-shipping pb-2">
+        <div class="alert alert-danger m-0 mt-2 d-none" role="alert" id="alert"></div>
+        <div class="total-shipping pb-2 pt-3">
           <h3 class="section-title fw-bold text-center mb-3">Isi data dan dapatkan vouchernya</h3>
           @if ($authData->needAuthGmail)
             @if ($authData->isAuthGmail)
@@ -129,9 +140,9 @@
               </div>
             @else
               <div class="auth-page-social-login" style="margin-top:-8px">
-                <button class="d-flex justify-content-center align-items-center" style="height: 45px">
+                <button id="login-google" class="d-flex justify-content-center align-items-center" style="height: 45px" data-url="{{ route('google::redirect', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}">
                   <img src="{{ asset('assets/lba-2/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
-                  <a class="term-condition-link" style="color: unset" href="{{ route('google::redirect', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}">
+                  <a class="term-condition-link" style="color: unset">
                     Login dengan Google
                   </a>
                 </button>
@@ -140,8 +151,9 @@
           @endif
 
           @if ($authData->needAuthWA)
-            <form action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post">
+            <form id="form-send-otp" action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post">
               @csrf
+              <input type="hidden" name="partner" class="partner-selected">
               <div class="form-group mt-2">
                 <label class="w-100 text-center fs-6">WhatsApp Number :</label>
                 <input type="text" name="phone_number" class="form-control" style="height: 45px" value="{{ $authData->userWA }}" {{ $authData->isAuthWA ? 'disabled' : 'required' }}>
@@ -162,8 +174,8 @@
       @if ($authData->isAuthGmail && $authData->isAuthWA)
         <form action="{{ route('voucher::claim', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post" id="form-get-product">
           @csrf
-          <input type="hidden" name="partner" id="partner-selected">
-          <div class="col12">
+          <input type="hidden" name="partner" class="partner-selected">
+          {{-- <div class="col12">
             <div class="form-check pb-2">
               <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}">
               <label class="form-check-label" for="check-term-condition">
@@ -173,7 +185,7 @@
                 </a>
               </label>
             </div>
-          </div>
+          </div> --}}
           <div class="col-12">
             <!-- get voucher button -->
             <div class="shop-product-button">

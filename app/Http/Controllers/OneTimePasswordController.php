@@ -31,12 +31,17 @@ class OneTimePasswordController extends Controller
             'phone_number' => 'required',
         ]);
         $phoneNumber = $request->input('phone_number');
+        $partnerId = $request->input('partner');
 
         if (strpos($phoneNumber, '0') === 0) {
             $phoneNumber = '62' . substr($phoneNumber, 1);
         }
 
         try {
+            if ($partnerId) {
+                session(['partner_id' => $partnerId]);
+            }
+
             $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
             $sendOpt = $this->otpService->sendOtp($phoneNumber);
 
@@ -58,7 +63,7 @@ class OneTimePasswordController extends Controller
     public function resend($brand, $campaign, $productId, $phoneNumber) {
         try {
             $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
-            $sendOpt = $this->otpService->sendOtp($otpType->id, $phoneNumber);
+            $sendOpt = $this->otpService->sendOtp($phoneNumber);
 
             if ($sendOpt) {
                 return redirect()->back()->with('success', 'Otp berhasil dikirim ulang!');
@@ -99,19 +104,8 @@ class OneTimePasswordController extends Controller
         }
 
         try {
-
             $otpType = $this->otpService->getOtpTypeByCode('WA_GATEWAY_ZENZIVA');
             $validateOtp = $this->otpService->validateOtp($otpType->id, $phoneNumber, $otpNumber);
-
-            $campaignData = $this->campaignService->getCampaign($brand, $campaign);
-
-            if ($campaignData->page_template_id == 2) {
-                return redirect()->route('product::show', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                ]);
-            }
 
             if ($validateOtp) {
                 return redirect()->route('voucher::claim', [

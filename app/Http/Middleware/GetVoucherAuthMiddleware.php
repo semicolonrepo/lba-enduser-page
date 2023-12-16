@@ -13,6 +13,7 @@ class GetVoucherAuthMiddleware
 
     public function __construct(
         private VoucherService $voucherService,
+        private CampaignService $campaignService,
     ) {}
 
     /**
@@ -32,6 +33,30 @@ class GetVoucherAuthMiddleware
         }
 
         $validateAuth = $this->voucherService->validateAuth($brand, $campaign);
+        $campaignData = $this->campaignService->getCampaign($brand, $campaign);
+
+        if (!$validateAuth->isAuthGmail && $campaignData->page_template_id == 2) {
+            return redirect()->route('product::show', [
+                'brand' => $brand,
+                'campaign' => $campaign,
+                'productId' => $productId,
+            ])->with([
+                'partner' => session('partner_id'),
+                'termStatus' => true
+            ]);
+        }
+
+        if (!$validateAuth->isAuthWA && $campaignData->page_template_id == 2) {
+            return redirect()->route('product::show', [
+                'brand' => $brand,
+                'campaign' => $campaign,
+                'productId' => $productId,
+            ])->with([
+                'partner' => session('partner_id'),
+                'termStatus' => true
+            ]);
+        }
+
         if (!$validateAuth->isAuthGmail) {
             return redirect()->route('google::login', [
                 'brand' => $brand,
