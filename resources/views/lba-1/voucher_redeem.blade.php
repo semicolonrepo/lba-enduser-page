@@ -42,7 +42,7 @@ $thankpage = json_decode($data->template_thankyou_json, true);
       <div class="col-12">
         <p class="section-title text-center" style="font-weight:700; font-size:24px; color: green">
             {{$voucher->code}}
-            @if($hasEncoded) 
+            @if($hasEncoded)
             <br><div class="code128 text-center">{{ htmlspecialchars($encoded_voucher) }}</div>
             @else
             <p></p>
@@ -82,7 +82,7 @@ $thankpage = json_decode($data->template_thankyou_json, true);
       </div>
       <div class="col-12 mt-4 gap-2 d-flex flex-column">
         <div class="shop-product-button">
-          <a href="https://t.me/discounthunters_info" target="_blank" class="w-100">
+          <a href="https://t.me/LetsbuyAsia" target="_blank" class="w-100">
             <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
               Join Komunitas
             </button>
