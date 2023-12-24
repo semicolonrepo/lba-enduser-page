@@ -163,7 +163,9 @@ class VoucherService
             )->havingRaw("($countVouvherUsedRaw)) < vouchers.limit_usage_user", $arrayVoucherUsedBinding);
 
         $voucherProductTerm = DB::table('voucher_term_products')
-            ->where('voucher_term_products.campaign_id', $campaignId)->get();
+            ->join('vouchers', 'vouchers.id', '=', 'voucher_term_products.voucher_id')
+            ->where('vouchers.campaign_id', $campaignId)
+            ->get();
 
         if ($voucherProductTerm->isNotEmpty()) {
             $voucherSql->where('voucher_term_products.product_id', $productId);
