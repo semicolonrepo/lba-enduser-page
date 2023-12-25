@@ -52,6 +52,7 @@ class VoucherService
         ->leftJoin('providers', 'providers.id', '=', 'vouchers.provider_id')
         ->leftJoin('voucher_usages', 'voucher_usages.voucher_generate_id', '=', 'voucher_generates.id')
         ->leftJoin('campaign_products', 'campaign_products.campaign_id', '=', 'campaigns.id')
+        ->leftJoin('voucher_term_products', 'voucher_term_products.voucher_id', '=', 'voucher_generates.voucher_id')
         ->where('vouchers.campaign_id', $campaignId)
         ->where('voucher_generates.is_active', true)
         ->whereNull('voucher_generates.claim_date')
@@ -147,6 +148,7 @@ class VoucherService
         }
 
         $voucherSql = $this->getVouchersGenerates($campaignId)
+            ->where('campaign_products.product_id', $productId)
             ->groupBy(
                 'voucher_generates.code',
                 'voucher_generates.phone_number',
@@ -160,14 +162,21 @@ class VoucherService
                 'providers.name',
             )->havingRaw("($countVouvherUsedRaw)) < vouchers.limit_usage_user", $arrayVoucherUsedBinding);
 
+        $voucherProductTerm = DB::table('voucher_term_products')
+            ->join('vouchers', 'vouchers.id', '=', 'voucher_term_products.voucher_id')
+            ->where('vouchers.campaign_id', $campaignId)
+            ->get();
+
+        if ($voucherProductTerm->isNotEmpty()) {
+            $voucherSql->where('voucher_term_products.product_id', $productId);
+        }
+
         if ($partner === 'internal') {
             $voucher = (clone $voucherSql)
-                ->where('campaign_products.product_id', $productId)
                 ->whereNull('vouchers.provider_id')
                 ->first();
         } else if (!empty($partner) && $partner !== 'internal') {
             $voucher = (clone $voucherSql)
-                ->where('campaign_products.product_id', $productId)
                 ->where('vouchers.provider_id', $partner)
                 ->first();
         } else {
