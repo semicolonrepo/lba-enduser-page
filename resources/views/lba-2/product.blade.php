@@ -140,7 +140,23 @@
               </div>
             @else
               <div class="auth-page-social-login" style="margin-top:-8px">
-                <button id="login-google" class="d-flex justify-content-center align-items-center" style="height: 45px" data-url="{{ route('google::redirect', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}">
+
+                @php
+                  $urlParams = request()->query();
+                  $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+                  $urlParams['brand'] = $brand;
+                  $urlParams['campaign'] = $data->slug;
+                  $urlParams['productId'] = $product->id;
+
+                  // Include utm_source in the URL parameters if present
+                  if ($utmSource !== null) {
+                      $urlParams['utm_source'] = $utmSource;
+                  }
+
+                  $urlGoogleLogin = route('google::redirect', $urlParams);
+                @endphp
+
+                <button id="login-google" class="d-flex justify-content-center align-items-center" style="height: 45px" data-url="{{ $urlGoogleLogin }}">
                   <img src="{{ asset('assets/lba-2/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
                   <a class="term-condition-link" style="color: unset">
                     Login dengan Google
@@ -151,7 +167,23 @@
           @endif
 
           @if ($authData->needAuthWA)
-            <form id="form-send-otp" action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post">
+
+              @php
+                $urlParams = request()->query();
+                $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+                $urlParams['brand'] = $brand;
+                $urlParams['campaign'] = $data->slug;
+                $urlParams['productId'] = $product->id;
+
+                // Include utm_source in the URL parameters if present
+                if ($utmSource !== null) {
+                    $urlParams['utm_source'] = $utmSource;
+                }
+
+                $urlOTPWa = route('otp::send', $urlParams);
+              @endphp
+
+            <form id="form-send-otp" action="{{ $urlOTPWa }}" method="post">
               @csrf
               <input type="hidden" name="partner" class="partner-selected">
               <div class="form-group mt-2">
@@ -172,7 +204,23 @@
       </div>
 
       @if ($authData->isAuthGmail && $authData->isAuthWA)
-        <form action="{{ route('voucher::claim', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post" id="form-get-product">
+
+          @php
+            $urlParams = request()->query();
+            $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+            $urlParams['brand'] = Str::slug($data->brand);
+            $urlParams['campaign'] = $data->slug;
+            $urlParams['productId'] = $product->id;
+
+            // Include utm_source in the URL parameters if present
+            if ($utmSource !== null) {
+                $urlParams['utm_source'] = $utmSource;
+            }
+
+            $urlClaimVoucher = route('voucher::claim', $urlParams);
+          @endphp
+
+        <form action="{{ $urlClaimVoucher }}" method="post" id="form-get-product">
           @csrf
           <input type="hidden" name="partner" class="partner-selected">
           {{-- <div class="col12">

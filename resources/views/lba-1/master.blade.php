@@ -62,7 +62,22 @@
             <div class="col-auto">
               <!-- header logo -->
               <div class="header-logo">
-                <a href="{{ route('index', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug]) }}">
+
+                @php
+                    $urlParams = request()->query();
+                    $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+                    $urlParams['brand'] = Str::slug($data->brand);
+                    $urlParams['campaign'] = $data->slug;
+
+                    // Include utm_source in the URL parameters if present
+                    if ($utmSource !== null) {
+                        $urlParams['utm_source'] = $utmSource;
+                    }
+
+                    $url = route('index', $urlParams);
+                @endphp
+
+                <a href="{{ $url }}">
                   <img src="{{ env('BASE_URL_DASHBOARD').'/assets/brand/images/'.$data->brand_logo }}" class="img-fluid" alt="" style="height: 41px">
                 </a>
               </div>
