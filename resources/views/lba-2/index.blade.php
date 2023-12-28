@@ -101,7 +101,18 @@
 
                 @foreach ($product as $stock)
                 @php
-                    $urlProduct = route('product::show', ['brand' =>  Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $stock->id]);
+                    $urlParams = request()->query();
+                    $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+                    $urlParams['brand'] = Str::slug($data->brand);
+                    $urlParams['campaign'] = $data->slug;
+                    $urlParams['productId'] = $stock->id;
+
+                    // Include utm_source in the URL parameters if present
+                    if ($utmSource !== null) {
+                        $urlParams['utm_source'] = $utmSource;
+                    }
+
+                    $urlProduct = route('product::show', $urlParams);
                 @endphp
                 <div class="col-6" style="cursor: pointer;" onclick="window.location.href='{{$urlProduct}}';">
                   <div class="grid-product space-mb--20" style="border:1px {{$data->template_primary_color}} solid">

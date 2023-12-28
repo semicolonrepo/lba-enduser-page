@@ -32,45 +32,93 @@ class GetVoucherAuthMiddleware
             session(['partner_id' => $partnerId]);
         }
 
+        $utmSource = $request->query('utm_source');
+
         $validateAuth = $this->voucherService->validateAuth($brand, $campaign);
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
         if (!$validateAuth->isAuthGmail && $campaignData->page_template_id == 2) {
-            return redirect()->route('product::show', [
-                'brand' => $brand,
-                'campaign' => $campaign,
-                'productId' => $productId,
-            ])->with([
-                'partner' => session('partner_id'),
-                'termStatus' => true
-            ]);
+            if($utmSource) {
+                return redirect()->route('product::show', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                    'utm_source' => $utmSource
+                ])->with([
+                    'partner' => session('partner_id'),
+                    'termStatus' => true
+                ]);
+            }
+            else {
+                return redirect()->route('product::show', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ])->with([
+                    'partner' => session('partner_id'),
+                    'termStatus' => true
+                ]);
+            }
         }
 
         if (!$validateAuth->isAuthWA && $campaignData->page_template_id == 2) {
-            return redirect()->route('product::show', [
-                'brand' => $brand,
-                'campaign' => $campaign,
-                'productId' => $productId,
-            ])->with([
-                'partner' => session('partner_id'),
-                'termStatus' => true
-            ]);
+            if($utmSource) {
+                return redirect()->route('product::show', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                    'utm_source' => $utmSource
+                ])->with([
+                    'partner' => session('partner_id'),
+                    'termStatus' => true
+                ]);
+            }
+            else {
+                return redirect()->route('product::show', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ])->with([
+                    'partner' => session('partner_id'),
+                    'termStatus' => true
+                ]);
+            }
         }
 
         if (!$validateAuth->isAuthGmail) {
-            return redirect()->route('google::login', [
-                'brand' => $brand,
-                'campaign' => $campaign,
-                'productId' => $productId,
-            ]);
+            if($utmSource) {
+                return redirect()->route('google::login', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                    'utm_source' => $utmSource
+                ]);
+            }
+            else {
+                return redirect()->route('google::login', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ]);
+            }
         }
 
         if (!$validateAuth->isAuthWA) {
-            return redirect()->route('otp::login', [
-                'brand' => $brand,
-                'campaign' => $campaign,
-                'productId' => $productId,
-            ]);
+            if($utmSource) {
+                return redirect()->route('otp::login', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                    'utm_source' => $utmSource
+                ]);
+            }
+            else {
+                return redirect()->route('otp::login', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ]);
+            }
         }
 
         return $next($request);

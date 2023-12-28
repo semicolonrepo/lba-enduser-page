@@ -7,7 +7,23 @@
       <div class="col-12">
         <!-- Auth form -->
         <div class="auth-form">
-          <form action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId]) }}" method="post">
+
+          @php
+            $urlParams = request()->query();
+            $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+            $urlParams['brand'] = $brand;
+            $urlParams['campaign'] = $campaign;
+            $urlParams['productId'] = $productId;
+
+            // Include utm_source in the URL parameters if present
+            if ($utmSource !== null) {
+                $urlParams['utm_source'] = $utmSource;
+            }
+
+            $urlOtpSend = route('otp::send', $urlParams);
+          @endphp
+
+          <form action="{{ $urlOtpSend }}" method="post">
           @csrf
             <div class="auth-form__single-field space-mb--30">
               <label for="mobileNumber">No Handphone (Whatsapp)</label>

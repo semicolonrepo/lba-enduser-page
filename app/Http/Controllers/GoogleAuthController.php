@@ -34,6 +34,13 @@ class GoogleAuthController extends Controller
         session(['campaign_session' => $campaign]);
         session(['product_id_session' => $productId]);
 
+        $utmSource = $request->query('utm_source');
+        if($utmSource) {
+            session(['utm_source_session' => $utmSource]);
+        }else {
+            session(['utm_source_session' => null]);
+        }
+
         if ($request->has('partner')) {
             session(['partner_id' => $request->query('partner')]);
         }
@@ -47,6 +54,7 @@ class GoogleAuthController extends Controller
             $brandSession = session('brand_session');
             $campaignSession = session('campaign_session');
             $productIdSession = session('product_id_session');
+            $utmSourceSession = session('utm_source_session');
 
             $googleUser = Socialite::driver('google')->user();
 
@@ -60,11 +68,21 @@ class GoogleAuthController extends Controller
             $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
             Session::put('customer_user_gmail', $authGmailUuid, 60);
 
-            return redirect()->route('voucher::claim', [
-                'brand' => $brandSession,
-                'campaign' => $campaignSession,
-                'productId' => $productIdSession,
-            ]);
+            if($utmSourceSession != null) {
+                return redirect()->route('voucher::claim', [
+                    'brand' => $brandSession,
+                    'campaign' => $campaignSession,
+                    'productId' => $productIdSession,
+                    'utm_source' => $utmSourceSession
+                ]);
+            }
+            else {
+                return redirect()->route('voucher::claim', [
+                    'brand' => $brandSession,
+                    'campaign' => $campaignSession,
+                    'productId' => $productIdSession,
+                ]);
+            }
 
         } catch (\Throwable $th) {
             return redirect()->back()->with('failed', 'terjadi kesalahan');

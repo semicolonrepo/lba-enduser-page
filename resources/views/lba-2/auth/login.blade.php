@@ -71,7 +71,23 @@
         <div class="auth-page-social-login" style="margin-top:-8px">
           <button class="d-flex justify-content-center align-items-center">
             <img src="{{ asset('assets/lba-2/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
-            <a href="{{ route('google::redirect', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId]) }}">Login dengan Google</a>
+
+            @php
+              $urlParams = request()->query();
+              $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+              $urlParams['brand'] = $brand;
+              $urlParams['campaign'] = $campaign;
+              $urlParams['productId'] = $productId;
+
+              // Include utm_source in the URL parameters if present
+              if ($utmSource !== null) {
+                  $urlParams['utm_source'] = $utmSource;
+              }
+
+              $urlRedirectGoogle = route('google::redirect', $urlParams);
+            @endphp
+
+            <a href="{{ $urlRedirectGoogle }}">Login dengan Google</a>
           </button>
         </div>
       </div>

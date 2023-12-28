@@ -60,7 +60,23 @@
 <div class="grand-total">
   <div class="container">
     <div class="row">
-        <form action="{{ route('voucher::claim', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug, 'productId' => $product->id]) }}" method="post" id="form-get-product">
+
+        @php
+          $urlParams = request()->query();
+          $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+          $urlParams['brand'] = Str::slug($data->brand);
+          $urlParams['campaign'] = $data->slug;
+          $urlParams['productId'] = $product->id;
+
+          // Include utm_source in the URL parameters if present
+          if ($utmSource !== null) {
+              $urlParams['utm_source'] = $utmSource;
+          }
+
+          $urlClaim = route('voucher::claim', $urlParams);
+        @endphp
+
+        <form action="{{ $urlClaim }}" method="post" id="form-get-product">
             @csrf
             <div class="col-12">
                 <div class="total-shipping pb-2">

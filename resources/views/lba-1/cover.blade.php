@@ -35,7 +35,22 @@
               </div>
             @elseif ($block['type'] == 'paragraph')
               <div class="cover-product-button">
-                <a style="width:100%" href="{{ route('index', ['brand' => Str::slug($data->brand), 'campaign' => $data->slug]) }}" style="text-decoration: none;">
+
+                @php
+                  $urlParams = request()->query();
+                  $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+                  $urlParams['brand'] = Str::slug($data->brand);
+                  $urlParams['campaign'] = $data->slug;
+
+                  // Include utm_source in the URL parameters if present
+                  if ($utmSource !== null) {
+                      $urlParams['utm_source'] = $utmSource;
+                  }
+
+                  $url = route('index', $urlParams);
+                @endphp
+
+                <a style="width:100%" href="{{ $url }}" style="text-decoration: none;">
                   <button style="background-color:{{ $data->template_primary_color }} !important" class="next">
                     @if ($block['data']['text'] != '')
                       {{ $block['data']['text'] }}

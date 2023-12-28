@@ -63,10 +63,25 @@
     <div class="row">
       <div class="col-12">
         
+          @php
+            $urlParams = request()->query();
+            $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+            $urlParams['brand'] = $brand;
+            $urlParams['campaign'] = $campaign;
+            $urlParams['productId'] = $productId;
+            $urlParams['phoneNumber'] = $phoneNumber;
+
+            // Include utm_source in the URL parameters if present
+            if ($utmSource !== null) {
+                $urlParams['utm_source'] = $utmSource;
+            }
+
+            $urlValidateOtp = route('otp::validate::post', $urlParams);
+          @endphp
         
         <!-- Auth form -->
         <div class="auth-form" style="margin-top: 5px">
-        <form action="{{ route('otp::validate::post', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId, 'phoneNumber' => $phoneNumber]) }}" method="post">
+        <form action="{{ $urlValidateOtp }}" method="post">
           @csrf
             <div class="auth-form__single-field space-mb--20">
               <label for="mobileNumber">Input 5 Digit Kode OTP</label>

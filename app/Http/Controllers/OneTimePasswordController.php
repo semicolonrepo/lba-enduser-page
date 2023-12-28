@@ -46,12 +46,25 @@ class OneTimePasswordController extends Controller
             $sendOpt = $this->otpService->sendOtp($phoneNumber);
 
             if ($sendOpt) {
-                return redirect()->route('otp::validate::get', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                    'phoneNumber' => $phoneNumber,
-                ]);
+                $utmSource = $request->query('utm_source');
+
+                if($utmSource) {
+                    return redirect()->route('otp::validate::get', [
+                        'brand' => $brand,
+                        'campaign' => $campaign,
+                        'productId' => $productId,
+                        'phoneNumber' => $phoneNumber,
+                        'utm_source' => $utmSource
+                    ]);
+                }
+                else {
+                    return redirect()->route('otp::validate::get', [
+                        'brand' => $brand,
+                        'campaign' => $campaign,
+                        'productId' => $productId,
+                        'phoneNumber' => $phoneNumber,
+                    ]);
+                }
             }
 
             return redirect()->back()->with('failed', 'Otp mengalami gangguan silahkan coba kembali!');
@@ -108,11 +121,23 @@ class OneTimePasswordController extends Controller
             $validateOtp = $this->otpService->validateOtp($otpType->id, $phoneNumber, $otpNumber);
 
             if ($validateOtp) {
-                return redirect()->route('voucher::claim', [
-                    'brand' => $brand,
-                    'campaign' => $campaign,
-                    'productId' => $productId,
-                ]);
+                $utmSource = $request->query('utm_source');
+
+                if($utmSource) {
+                    return redirect()->route('voucher::claim', [
+                        'brand' => $brand,
+                        'campaign' => $campaign,
+                        'productId' => $productId,
+                        'utm_source' => $utmSource
+                    ]);
+                }
+                else {
+                    return redirect()->route('voucher::claim', [
+                        'brand' => $brand,
+                        'campaign' => $campaign,
+                        'productId' => $productId,
+                    ]);
+                }
             }
 
             return redirect()->back()->with('failed', 'Otp salah silahkan coba kembali!');
