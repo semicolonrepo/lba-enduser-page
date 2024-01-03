@@ -33,6 +33,7 @@ class OneTimePasswordController extends Controller
         $phoneNumber = $request->input('phone_number');
         $partnerId = $request->input('partner');
 
+        $phoneNumber = str_replace('+', '', $phoneNumber);
         if (strpos($phoneNumber, '0') === 0) {
             $phoneNumber = '62' . substr($phoneNumber, 1);
         }
@@ -91,6 +92,7 @@ class OneTimePasswordController extends Controller
     public function validateGet($brand, $campaign, $productId, $phoneNumber) {
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
+        $phoneNumber = str_replace('+', '', $phoneNumber);
         if (strpos($phoneNumber, '0') === 0) {
             $phoneNumber = '62' . substr($phoneNumber, 1);
         }
@@ -112,6 +114,7 @@ class OneTimePasswordController extends Controller
 
         $otpNumber = $request->input('otp_number');
 
+        $phoneNumber = str_replace('+', '', $phoneNumber);
         if (strpos($phoneNumber, '0') === 0) {
             $phoneNumber = '62' . substr($phoneNumber, 1);
         }
