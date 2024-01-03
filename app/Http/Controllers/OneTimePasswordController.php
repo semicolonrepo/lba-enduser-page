@@ -28,7 +28,7 @@ class OneTimePasswordController extends Controller
 
     public function send(Request $request, $brand, $campaign, $productId) {
         $request->validate([
-            'phone_number' => 'required|integer',
+            'phone_number' => 'required|numeric',
         ]);
         $phoneNumber = $request->input('phone_number');
         $partnerId = $request->input('partner');
@@ -113,7 +113,7 @@ class OneTimePasswordController extends Controller
 
     public function validatePost(Request $request, $brand, $campaign, $productId, $phoneNumber) {
         $request->validate([
-            'otp_number' => 'required|integer',
+            'otp_number' => 'required|numeric',
         ]);
 
         $otpNumber = $request->input('otp_number');
