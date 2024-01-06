@@ -22,7 +22,7 @@ use App\Http\Controllers\TermConditionController;
 */
 
 Route::get('/', function () {
-    return view('welcome_custom');
+    return view('welcome_custom', ['message' => 'Campaign not found']);
 });
 
 Route::get('/preview/{token}', [CampaignController::class, 'preview'])->name('preview');
