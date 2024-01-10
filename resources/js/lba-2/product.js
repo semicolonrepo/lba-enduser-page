@@ -62,7 +62,7 @@ $(document).ready(function () {
 
         if (inapp.isInApp()) {
             urlLoginGoogle = urlLoginGoogle.replace("https://", "googlechrome://");
-            window.location = urlLoginGoogle;
+            window.location.href = urlLoginGoogle;
         } else {
             window.location.href = urlLoginGoogle;
         }
