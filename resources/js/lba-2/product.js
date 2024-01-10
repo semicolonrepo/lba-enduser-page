@@ -59,14 +59,7 @@ $(document).ready(function () {
     } else {
         const partner = $(".partner:checked").val();
         const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
-
-        if (inapp.isInApp()) {
-            urlLoginGoogle = urlLoginGoogle.replace("https://", "googlechrome://");
-            window.location.href = urlLoginGoogle;
-        } else {
-            window.location.href = urlLoginGoogle;
-        }
-
+        window.location.href = urlLoginGoogle;
     }
   });
 
