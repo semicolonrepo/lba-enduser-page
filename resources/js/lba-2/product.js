@@ -61,7 +61,7 @@ $(document).ready(function () {
         const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
 
         if (inapp.isInApp()) {
-            window.open(`intent:${urlLoginGoogle};end`, '_blank');
+            window.open(urlLoginGoogle, '_system');
         } else {
             window.location.href = urlLoginGoogle;
         }
