@@ -60,7 +60,7 @@ $(document).ready(function () {
         const partner = $(".partner:checked").val();
         const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
 
-        if (inapp.isInApp) {
+        if (inapp.isInApp()) {
           window.location = `intent:${urlLoginGoogle}#Intent;end`;
         } else {
           window.location.href = urlLoginGoogle;
