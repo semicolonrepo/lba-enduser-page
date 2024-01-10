@@ -59,7 +59,8 @@ $(document).ready(function () {
     } else {
         const partner = $(".partner:checked").val();
         const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
-        window.location.href = urlLoginGoogle;
+        // window.location.href = urlLoginGoogle;
+        window.location = `intent:${urlLoginGoogle}#Intent;end`;
     }
   });
 
