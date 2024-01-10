@@ -1,3 +1,7 @@
+import InApp from 'detect-inapp';
+
+const inapp = new InApp(navigator.userAgent || navigator.vendor || window.opera);
+
 $(document).ready(function () {
   const primaryColor = $(".body-wrapper").data("primary-color");
 
@@ -53,10 +57,15 @@ $(document).ready(function () {
     } else if (termConditionChecked == 0) {
       showAlert("Harap ceklis Terms & Conditions!")
     } else {
-      const partner = $(".partner:checked").val();
-      const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
+        const partner = $(".partner:checked").val();
+        const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
 
-      window.open(urlLoginGoogle, "_blank");
+        if (inapp.isInApp()) {
+            window.open(`intent:${urlLoginGoogle};end`, '_blank');
+        } else {
+            window.location.href = urlLoginGoogle;
+        }
+
     }
   });
 
