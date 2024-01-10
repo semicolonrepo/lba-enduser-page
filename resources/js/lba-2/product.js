@@ -39,7 +39,7 @@ $(document).ready(function () {
   function showAlert(message) {
     $("#alert").removeClass("d-none");
     $("#alert").text(message);
-    setTimeout(function() { 
+    setTimeout(function() {
       $("#alert").addClass("d-none");
     }, 2000);
   }
@@ -56,7 +56,7 @@ $(document).ready(function () {
       const partner = $(".partner:checked").val();
       const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
 
-      window.location.href = urlLoginGoogle;
+      window.open(urlLoginGoogle, "_blank");
     }
   });
 
