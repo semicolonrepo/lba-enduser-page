@@ -2,6 +2,29 @@ import InApp from 'detect-inapp';
 
 const inapp = new InApp(navigator.userAgent || navigator.vendor || window.opera);
 
+function getOS() {
+    const userAgent = window.navigator.userAgent,
+        platform = window.navigator?.userAgentData?.platform || window.navigator.platform,
+        macosPlatforms = ['macOS', 'Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+        iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+    let os = null;
+
+    if (macosPlatforms.indexOf(platform) !== -1) {
+      os = 'Mac OS';
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+      os = 'iOS';
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+      os = 'Windows';
+    } else if (/Android/.test(userAgent)) {
+      os = 'Android';
+    } else if (/Linux/.test(platform)) {
+      os = 'Linux';
+    }
+
+    return os;
+  }
+
 $(document).ready(function () {
   const primaryColor = $(".body-wrapper").data("primary-color");
 
@@ -59,7 +82,14 @@ $(document).ready(function () {
     } else {
         const partner = $(".partner:checked").val();
         const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
-        window.location.href = urlLoginGoogle;
+
+        if (inapp.isInApp() && getOS() === 'Android') {
+            window.location = `intent:${urlLoginGoogle}#Intent;end`;
+        }else if(inapp.isInApp() && getOS() === 'iOS'){
+            window.open(urlLoginGoogle, "_blank");
+        } else {
+            window.location.href = urlLoginGoogle;
+        }
     }
   });
 
