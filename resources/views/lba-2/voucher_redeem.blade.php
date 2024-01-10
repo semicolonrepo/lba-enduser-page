@@ -62,7 +62,7 @@ $thankpage = json_decode($data->template_thankyou_json, true);
         </p>
 
         <p class="text-center space-mb--5" style="font-size: 16px;">
-          Kami juga telah mengirimkan kode voucher beserta <b>cara pemakaian nya</b> melalui @if($voucher->email) <b>{{$voucher->email}}</b> @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) <b>{{$voucher->phone_number}}</b> @endif nomor kamu ya.
+          Kami juga telah mengirimkan kode voucher beserta <b>cara pemakaian nya</b> melalui @if($voucher->email) <b>{{$voucher->email}}</b> @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) <b>{{$voucher->phone_number}}</b> nomor @endif kamu ya.
         </p>
 
         @if($thankpage != null)
