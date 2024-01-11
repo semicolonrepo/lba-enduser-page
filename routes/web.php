@@ -40,8 +40,10 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
 
     Route::get('/product/{productId}/otp/login', [OneTimePasswordController::class, 'login'])->name('otp::login');
-    Route::post('/product/{productId}/otp/send', [OneTimePasswordController::class, 'send'])->name('otp::send');
-    Route::get('/product/{productId}/otp/resend/{phoneNumber}', [OneTimePasswordController::class, 'resend'])->name('otp::resend');
+    Route::middleware('throttle:5,1')->group(function () {
+        Route::post('/product/{productId}/otp/send', [OneTimePasswordController::class, 'send'])->name('otp::send');
+        Route::get('/product/{productId}/otp/resend/{phoneNumber}', [OneTimePasswordController::class, 'resend'])->name('otp::resend');
+    });
     Route::get('/product/{productId}/otp/send/{phoneNumber}', [OneTimePasswordController::class, 'validateGet'])->name('otp::validate::get');
     Route::post('/product/{productId}/otp/send/{phoneNumber}', [OneTimePasswordController::class, 'validatePost'])->name('otp::validate::post');
 
