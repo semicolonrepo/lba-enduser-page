@@ -33,12 +33,11 @@ class GoogleAuthController extends Controller
         session(['brand_session' => $brand]);
         session(['campaign_session' => $campaign]);
         session(['product_id_session' => $productId]);
+        
 
-        $utmSource = $request->query('utm_source');
-        if($utmSource) {
-            session(['utm_source_session' => $utmSource]);
-        }else {
-            session(['utm_source_session' => null]);
+        //$utmSource = $request->query('utm_source');
+        if($request->has('utm_source')) {
+            session(['utm_source_session' => $request->query('utm_source')]);
         }
 
         if ($request->has('partner')) {
