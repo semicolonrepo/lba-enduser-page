@@ -81,7 +81,8 @@ $(document).ready(function () {
       showAlert("Harap ceklis Terms & Conditions!")
     } else {
         const partner = $(".partner:checked").val();
-        const urlLoginGoogle = $(this).data("url") + '?partner=' + partner;
+        const separator = $(this).data("url").indexOf('?') !== -1 ? '&' : '?';
+        const urlLoginGoogle = $(this).data("url") + separator + 'partner=' + partner;
 
         if (inapp.isInApp() && getOS() === 'Android') {
             window.location = `intent:${urlLoginGoogle}#Intent;end`;
