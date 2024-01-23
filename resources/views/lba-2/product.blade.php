@@ -142,18 +142,16 @@
               <div class="auth-page-social-login" style="margin-top:-8px">
 
                 @php
-                  $urlParams = request()->query();
-                  $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
-                  $urlParams['brand'] = $brand;
-                  $urlParams['campaign'] = $data->slug;
-                  $urlParams['productId'] = $product->id;
+                    $urlParams = [];
+                    $urlParams['brand'] = $brand;
+                    $urlParams['campaign'] = $data->slug;
+                    $urlParams['productId'] = $product->id;
 
-                  // Include utm_source in the URL parameters if present
-                  if ($utmSource !== null) {
-                      $urlParams['utm_source'] = $utmSource;
-                  }
+                    if (request()->query('utm_source')) {
+                        $urlParams['utm_source'] = request()->query('utm_source');
+                    }
 
-                  $urlGoogleLogin = route('google::redirect', $urlParams);
+                    $urlGoogleLogin = route('google::redirect', $urlParams);
                 @endphp
 
                 <button id="login-google" class="d-flex justify-content-center align-items-center" style="height: 45px" data-url="{{ $urlGoogleLogin }}">
