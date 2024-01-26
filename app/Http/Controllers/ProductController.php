@@ -33,6 +33,7 @@ class ProductController extends Controller
                     ->join('providers', 'vouchers.provider_id', '=', 'providers.id')
                     ->where('vouchers.campaign_id', $campaignData->id)
                     ->where('providers.is_active', true)
+                    ->where('vouchers.is_active', true)
                     ->distinct('providers.name')
                     ->get();
 
