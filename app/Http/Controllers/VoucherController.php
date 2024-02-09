@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\CampaignService;
 use App\Services\VoucherService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class VoucherController extends Controller
 {
@@ -20,7 +22,7 @@ class VoucherController extends Controller
             $utmSource = request()->query('utm_source');
 
             if ($voucher) {
-                
+
                 if($utmSource) {
                     return redirect()->route('voucher::show',[
                         'brand' => $brand,
@@ -56,8 +58,10 @@ class VoucherController extends Controller
                     'productId' => $productId,
                 ])->with('failed', 'Voucher sudah diclaim atau habis!');
             }
-        } 
+        }
         catch (\Throwable $th) {
+            $error = sprintf('[%s],[%d] ERROR:[%s]', __METHOD__, __LINE__, json_encode($th->getMessage(), true));
+            Log::error($error);
             return redirect()->back()->with('failed', 'Terjadi kesalahan!');
         }
     }
@@ -66,7 +70,12 @@ class VoucherController extends Controller
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
         $voucher = $this->voucherService->showVoucher($voucherCode);
 
-        if ($voucherCode && $campaignData) {
+        $authWA = DB::table('auth_wa')
+        ->where('uuid', session('customer_user_wa'))->first();
+        $authGmail = DB::table('auth_gmail')
+        ->where('uuid', session('customer_user_gmail'))->first();
+
+        if ($voucherCode && $campaignData && ($authGmail->email == $voucher->email || $authWA->phone_number == $voucher->phone_number)) {
             $viewTemplate = $campaignData->page_template_code . '.voucher_redeem';
             return view($viewTemplate, [
                 'voucher' => $voucher,
