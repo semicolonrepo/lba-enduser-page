@@ -238,7 +238,8 @@ class VoucherService
             'products.name as product_name',
             'brands.name as brand_name',
             'brands.photo as brand_photo',
-            'auth_gmail.name as auth_gmail_name'
+            'auth_gmail.name as auth_gmail_name',
+            'campaigns.id as campaign_id',
         )->first();
     }
 }

@@ -33,9 +33,7 @@ class GoogleAuthController extends Controller
         session(['brand_session' => $brand]);
         session(['campaign_session' => $campaign]);
         session(['product_id_session' => $productId]);
-        
 
-        //$utmSource = $request->query('utm_source');
         if($request->has('utm_source')) {
             session(['utm_source_session' => $request->query('utm_source')]);
         }
@@ -45,17 +43,26 @@ class GoogleAuthController extends Controller
         }
 
         return Socialite::driver('google')
+            ->with(['hd' => 'gmail.com'])
             ->redirect();
     }
 
     public function callback() {
         try {
-            $brandSession = session('brand_session');
-            $campaignSession = session('campaign_session');
-            $productIdSession = session('product_id_session');
-            $utmSourceSession = session('utm_source_session');
+            $arrayRoute = [
+                'brand' => session('brand_session'),
+                'campaign' => session('campaign_session'),
+                'productId' => session('product_id_session'),
+            ];
+
+            if (session('utm_source_session') !== null) {
+                $arrayRoute['utm_source'] = session('utm_source_session');
+            }
 
             $googleUser = Socialite::driver('google')->user();
+            if (!Str::endsWith($googleUser->getEmail(), '@gmail.com')) {
+                return redirect()->route('product::show', $arrayRoute)->with('failed', 'Gunakan gmail domain!');
+            }
 
             $authGmailId = DB::table('auth_gmail')->insertGetId([
                 'uuid' => Str::uuid(),
@@ -67,22 +74,7 @@ class GoogleAuthController extends Controller
             $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
             Session::put('customer_user_gmail', $authGmailUuid, 60);
 
-            if($utmSourceSession != null) {
-                return redirect()->route('voucher::claim', [
-                    'brand' => $brandSession,
-                    'campaign' => $campaignSession,
-                    'productId' => $productIdSession,
-                    'utm_source' => $utmSourceSession
-                ]);
-            }
-            else {
-                return redirect()->route('voucher::claim', [
-                    'brand' => $brandSession,
-                    'campaign' => $campaignSession,
-                    'productId' => $productIdSession,
-                ]);
-            }
-
+            return redirect()->route('voucher::claim', $arrayRoute);
         } catch (\Throwable $th) {
             return redirect()->back()->with('failed', 'terjadi kesalahan');
         }
