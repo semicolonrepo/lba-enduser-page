@@ -3,11 +3,10 @@
 namespace App\Notifications;
 
 use App\Channels\QontakGatewayChannel;
-use App\Channels\ZenzivaGatewayChannel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
 
 class ClaimVoucher extends Notification
 {
@@ -30,6 +29,17 @@ class ClaimVoucher extends Notification
      */
     public function via(object $notifiable): array
     {
+        // Directly fetch mailer configuration from the database
+        $mailerConfig = DB::table('campaigns')
+            ->where('id', $this->voucher->campaign_id)
+            ->select('mail_username', 'mail_password')
+            ->first();
+
+        config([
+            'mail.mailers.smtp.username' => $mailerConfig->mail_username ?? env('MAIL_USERNAME'),
+            'mail.mailers.smtp.password' =>  $mailerConfig->mail_password ?? env('MAIL_PASSWORD'),
+        ]);
+
         return ['mail', QontakGatewayChannel::class];
     }
 
