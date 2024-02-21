@@ -96,8 +96,10 @@ class VoucherClaimService
             ->first();
 
         $claimedInTime = DB::table('voucher_generates')
-            ->where('ip_address', request()->ip())
-            ->where('claim_date', '>=', now()->subMinutes($campaign->ip_address_limit_time))
+            ->join('vouchers', 'vouchers.id', '=', 'voucher_generates.voucher_id')
+            ->where('vouchers.campaign_id', $campaignId)
+            ->where('voucher_generates.ip_address', request()->ip())
+            ->where('voucher_generates.claim_date', '>=', now()->subMinutes($campaign->ip_address_limit_time))
             ->count();
 
         if ($claimedInTime >= $campaign->ip_address_limit_voucher) {
