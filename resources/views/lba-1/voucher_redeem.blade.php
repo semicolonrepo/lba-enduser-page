@@ -28,8 +28,8 @@ $thankpage = json_decode($data->template_thankyou_json, true);
           </svg>
         </p>
 
-        <h3 class="text-center space-mb--5">Congratulation</h3>
-        <h5 class="text-center">Kamu berhasil mendapatkan voucher</h5>
+        <h3 class="text-center space-mb--5">Congratulation!</h3>
+        <h5 class="text-center lh-base">Kamu berhasil mendapatkan voucher {{ $voucher->product_name }}</h5>
       </div>
     </div>
   </div>
