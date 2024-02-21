@@ -80,11 +80,15 @@ class CampaignService
         return $products;
     }
 
-    public function getCampaignAuths($campaignId) {
+    public function getCampaignAuths($campaignId, $authCode = null) {
         $campaignAuths = CampaignAuthSetting::join('auth_settings', 'auth_settings.id', 'campaign_auth_settings.auth_setting_id')
             ->where('auth_settings.is_active', true)
             ->where('campaign_auth_settings.campaign_id', $campaignId)
             ->select('auth_settings.id', 'auth_settings.code');
+
+        if ($authCode) {
+            $campaignAuths->where('auth_settings.code', $authCode);
+        }
 
         return $campaignAuths;
     }
