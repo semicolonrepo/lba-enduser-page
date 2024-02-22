@@ -29,7 +29,7 @@ $thankpage = json_decode($data->template_thankyou_json, true);
         </p>
 
         <h3 class="text-center space-mb--5">Congratulation!</h3>
-        <h5 class="text-center lh-base">Kamu berhasil mendapatkan voucher {{ $voucher->product_name }}</h5>
+        <h5 class="text-center lh-base">Kamu berhasil mendapatkan voucher <br> {{ $voucher->product_name }}</h5>
       </div>
     </div>
   </div>
