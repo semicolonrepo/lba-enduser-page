@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomerUser;
 use App\Services\CampaignService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -61,7 +59,7 @@ class GoogleAuthController extends Controller
 
             $googleUser = Socialite::driver('google')->user();
             if (!Str::endsWith($googleUser->getEmail(), '@gmail.com')) {
-                return redirect()->route('product::show', $arrayRoute)->with('failed', 'Gunakan gmail domain!');
+                return redirect()->route('product::show', $arrayRoute)->with('failed', 'Gunakan domain @gmail.com ya!');
             }
 
             $authGmailId = DB::table('auth_gmail')->insertGetId([
