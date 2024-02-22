@@ -102,7 +102,7 @@ class VoucherClaimService
             ->where('voucher_generates.claim_date', '>=', now()->subMinutes($campaign->ip_address_limit_time))
             ->count();
 
-        if ($claimedInTime >= $campaign->ip_address_limit_voucher) {
+        if ($campaign->ip_address_limit_voucher && $claimedInTime >= $campaign->ip_address_limit_voucher) {
             return false;
         }
 
