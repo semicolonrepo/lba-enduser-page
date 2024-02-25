@@ -21,7 +21,7 @@ class RatingController extends Controller
             $viewTemplate = $campaign->page_template_code . '.rating';
             return view($viewTemplate, [
                 'voucher' => $voucher,
-                'campaign' => $campaign,
+                'data' => $campaign,
             ]);
         } catch (\Throwable $th) {
             return redirect()->back()->with('failed', 'Terjadi kesalahan!');
