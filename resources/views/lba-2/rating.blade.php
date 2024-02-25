@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-12">
         <h5 class="mb-3 fw-bold">Nilai Produk</h5>
-        <form id="form-render" action="{{ route('rating::post', ['brand' => $data->brand, 'campaign' => $data->slug]) }}" method="POST"></form>
+        <form id="form-render" method="POST"></form>
       </div>
     </div>
   </div>
@@ -41,8 +41,8 @@
   let formData = {!! $data->formbuilder_rating_json !!};
   let starRating = null;
 
-  var typeToFind = "starRating";
-  var foundIndex = formData.findIndex(item => item.type === typeToFind);
+  const typeToFind = "starRating";
+  const foundIndex = formData.findIndex(item => item.type === typeToFind);
 
   if (foundIndex !== -1) {
     starRating = formData.splice(foundIndex, 1)[0];
