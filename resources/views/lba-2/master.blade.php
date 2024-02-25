@@ -33,6 +33,7 @@
   <!-- Main Style CSS -->
   <link rel="stylesheet" href="{{ asset('assets/lba-2/css/style.css') }}">
   <link href="https://fonts.googleapis.com/css?family=Libre+Barcode+128&display=swap" rel="stylesheet">
+  @yield('css')
   @vite('resources/css/lba-2/custom.css')
 </head>
 
