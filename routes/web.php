@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Controllers\TermConditionController;
 
@@ -38,6 +39,8 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::get('/product/{productId}/voucher/view/{voucherCode}', [VoucherController::class, 'show'])->name('voucher::show')->middleware('activity.log');
     Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
     Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
+
+    Route::get('/rating/{voucherCode}', [RatingController::class, 'show'])->name('rating::show')->middleware('activity.log');
 
     Route::get('/product/{productId}/otp/login', [OneTimePasswordController::class, 'login'])->name('otp::login');
     Route::middleware('throttle:5,1')->group(function () {
