@@ -1,9 +1,5 @@
 @extends('lba-2.master')
 
-@section('css')
-<link rel="stylesheet" href="{{ asset('assets/plugins/jquery.rateyo.min.css') }}">
-@endsection
-
 @section('content')
 <div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--30" style="border-top-left-radius: 12px; border-top-right-radius: 12px">
   <div class="container">
@@ -36,48 +32,21 @@
 
 @section('js')
 <script src="{{ asset("assets/plugins/form-render.min.js") }}"></script>
-<script src="{{ asset("assets/plugins/jquery.rateyo.min.js") }}"></script>
+<script src="{{ asset("assets/plugins/star-rating.js") }}"></script>
 <script type="text/javascript">
-  let formData = {!! $data->formbuilder_rating_json !!};
-  let starRating = null;
-
-  const typeToFind = "starRating";
-  const foundIndex = formData.findIndex(item => item.type === typeToFind);
-
-  if (foundIndex !== -1) {
-    starRating = formData.splice(foundIndex, 1)[0];
-  }
-
   $("#form-render").formRender({
-    formData,
+    formData: {!! $data->formbuilder_rating_json !!},
     dataType: 'json',
     render: true
   });
 
-  if (starRating) {
-    $("#form-render").append(`
-      <div id='star-rating'>
-        <label>${starRating.label}</label>
-        <input name="${starRating.name}" type="hidden" id="rating-value" />
-        <div id="star"></div>
-      </div>
-      <input type="hidden" value="{{ csrf_token() }}" name="_token" />
-      
-      <div class="shop-product-button mt-4">
-        <button type="submit" class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
-          Kirim
-        </button>
-      </div>
-    `);
-
-    $("#star").rateYo({
-      rating: starRating.value,
-      spacing: "5px",
-      fullStar: true,
-      onSet: function (rating) {
-        $("#rating-value").val(rating);
-      }
-    });
-  }
+  $("#form-render").append(`
+    <input type="hidden" value="{{ csrf_token() }}" name="_token" />
+    <div class="shop-product-button mt-4">
+      <button type="submit" class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
+        Kirim
+      </button>
+    </div>
+  `);
 </script>
 @endsection
