@@ -81,6 +81,13 @@ $thankpage = json_decode($data->template_thankyou_json, true);
         @endphp
       </div>
       <div class="col-12 mt-4 gap-2 d-flex flex-column">
+        <div class="shop-product-button mb-2">
+          <a href="{{ route('rating::show', ['brand' => $brand, 'campaign' => $campaign, 'voucherCode' => $voucherCode]) }}" class="w-100">
+            <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
+              Nilai Produk
+            </button>
+          </a>
+        </div>
         <div class="shop-product-button">
           <a href="https://t.me/LetsbuyAsia" target="_blank" class="w-100">
             <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
