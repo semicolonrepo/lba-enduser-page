@@ -67,6 +67,8 @@ class GoogleAuthController extends Controller
                 'name' => $googleUser->getName(),
                 'email' => $googleUser->getEmail(),
                 'google_id' => $googleUser->getId(),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
 
             $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
