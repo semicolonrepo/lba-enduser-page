@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-12">
         <h5 class="mb-3 fw-bold">Nilai Produk</h5>
-        <form id="form-render" method="POST"></form>
+        <form action="{{ route('rating::store', ['brand' => $brandSlug, 'campaign' => $campaignSlug, 'voucherCode' => $voucher->code]) }}" id="form-render" method="POST"></form>
       </div>
     </div>
   </div>

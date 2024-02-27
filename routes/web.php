@@ -41,6 +41,7 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
 
     Route::get('/rating/{voucherCode}', [RatingController::class, 'show'])->name('rating::show')->middleware('activity.log');
+    Route::post('/rating/{voucherCode}', [RatingController::class, 'store'])->name('rating::store')->middleware('activity.log');
 
     Route::get('/product/{productId}/otp/login', [OneTimePasswordController::class, 'login'])->name('otp::login');
     Route::middleware('throttle:5,1')->group(function () {
