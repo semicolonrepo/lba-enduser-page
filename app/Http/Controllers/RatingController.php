@@ -36,7 +36,7 @@ class RatingController extends Controller
         try {
             $this->ratingService->store($brand, $campaign, $voucherCode, $request->all());
 
-            return redirect()->back()->with('success', 'Berhasil memberikan rating!');
+            return redirect()->route('index', ['brand' => $brand, 'campaign' => $campaign])->with('success', 'Terima kasih atas penilaian Anda');
         } catch (\Throwable $th) {
             return redirect()->back()->with('failed', 'Terjadi kesalahan');
         }

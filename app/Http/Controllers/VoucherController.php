@@ -63,6 +63,9 @@ class VoucherController extends Controller
             return view($viewTemplate, [
                 'voucher' => $voucher,
                 'data' => $campaignData,
+                'brand' => $brand,
+                'campaign' => $campaign,
+                'voucherCode' => $voucherCode,
             ]);
         }
 
