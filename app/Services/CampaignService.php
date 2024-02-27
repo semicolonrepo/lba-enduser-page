@@ -80,6 +80,17 @@ class CampaignService
         return $products;
     }
 
+    public function getProductOffer($campaignId, $productId) {
+        $products = CampaignProductsModel::select('products.*', 'deal_offers.name as type', 'campaign_products.normal_price', 'campaign_products.subsidi_price')
+        ->join('products', 'campaign_products.product_id', '=', 'products.id')
+        ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
+        ->where('campaign_id', $campaignId)
+        ->where('product_id', $productId)
+        ->first();
+
+        return $products;
+    }
+
     public function getCampaignAuths($campaignId, $authCode = null) {
         $campaignAuths = CampaignAuthSetting::join('auth_settings', 'auth_settings.id', 'campaign_auth_settings.auth_setting_id')
             ->where('auth_settings.is_active', true)

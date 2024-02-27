@@ -36,6 +36,7 @@ class GetVoucherAuthMiddleware
 
         $validateAuth = $this->voucherService->validateAuth($brand, $campaign);
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
+        $productOffer = $this->campaignService->getProductOffer($campaignData->id, $productId);
 
         if (!$validateAuth->isAuthGmail && $campaignData->page_template_id == 2) {
             if($utmSource) {
@@ -75,6 +76,31 @@ class GetVoucherAuthMiddleware
             }
             else {
                 return redirect()->route('product::show', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                ])->with([
+                    'partner' => session('partner_id'),
+                    'termStatus' => true
+                ]);
+            }
+        }
+
+        //check product type if PAID
+        if($validateAuth->isAuthWA && $validateAuth->isAuthGmail && $productOffer->type=='Paid' && $campaignData->page_template_id == 2) {
+            if($utmSource) {
+                return redirect()->route('voucher::pay', [
+                    'brand' => $brand,
+                    'campaign' => $campaign,
+                    'productId' => $productId,
+                    'utm_source' => $utmSource
+                ])->with([
+                    'partner' => session('partner_id'),
+                    'termStatus' => true
+                ]);
+            }
+            else {
+                return redirect()->route('voucher::pay', [
                     'brand' => $brand,
                     'campaign' => $campaign,
                     'productId' => $productId,
