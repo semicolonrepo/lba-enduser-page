@@ -35,7 +35,7 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
 
     Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show')->middleware('activity.log');
 
-    Route::get('/product/{productId}/voucher/view/{voucherCode}', [VoucherController::class, 'show'])->name('voucher::show')->middleware('activity.log');
+    Route::get('/product/{productId}/voucher/view/{voucherCode}/{transactionNumber?}', [VoucherController::class, 'show'])->name('voucher::show')->middleware('activity.log');
     Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
     Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
     Route::post('/product/{productId}/voucher/pay', [VoucherController::class, 'pay'])->name('voucher::pay');

@@ -32,6 +32,12 @@ class TransactionModel extends Model
         'status',
         'notes',
         'midtrans_snap_token',
+        'midtrans_status_code',
+        'midtrans_status_message',
+        'midtrans_payment_type',
+        'midtrans_status',
+        'midtrans_payment_time',
+        'midtrans_response'
     ];
 
     protected static function boot()
@@ -45,11 +51,12 @@ class TransactionModel extends Model
 
     protected static function generateTransactionNumber()
     {
+        $prefix = 'LB';
         $datePart = now()->format('Ymd');
         $maxNumber = static::whereDate('created_at', now()->toDateString())->max('transaction_number');
         $sortNumber = $maxNumber ? (int)substr($maxNumber, -6) + 1 : 1;
 
-        return $datePart . str_pad($sortNumber, 6, '0', STR_PAD_LEFT);
+        return $prefix . $datePart . str_pad($sortNumber, 6, '0', STR_PAD_LEFT);
     }
 
 }
