@@ -215,7 +215,13 @@
                 $urlParams['utm_source'] = $utmSource;
             }
 
-            $urlClaimVoucher = route('voucher::claim', $urlParams);
+            if($product->type == 'Paid') {
+              $urlClaimVoucher = route('voucher::pay', $urlParams);
+            }
+            else {
+              $urlClaimVoucher = route('voucher::claim', $urlParams);
+            }
+
           @endphp
 
         <form action="{{ $urlClaimVoucher }}" method="post" id="form-get-product">

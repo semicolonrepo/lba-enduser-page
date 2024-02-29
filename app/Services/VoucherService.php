@@ -122,4 +122,14 @@ class VoucherService
             'campaigns.id as campaign_id',
         )->first();
     }
+
+    public function checkLastTransaction($campaignId, $productId, $amount) {
+        return DB::table('voucher_transaction')
+            ->where('campaign_id', 1)
+            ->where('product_id', 19)
+            ->where('transaction_amount', 3000)
+            ->where('status', 'waiting')
+        ->first();
+    }
+
 }
