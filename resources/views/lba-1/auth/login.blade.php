@@ -9,22 +9,32 @@
         <div class="auth-page-social-login">
           <button class="d-flex justify-content-center align-items-center">
             <img src="{{ asset('assets/lba-1/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
-            
+
             @php
-              $urlParams = request()->query();
-              $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
-              $urlParams['brand'] = $brand;
-              $urlParams['campaign'] = $campaign;
-              $urlParams['productId'] = $productId;
+                $urlParams = request()->query();
+                $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+                $urlParams['brand'] = $brand;
+                $urlParams['campaign'] = $campaign;
+                $routeName = null;
 
-              // Include utm_source in the URL parameters if present
-              if ($utmSource !== null) {
-                  $urlParams['utm_source'] = $utmSource;
-              }
+                if (isset($productId)) {
+                    $urlParams['productId'] = $productId;
+                    $routeName = 'google::redirect';
+                }
 
-              $urlRedirectGoogle = route('google::redirect', $urlParams);
+                if (isset($voucherCode)) {
+                    $urlParams['voucherCode'] = $voucherCode;
+                    $routeName = 'google::redirect::rating';
+                }
+
+                // Include utm_source in the URL parameters if present
+                if ($utmSource !== null) {
+                    $urlParams['utm_source'] = $utmSource;
+                }
+
+                $urlRedirectGoogle = route($routeName, $urlParams);
             @endphp
-            
+
             <a href="{{ $urlRedirectGoogle }}">Login dengan Google</a>
           </button>
         </div>
