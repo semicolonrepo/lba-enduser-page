@@ -16,11 +16,13 @@ class RatingService
         $sanitizeArray = $this->sanitizeArray($formSetting, $formRequest, $voucherCode);
         $sanitizeJson = $this->sanitizeJson($formSetting, $formRequest);
 
-        DB::transaction(function () use ($sanitizeArray, $sanitizeJson) {
-            DB::table('voucher_generates')->where('is_has_rating', 0)->update([
-                'is_has_rating' => 1,
-                'rating_json' => $sanitizeJson,
-            ]);
+        DB::transaction(function () use ($voucherCode, $sanitizeArray, $sanitizeJson) {
+            DB::table('voucher_generates')
+                ->where('code', $voucherCode)
+                ->where('is_has_rating', 0)->update([
+                    'is_has_rating' => 1,
+                    'rating_json' => $sanitizeJson,
+                ]);
 
             DB::table('ratings')->insert($sanitizeArray);
         });

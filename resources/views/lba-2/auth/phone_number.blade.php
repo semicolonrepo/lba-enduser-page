@@ -67,10 +67,33 @@
           <div class="auth-text-body">Number #1</div>
           <div class="auth-text-body">Online to Offline Platform</div>
         </div> --}}
-        
+
         <!-- Auth form -->
         <div class="auth-form">
-          <form action="{{ route('otp::send', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId]) }}" method="post">
+        @php
+            $urlParams = request()->query();
+            $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+            $urlParams['brand'] = $brand;
+            $urlParams['campaign'] = $campaign;
+
+            if (isset($productId)) {
+                $urlParams['productId'] = $productId;
+                $routeName = 'otp::send';
+            }
+
+            if (isset($voucherCode)) {
+                $urlParams['voucherCode'] = $voucherCode;
+                $routeName = 'otp::send::rating';
+            }
+
+            // Include utm_source in the URL parameters if present
+            if ($utmSource !== null) {
+                $urlParams['utm_source'] = $utmSource;
+            }
+
+            $urlOtpSend = route($routeName, $urlParams);
+        @endphp
+          <form action="{{ $urlOtpSend }}" method="post">
           @csrf
             <div class="auth-form__single-field space-mb--20">
               <label for="mobileNumber">No Handphone (Whatsapp)</label>

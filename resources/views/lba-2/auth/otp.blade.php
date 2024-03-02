@@ -62,23 +62,32 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        
+
           @php
             $urlParams = request()->query();
             $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
             $urlParams['brand'] = $brand;
             $urlParams['campaign'] = $campaign;
-            $urlParams['productId'] = $productId;
             $urlParams['phoneNumber'] = $phoneNumber;
+
+            if (isset($productId)) {
+                $urlParams['productId'] = $productId;
+                $routeName = 'otp::validate::post';
+            }
+
+            if (isset($voucherCode)) {
+                $urlParams['voucherCode'] = $voucherCode;
+                $routeName = 'otp::validate::post::rating';
+            }
 
             // Include utm_source in the URL parameters if present
             if ($utmSource !== null) {
                 $urlParams['utm_source'] = $utmSource;
             }
 
-            $urlValidateOtp = route('otp::validate::post', $urlParams);
+            $urlValidateOtp = route($routeName, $urlParams);
           @endphp
-        
+
         <!-- Auth form -->
         <div class="auth-form" style="margin-top: 5px">
         <form action="{{ $urlValidateOtp }}" method="post">
@@ -89,7 +98,7 @@
             </div>
             <div class="auth-form__single-field space-mb--40">
               <p class="auth-form__info-text">
-                Tidak terima OTP? 
+                Tidak terima OTP?
                 <a href="{{ route('otp::resend', ['brand' => $brand, 'campaign' => $campaign, 'productId' => $productId, 'phoneNumber' => $phoneNumber]) }}">
                   Kirim ulang
                 </a>

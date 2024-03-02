@@ -50,8 +50,19 @@ class GoogleAuthController extends Controller
             $arrayRoute = [
                 'brand' => session('brand_session'),
                 'campaign' => session('campaign_session'),
-                'productId' => session('product_id_session'),
             ];
+
+            $routeName = null;
+
+            if (session('product_id_session') !== null) {
+                $arrayRoute['productId'] = session('product_id_session');
+                $routeName = 'product::show';
+            }
+
+            if (session('voucher_code_session') !== null) {
+                $arrayRoute['voucherCode'] = session('voucher_code_session');
+                $routeName = 'google::login::rating';
+            }
 
             if (session('utm_source_session') !== null) {
                 $arrayRoute['utm_source'] = session('utm_source_session');
@@ -59,7 +70,7 @@ class GoogleAuthController extends Controller
 
             $googleUser = Socialite::driver('google')->user();
             if (!Str::endsWith($googleUser->getEmail(), '@gmail.com')) {
-                return redirect()->route('product::show', $arrayRoute)->with('failed', 'Gunakan domain @gmail.com ya!');
+                return redirect()->route($routeName, $arrayRoute)->with('failed', 'Gunakan domain @gmail.com ya!');
             }
 
             $authGmailId = DB::table('auth_gmail')->insertGetId([
@@ -74,7 +85,13 @@ class GoogleAuthController extends Controller
             $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
             Session::put('customer_user_gmail', $authGmailUuid, 60);
 
-            return redirect()->route('voucher::claim', $arrayRoute);
+            if (session('product_id_session') !== null) {
+                return redirect()->route('voucher::claim', $arrayRoute);
+            }
+
+            if (session('voucher_code_session') !== null) {
+                return redirect()->route('rating::show', $arrayRoute);
+            }
         } catch (\Throwable $th) {
             return redirect()->back()->with('failed', 'terjadi kesalahan');
         }
