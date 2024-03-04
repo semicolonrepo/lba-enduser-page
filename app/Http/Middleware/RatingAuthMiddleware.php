@@ -2,11 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Services\CampaignService;
 use App\Services\VoucherService;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class RatingAuthMiddleware
@@ -14,7 +12,6 @@ class RatingAuthMiddleware
 
     public function __construct(
         private VoucherService $voucherService,
-        private CampaignService $campaignService,
     ) {}
 
 

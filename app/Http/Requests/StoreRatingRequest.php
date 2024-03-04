@@ -62,4 +62,23 @@ class StoreRatingRequest extends FormRequest
 
         return $arrayRules;
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        $messages = [];
+
+        foreach ($this->ratingForms as $key => $form) {
+            $messages[$form->name . '.required'] = "The $form->label field is required.";
+            $messages[$form->name . '.numeric'] = "The $form->label field must be a number.";
+            $messages[$form->name . '.string'] = "The $form->label field must be a string.";
+            $messages[$form->name . '.array'] = "The $form->label field must be a array.";
+        }
+
+        return $messages;
+    }
 }
