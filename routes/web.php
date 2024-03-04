@@ -45,6 +45,7 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::get('/rating/{voucherCode}', [RatingController::class, 'show'])->name('rating::show')->middleware(
         'activity.log',
         'rating.auth',
+        'verify.campaign.has.rating',
         'verify.voucher.claimed',
         'verify.voucher.permission',
         'verify.voucher.has.rating',
@@ -52,6 +53,7 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::post('/rating/{voucherCode}', [RatingController::class, 'store'])->name('rating::store')->middleware(
         'activity.log',
         'rating.auth',
+        'verify.campaign.has.rating',
         'verify.voucher.claimed',
         'verify.voucher.permission',
         'verify.voucher.has.rating',
