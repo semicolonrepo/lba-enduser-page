@@ -30,7 +30,7 @@ class VerifyVoucherHasRatingMiddleware
             return redirect()->route('index', [
                 'brand' => $brand,
                 'campaign' => $campaign,
-            ])->with('success', 'Penilaian Anda sudah ada!');
+            ])->with('success', 'Anda telah memberikan penilaian, terima kasih!');
         }
 
         return $next($request);
