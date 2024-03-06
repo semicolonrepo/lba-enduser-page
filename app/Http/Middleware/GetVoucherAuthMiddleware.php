@@ -32,6 +32,17 @@ class GetVoucherAuthMiddleware
             session(['partner_id' => $partnerId]);
         }
 
+        $nameForm = $request->input('name_form');
+        $phoneNumberForm = $request->input('phone_number_form');
+
+        if ($nameForm) {
+            session(['name_form' => $nameForm]);
+        }
+
+        if ($phoneNumberForm) {
+            session(['phone_number_form' => $phoneNumberForm]);
+        }
+
         $utmSource = $request->query('utm_source');
 
         $validateAuth = $this->voucherService->validateAuth($brand, $campaign);
