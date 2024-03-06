@@ -87,6 +87,12 @@ $thankpage = json_decode($data->template_thankyou_json, true);
                 <iframe style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
               </div>
             @endif
+
+            @if ($block['type'] == 'image')
+              <div class="mt-2">
+                <img src="{{ $block['data']['file']['url'] }}" alt="{{ $block['data']['caption'] }}" class="w-100 rounded-2">
+              </div>
+            @endif
           @endforeach
         @endif
       </div>
