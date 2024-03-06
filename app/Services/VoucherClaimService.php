@@ -66,6 +66,8 @@ class VoucherClaimService
                             'type' => 'text',
                             "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
                             "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
                         ],
                         [
                             'product_id' => $productId,
@@ -77,6 +79,8 @@ class VoucherClaimService
                             'type' => 'text',
                             "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
                             "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
                         ]
                     ]);
             }
@@ -236,7 +240,7 @@ class VoucherClaimService
             ->leftJoin('campaign_products', 'campaign_products.campaign_id', '=', 'campaigns.id')
             ->leftJoin('voucher_term_products', 'voucher_term_products.voucher_id', '=', 'voucher_generates.voucher_id')
             ->select(
-                'voucher_generates.id',
+                DB::raw('MIN(voucher_generates.id) as id'),
                 'voucher_generates.code',
                 'voucher_generates.phone_number',
                 'voucher_generates.email',
@@ -247,7 +251,6 @@ class VoucherClaimService
                 'vouchers.expires_at',
                 'providers.name as provider_name',
             )->groupBy(
-                'voucher_generates.id',
                 'voucher_generates.code',
                 'voucher_generates.phone_number',
                 'voucher_generates.email',
