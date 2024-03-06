@@ -122,7 +122,7 @@
           <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
           <label class="form-check-label" for="check-term-condition">
             I have read and agreed to the
-            <a href="{{ route('term-condition') }}" class="term-condition-link link-primary" target="_blank">
+            <a href="{{ route('term-condition') }}/{{(strtoupper($brand) === 'MILO') ? 'milo' : '' }}{{(strtoupper($brand) === 'BEARBRAND') ? 'bear-brand' : '' }}" class="term-condition-link link-primary" target="_blank">
               Terms and Conditions
             </a>
           </label>
@@ -239,7 +239,7 @@
               <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}">
               <label class="form-check-label" for="check-term-condition">
                 I have read and agreed to the
-                <a href="{{ route('term-condition') }}" class="term-condition-link link-primary" target="_blank">
+                <a href="{{ route('term-condition') }}/{{(strtoupper($brand) === 'MILO') ? 'milo' : '' }}{{(strtoupper($brand) === 'BEARBRAND') ? 'bear-brand' : '' }}" class="term-condition-link link-primary" target="_blank">
                   Terms and Conditions
                 </a>
               </label>
