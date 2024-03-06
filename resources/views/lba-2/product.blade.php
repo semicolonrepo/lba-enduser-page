@@ -132,6 +132,19 @@
         <div class="alert alert-danger m-0 mt-2 d-none" role="alert" id="alert"></div>
         <div class="total-shipping pb-2 pt-3">
           <h3 class="section-title fw-bold text-center mb-3">Isi data dan dapatkan vouchernya</h3>
+          <form method="POST" id="questionare-form">
+            @csrf
+            @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')
+              <div class="form-group mb-2">
+                <label class="w-100 text-center fs-6">*Nama :</label>
+                <input type="text" class="form-control" style="height: 45px" name="name_form" value="{{ session('name_form') }}" required>
+              </div>
+              <div class="form-group mb-4">
+                <label class="w-100 text-center fs-6">*Nomor Handphone :</label>
+                <input type="text" class="form-control" style="height: 45px" name="phone_number_form" value="{{ session('phone_number_form') }}" required>
+              </div>
+            @endif
+          </form>
           @if ($authData->needAuthGmail)
             @if ($authData->isAuthGmail)
               <div class="form-group">
@@ -154,7 +167,7 @@
                     $urlGoogleLogin = route('google::redirect', $urlParams);
                 @endphp
 
-                <button id="login-google" class="d-flex justify-content-center align-items-center" style="height: 45px" data-url="{{ $urlGoogleLogin }}">
+                <button id="login-google" class="d-flex justify-content-center align-items-center" style="height: 45px" data-url="{{ $urlGoogleLogin }}" data-brand="{{ $brand }}">
                   <img src="{{ asset('assets/lba-2/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
                   <a class="term-condition-link" style="color: unset">
                     Login dengan Google

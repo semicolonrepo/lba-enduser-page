@@ -74,23 +74,39 @@ $(document).ready(function () {
   $("#login-google").click(function() {
     const partnerChecked = $(".partner:checked").length;
     const termConditionChecked = $("#check-term-condition:checked").length;
+    const brand = $(this).data("brand");
 
     if (partnerChecked == 0) {
       showAlert("Harap pilih Lokasi Penukaran Voucher!")
     } else if (termConditionChecked == 0) {
       showAlert("Harap ceklis Terms & Conditions!")
     } else {
-        const partner = $(".partner:checked").val();
-        const separator = $(this).data("url").indexOf('?') !== -1 ? '&' : '?';
-        const urlLoginGoogle = $(this).data("url") + separator + 'partner=' + partner;
+      const partner = $(".partner:checked").val();
+      const separator = $(this).data("url").indexOf('?') !== -1 ? '&' : '?';
+      const urlLoginGoogle = $(this).data("url") + separator + 'partner=' + partner;
 
-        if (inapp.isInApp() && getOS() === 'Android') {
-            window.location = `intent:${urlLoginGoogle}#Intent;end`;
-        }else if(inapp.isInApp() && getOS() === 'iOS'){
-            window.open(urlLoginGoogle, "_blank");
+      if (inapp.isInApp() && getOS() === 'Android') {
+        const action = `intent:${urlLoginGoogle}#Intent;end`;
+        $("#questionare-form").attr("action", action);
+      } else if(inapp.isInApp() && getOS() === 'iOS'){
+        const action = urlLoginGoogle;
+        $("#questionare-form").attr("action", action);
+      } else {
+        const action = urlLoginGoogle;
+        $("#questionare-form").attr("action", action);
+      }
+
+      if (brand.toUpperCase() == 'MILO' || brand.toUpperCase() == 'BEARBRAND') {
+        if ($("input[name='name_form']").val() == '') {
+          showAlert("Harap isi Nama Anda!")
+        } else if ($("input[name='phone_number_form']").val() == '') {
+          showAlert("Harap isi Nomor Handphone Anda!")
         } else {
-            window.location.href = urlLoginGoogle;
+          $("#questionare-form").submit();
         }
+      } else {
+        $("#questionare-form").submit();
+      }      
     }
   });
 
