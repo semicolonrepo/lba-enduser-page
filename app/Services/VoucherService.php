@@ -105,10 +105,13 @@ class VoucherService
         ->where('vouchers.expires_at', '>', date('Y-m-d H:i:s'))
         ->where('campaigns.expires_at', '>', date('Y-m-d H:i:s'))
         ->select(
+            'voucher_generates.id',
             'voucher_generates.code',
             'voucher_generates.phone_number',
             'voucher_generates.email',
             'voucher_generates.claim_date',
+            'voucher_generates.is_has_rating',
+            'voucher_generates.rating_json',
             'vouchers.id as voucher_id',
             'vouchers.title as voucher_title',
             'vouchers.limit_usage_user',
