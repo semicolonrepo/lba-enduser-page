@@ -79,6 +79,6 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::get('/rating/{voucherCode}/google/redirect', [GoogleAuthRatingController::class, 'redirect'])->name('google::redirect::rating');
 
     Route::get('/product/{productId}/google/login', [GoogleAuthController::class, 'login'])->name('google::login');
-    Route::get('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
+    Route::post('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
 });
 

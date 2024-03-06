@@ -28,6 +28,11 @@ class GoogleAuthController extends Controller
     }
 
     public function redirect(Request $request, $brand, $campaign, $productId) {
+        if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND') {
+            session(['name_form' => $request->input('name_form')]);
+            session(['phone_number_form' => $request->input('phone_number_form')]);
+        }
+
         session(['brand_session' => $brand]);
         session(['campaign_session' => $campaign]);
         session(['product_id_session' => $productId]);
