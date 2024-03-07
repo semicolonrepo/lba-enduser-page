@@ -118,15 +118,6 @@
             @endif
           </div>
         </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
-          <label class="form-check-label" for="check-term-condition">
-            I have read and agreed to the
-            <a href="{{ route('term-condition') }}/{{(strtoupper($brand) === 'MILO') ? 'milo' : '' }}{{(strtoupper($brand) === 'BEARBRAND') ? 'bear-brand' : '' }}" class="term-condition-link link-primary" target="_blank">
-              Terms and Conditions
-            </a>
-          </label>
-        </div>
       </div>
       <div class="col-12">
         <div class="alert alert-danger m-0 mt-2 d-none" role="alert" id="alert"></div>
@@ -139,12 +130,21 @@
                 <label class="w-100 text-center fs-6">*Nama :</label>
                 <input type="text" class="form-control" style="height: 45px" name="name_form" value="{{ session('name_form') }}" required>
               </div>
-              <div class="form-group mb-4">
+              <div class="form-group mb-3">
                 <label class="w-100 text-center fs-6">*Nomor Handphone :</label>
                 <input type="text" class="form-control" style="height: 45px" name="phone_number_form" value="{{ session('phone_number_form') }}" required>
               </div>
             @endif
           </form>
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+            <label class="form-check-label" for="check-term-condition">
+              I have read and agreed to the
+              <a href="{{ route('term-condition') }}/{{(strtoupper($brand) === 'MILO') ? 'milo' : '' }}{{(strtoupper($brand) === 'BEARBRAND') ? 'bear-brand' : '' }}" class="term-condition-link link-primary" target="_blank">
+                Terms and Conditions
+              </a>
+            </label>
+          </div>
           @if ($authData->needAuthGmail)
             @if ($authData->isAuthGmail)
               <div class="form-group">
