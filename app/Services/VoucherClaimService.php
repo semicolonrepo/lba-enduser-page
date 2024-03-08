@@ -32,7 +32,7 @@ class VoucherClaimService
     }
 
     protected function claim($voucher, $campaignId, $productId) {
-        DB::transaction(function () use ($voucher, $campaignId,$productId) {
+        DB::transaction(function () use ($voucher, $campaignId, $productId) {
             $isCampaignAuthByGmail = $this->campaignService->getCampaignAuths($campaignId, 'GMAIL')->first();
             $isCampaignAuthByWA = $this->campaignService->getCampaignAuths($campaignId, 'WHATSAPP')->first();
             $sessionWA = $this->getAuthSession('customer_user_wa');
@@ -46,6 +46,44 @@ class VoucherClaimService
                     "claim_date" => date('Y-m-d H:i:s'),
                     "ip_address" => request()->ip(),
                 ]);
+
+            $campaignData = DB::table('campaigns')
+                ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
+                ->where('campaigns.id', $campaignId)
+                ->select('brands.name as brand')
+                ->first();
+
+            if (strtoupper($campaignData->brand) === 'MILO' || strtoupper($campaignData->brand) === 'BEARBRAND') {
+                DB::table('campaign_product_questionares')
+                    ->insert([
+                        [
+                            'product_id' => $productId,
+                            'campaign_id' => $campaignId,
+                            'voucher_generate_id' => $voucher->id,
+                            'voucher_generate_code' => $voucher->code,
+                            'question' => 'Nama',
+                            'answer' => session('name_form'),
+                            'type' => 'text',
+                            "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
+                            "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        ],
+                        [
+                            'product_id' => $productId,
+                            'campaign_id' => $campaignId,
+                            'voucher_generate_id' => $voucher->id,
+                            'voucher_generate_code' => $voucher->code,
+                            'question' => 'No. Handphone',
+                            'answer' => session('phone_number_form'),
+                            'type' => 'text',
+                            "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
+                            "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        ]
+                    ]);
+            }
 
             $voucher = $this->voucherService->showVoucher($voucher->code);
             $this->sendNotif($voucher);
@@ -202,6 +240,7 @@ class VoucherClaimService
             ->leftJoin('campaign_products', 'campaign_products.campaign_id', '=', 'campaigns.id')
             ->leftJoin('voucher_term_products', 'voucher_term_products.voucher_id', '=', 'voucher_generates.voucher_id')
             ->select(
+                DB::raw('MIN(voucher_generates.id) as id'),
                 'voucher_generates.code',
                 'voucher_generates.phone_number',
                 'voucher_generates.email',

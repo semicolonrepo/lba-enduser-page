@@ -65,20 +65,36 @@ $thankpage = json_decode($data->template_thankyou_json, true);
           Kami juga telah mengirimkan kode voucher beserta <b>cara pemakaian nya</b> melalui @if($voucher->email) <b>{{$voucher->email}}</b> @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) <b>{{$voucher->phone_number}}</b> nomor @endif kamu ya.
         </p>
 
-        @php
-        if($thankpage != null) {
-        $thankBlock = $thankpage['blocks'];
-        @endphp
+        @if($thankpage != null)
+          @php
+          $thankBlock = $thankpage['blocks'];
+          @endphp
+
           @foreach ($thankBlock as $block)
             @if ($block['type'] == 'paragraph')
               @if ($block['data']['text'] != '')
               <p class="text-center" style="font-size: 16px;">{!! $block['data']['text'] !!}</p>
               @endif
             @endif
+
+            @if ($block['type'] == 'youtubeEmbed')
+              @php
+                $urlParts = parse_url($block['data']['url']);
+                parse_str($urlParts['query'], $query);
+                $videoId = $query['v'];
+              @endphp
+              <div class="text-center embed-responsive embed-responsive-1by1 space-mt--20">
+                <iframe style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
+              </div>
+            @endif
+
+            @if ($block['type'] == 'image')
+              <div class="mt-2">
+                <img src="{{ $block['data']['file']['url'] }}" alt="{{ $block['data']['caption'] }}" class="w-100 rounded-2">
+              </div>
+            @endif
           @endforeach
-        @php
-        }
-        @endphp
+        @endif
       </div>
       <div class="col-12 mt-4 gap-2 d-flex flex-column">
         <div class="shop-product-button mb-2">
