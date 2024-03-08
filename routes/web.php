@@ -31,6 +31,8 @@ Route::get('/', function () {
 Route::get('/preview/{token}', [CampaignController::class, 'preview'])->name('preview');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google::callback');
 Route::get('/term-condition', [TermConditionController::class, 'index'])->name('term-condition');
+Route::get('/term-condition/bear-brand', [TermConditionController::class, 'bearBrand'])->name('term-condition::bear-brand');
+Route::get('/term-condition/milo', [TermConditionController::class, 'milo'])->name('term-condition::milo');
 
 Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/', [CampaignController::class, 'index'])->name('index')->middleware('activity.log');
@@ -79,6 +81,6 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::get('/rating/{voucherCode}/google/redirect', [GoogleAuthRatingController::class, 'redirect'])->name('google::redirect::rating');
 
     Route::get('/product/{productId}/google/login', [GoogleAuthController::class, 'login'])->name('google::login');
-    Route::get('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
+    Route::post('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
 });
 

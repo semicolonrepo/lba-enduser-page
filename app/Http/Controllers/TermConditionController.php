@@ -18,4 +18,12 @@ class TermConditionController extends Controller
             'term_condition' => $termCondition
         ]);
     }
+
+    public function bearBrand() {
+        return view('term_condition_bearbrand');
+    }
+
+    public function milo() {
+        return view('term_condition_milo');
+    }
 }
