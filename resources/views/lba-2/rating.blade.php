@@ -13,17 +13,19 @@
         <form action="{{ route('rating::store', ['brand' => $brandSlug, 'campaign' => $campaignSlug, 'voucherCode' => $voucher->code]) }}" id="form-render" method="POST">
           @csrf
           @php $starRatings = []; @endphp
-          @foreach (json_decode($data->formbuilder_rating_json) as $formRating)
-            @include('form-rating')
-            @if ($formRating->type === 'starRating')
-              @php array_push($starRatings, $formRating->name) @endphp
-            @endif
-          @endforeach
-          <div class="shop-product-button mt-4">
-            <button type="submit" class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
-              Kirim
-            </button>
-          </div>
+          @if ($data->formbuilder_rating_json != null)
+            @foreach (json_decode($data->formbuilder_rating_json) as $formBuilder)
+              @include('show_form_builder')
+              @if ($formBuilder->type === 'starRating')
+                @php array_push($starRatings, $formBuilder->name) @endphp
+              @endif
+            @endforeach
+            <div class="shop-product-button mt-4">
+              <button type="submit" class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
+                Kirim
+              </button>
+            </div>
+          @endif
         </form>
       </div>
     </div>

@@ -104,12 +104,23 @@
                     </div>
                 </div>
             </div>
+            @if ($product->questionares_json != null)
+            <div class="col-12">
+                <h3 class="section-title fw-bold text-center mb-3">Isi data dan dapatkan vouchernya</h3>
+                <form method="POST" id="questionare-form">
+                    @csrf
+                    @foreach (json_decode($product->questionares_json) as $formBuilder)
+                    @include('show_form_builder')
+                    @endforeach
+                </form>
+            </div>
+            @endif
             <div class="col12">
                 <div class="form-check pb-2">
                     <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}">
                     <label class="form-check-label" for="check-term-condition">
                         I have read and agreed to the
-                        <a href="{{ route('term-condition') }}" class="term-condition-link link-primary" target="_blank">
+                        <a href="{{ route('term-condition') }}/{{(strtoupper($brand) === 'MILO') ? 'milo' : '' }}{{(strtoupper($brand) === 'BEARBRAND') ? 'bear-brand' : '' }}" class="term-condition-link link-primary" target="_blank">
                             Terms and Conditions
                         </a>
                     </label>
