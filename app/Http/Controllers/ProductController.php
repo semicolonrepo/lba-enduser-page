@@ -20,7 +20,7 @@ class ProductController extends Controller
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
 
         if($campaignData && $productId) {
-            $productData = CampaignProductsModel::select('products.*', 'deal_offers.name as type', 'campaign_products.normal_price', 'campaign_products.subsidi_price')
+            $productData = CampaignProductsModel::select('products.*', 'deal_offers.name as type', 'campaign_products.normal_price', 'campaign_products.subsidi_price', 'campaign_products.questionares_json')
                 ->join('products', 'campaign_products.product_id', '=', 'products.id')
                 ->join('deal_offers', 'campaign_products.deal_offer_id', '=', 'deal_offers.id')
                 ->where('products.id', $productId)
