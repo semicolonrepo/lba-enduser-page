@@ -33,7 +33,7 @@ class GoogleAuthController extends Controller
                 'name_form' => 'required|string',
                 'phone_number_form' => 'required|numeric',
             ]);
-
+          
             session(['name_form' => $request->input('name_form')]);
             session(['phone_number_form' => $request->input('phone_number_form')]);
         }
