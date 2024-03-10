@@ -96,7 +96,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <div class="total-shipping pb-2">
+        <div class="total-shipping pb-0">
           <h3 class="section-title fw-bold text-center mb-1">Pilih Lokasi Penukaran Voucher</h3>
           <h6 class="text-center mb-3">Klik pada logo merchant</h6>
           <div class="row" id="list-partner" style="row-gap: 16px">
@@ -121,21 +121,16 @@
       </div>
       <div class="col-12">
         <div class="alert alert-danger m-0 mt-2 d-none" role="alert" id="alert"></div>
-        <div class="total-shipping pb-2 pt-3">
-          <h3 class="section-title fw-bold text-center mb-3">Isi data dan dapatkan vouchernya</h3>
-          <form method="POST" id="questionare-form">
-            @csrf
-            @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')
-              <div class="form-group mb-2">
-                <label class="w-100 text-center fs-6">*Nama :</label>
-                <input type="text" class="form-control name-form" style="height: 45px" name="name_form" value="{{ session('name_form') }}" required>
-              </div>
-              <div class="form-group mb-3">
-                <label class="w-100 text-center fs-6">*Nomor Handphone :</label>
-                <input type="text" class="form-control phone-number-form autonumeric" style="height: 45px" name="phone_number_form" value="{{ session('phone_number_form') }}" required>
-              </div>
-            @endif
-          </form>
+        <div class="total-shipping pb-2 pt-0">
+          @if ($product->questionares_json != null)
+            <h3 class="section-title fw-bold text-center mb-3 mt-2">Isi data dan dapatkan vouchernya</h3>
+            <form method="POST" id="questionare-form">
+              @csrf
+              @foreach (json_decode($product->questionares_json) as $formBuilder)
+                @include('show_form_builder')
+              @endforeach
+            </form>
+          @endif
           @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>

@@ -125,17 +125,7 @@ $(document).ready(function () {
         $("#questionare-form").attr("action", action);
       }
 
-      if (brand.toUpperCase() == 'MILO' || brand.toUpperCase() == 'BEARBRAND') {
-        if ($("input[name='name_form']").val() == '') {
-          showAlert("Harap isi Nama Anda!")
-        } else if ($("input[name='phone_number_form']").val() == '') {
-          showAlert("Harap isi Nomor Handphone Anda!")
-        } else {
-          $("#questionare-form").submit();
-        }
-      } else {
-        $("#questionare-form").submit();
-      }
+      $("#questionare-form").submit();
     }
   });
 
