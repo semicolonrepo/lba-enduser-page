@@ -32,15 +32,22 @@ class GetVoucherAuthMiddleware
             session(['partner_id' => $partnerId]);
         }
 
-        $nameForm = $request->input('name_form');
-        $phoneNumberForm = $request->input('phone_number_form');
+        if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND') {
+            $request->validate([
+                'name_form' => 'required|string',
+                'phone_number_form' => 'required|numeric',
+            ]);
 
-        if ($nameForm) {
-            session(['name_form' => $nameForm]);
-        }
+            $nameForm = $request->input('name_form');
+            $phoneNumberForm = $request->input('phone_number_form');
 
-        if ($phoneNumberForm) {
-            session(['phone_number_form' => $phoneNumberForm]);
+            if ($nameForm) {
+                session(['name_form' => $nameForm]);
+            }
+
+            if ($phoneNumberForm) {
+                session(['phone_number_form' => $phoneNumberForm]);
+            }
         }
 
         $utmSource = $request->query('utm_source');
