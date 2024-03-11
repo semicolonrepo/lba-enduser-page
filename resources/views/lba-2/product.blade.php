@@ -133,8 +133,8 @@
           @endif
           @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
-                <label class="form-check-label" for="check-term-condition">
+                <input class="form-check-input" type="checkbox" id="check-term-condition-1" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+                <label class="form-check-label" for="check-term-condition-1">
                 Saya berusia lebih dari 18 tahun. Saya menyetujui
                 <a href="https://bearbrand.co.id/term-condition" class="term-condition-link link-primary" target="_blank">
                 Syarat dan Ketentuan
@@ -143,14 +143,14 @@
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
-                <label class="form-check-label" for="check-term-condition">
+                <input class="form-check-input" type="checkbox" id="check-term-condition-2" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+                <label class="form-check-label" for="check-term-condition-2">
                 Saya memberikan persetujuan kepada PT Nestlé Indonesia dan afiliasinya ("Nestlé") untuk memproses data pribadi saya dengan mengacu pada <a href="https://www.bearbrand.co.id/privacy-policy" class="term-condition-link link-primary" target="_blank">Kebijakan Kerahasiaan</a> BEAR BRAND, saya dapat menarik persetujuan saya kapan saja.*
                 </label>
             </div>
             <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
-                <label class="form-check-label" for="check-term-condition">
+                <input class="form-check-input" type="checkbox" id="check-term-condition-3" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+                <label class="form-check-label" for="check-term-condition-3">
                 Saya bersedia menerima segala informasi mengenai materi promosi, penawaran, dan diskon dari BEAR BRAND serta segala bentuk komunikasi lainnya dari Nestlé dan produknya melalui: Buletin dan email, SMS, nomor telepon.*
                 </label>
             </div>
