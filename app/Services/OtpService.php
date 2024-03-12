@@ -180,7 +180,7 @@ class OtpService
             ]);
 
             $authWAUuid = DB::table('auth_wa')->where('id', $authWAId)->value('uuid');
-            Session::put('customer_user_wa', $authWAUuid, 60);
+            Session::put('customer_user_wa', $authWAUuid);
 
             return true;
         }
