@@ -93,7 +93,7 @@ class GoogleAuthController extends Controller
             ]);
 
             $authGmailUuid = DB::table('auth_gmail')->where('id', $authGmailId)->value('uuid');
-            Session::put('customer_user_gmail', $authGmailUuid, 60);
+            Session::put('customer_user_gmail', $authGmailUuid);
 
             if (session('product_id_session') !== null) {
                 return redirect()->route('voucher::claim', $arrayRoute);

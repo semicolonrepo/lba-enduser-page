@@ -33,11 +33,6 @@ class GetVoucherAuthMiddleware
         }
 
         if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND') {
-            $request->validate([
-                'name_form' => 'required|string',
-                'phone_number_form' => 'required|numeric',
-            ]);
-
             $nameForm = $request->input('name_form');
             $phoneNumberForm = $request->input('phone_number_form');
 
