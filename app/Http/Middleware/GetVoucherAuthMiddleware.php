@@ -35,7 +35,7 @@ class GetVoucherAuthMiddleware
         if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND') {
             $nameForm = $request->input('name_form');
             $phoneNumberForm = $request->input('phone_number_form');
-
+          
             if ($nameForm) {
                 session(['name_form' => $nameForm]);
             }
