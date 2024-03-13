@@ -23,33 +23,9 @@ class GetVoucherAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $partnerId = $request->input('partner');
         $brand = $request->route('brand');
         $campaign =  $request->route('campaign');
         $productId =  $request->route('productId');
-
-        if ($partnerId) {
-            session(['partner_id' => $partnerId]);
-        }
-
-        if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND') {
-            $request->validate([
-                'name_form' => 'required|string',
-                'phone_number_form' => 'required|numeric',
-            ]);
-
-            $nameForm = $request->input('name_form');
-            $phoneNumberForm = $request->input('phone_number_form');
-
-            if ($nameForm) {
-                session(['name_form' => $nameForm]);
-            }
-
-            if ($phoneNumberForm) {
-                session(['phone_number_form' => $phoneNumberForm]);
-            }
-        }
-
         $utmSource = $request->query('utm_source');
 
         $validateAuth = $this->voucherService->validateAuth($brand, $campaign);

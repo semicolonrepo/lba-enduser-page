@@ -118,6 +118,7 @@ class VoucherService
             'vouchers.expires_at',
             'vouchers.description',
             'providers.name as provider_name',
+            'voucher_generates.product_id',
             'products.name as product_name',
             'brands.name as brand_name',
             'brands.photo as brand_photo',
