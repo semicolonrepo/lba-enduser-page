@@ -25,6 +25,15 @@ function getOS() {
     return os;
   }
 
+function checkingBrowser() {
+    if (inapp.isInApp() && getOS() === 'Android') {
+        const currentURL = window.location.href;
+        window.location.href = `intent:${currentURL}#Intent;end`;
+    }
+}
+
+checkingBrowser();
+
   new AutoNumeric.multiple('.autonumeric', {
     allowDecimalPadding: false,
     lZero: "keep",
