@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use App\Http\Requests\ClaimVoucherRequest;
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class SetVoucherClaimSessionMiddleware
+{
+
+    public function __construct(
+        private ClaimVoucherRequest $claimVoucherRequest
+    ) {}
+
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        session(['voucher_claim_request_session' => $request->all()]);
+        $voucherClaimRequestSession = session('voucher_claim_request_session');
+
+        session(['partner_id' => $voucherClaimRequestSession['partner']]);
+
+        if(isset($voucherClaimRequestSession['utm_source'])) {
+            session(['utm_source_session' => $voucherClaimRequestSession['utm_source']]);
+        } else {
+            session()->forget('utm_source_session');
+        }
+
+        return $next($request);
+    }
+}

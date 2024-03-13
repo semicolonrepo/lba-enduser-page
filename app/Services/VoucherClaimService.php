@@ -15,6 +15,7 @@ class VoucherClaimService
     public function __construct(
         private CampaignService $campaignService,
         private VoucherService $voucherService,
+        private CampaignProductService $campaignProductService,
     ) {}
 
     public function run($campaignId, $productId) {
@@ -47,43 +48,10 @@ class VoucherClaimService
                     "ip_address" => request()->ip(),
                 ]);
 
-            $campaignData = DB::table('campaigns')
-                ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
-                ->where('campaigns.id', $campaignId)
-                ->select('brands.name as brand')
-                ->first();
-
-            if (strtoupper($campaignData->brand) === 'MILO' || strtoupper($campaignData->brand) === 'BEARBRAND') {
-                DB::table('campaign_product_questionares')
-                    ->insert([
-                        [
-                            'product_id' => $productId,
-                            'campaign_id' => $campaignId,
-                            'voucher_generate_id' => $voucher->id,
-                            'voucher_generate_code' => $voucher->code,
-                            'question' => 'Nama',
-                            'answer' => session('name_form'),
-                            'type' => 'text',
-                            "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
-                            "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s'),
-                        ],
-                        [
-                            'product_id' => $productId,
-                            'campaign_id' => $campaignId,
-                            'voucher_generate_id' => $voucher->id,
-                            'voucher_generate_code' => $voucher->code,
-                            'question' => 'No. Handphone',
-                            'answer' => session('phone_number_form'),
-                            'type' => 'text',
-                            "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
-                            "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s'),
-                        ]
-                    ]);
-            }
+            $formSetting = $this->campaignProductService->getFormSettingArray($campaignId, $productId);
+            $sanitizeArray = $this->campaignProductService->sanitizeFormArray($formSetting, session('voucher_claim_request_session'), $voucher->code);
+            DB::table('campaign_product_questionares')
+                ->insert($sanitizeArray);
 
             $voucher = $this->voucherService->showVoucher($voucher->code);
             $this->sendNotif($voucher);
