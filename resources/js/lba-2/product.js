@@ -125,31 +125,31 @@ $(document).ready(function () {
 
       if (inapp.isInApp() && getOS() === 'Android') {
         const action = `intent:${urlLoginGoogle}#Intent;end`;
-        $("#questionare-form").attr("action", action);
+        $("#form-get-voucher").attr("action", action);
       } else if(inapp.isInApp() && getOS() === 'iOS'){
         const action = urlLoginGoogle;
-        $("#questionare-form").attr("action", action);
+        $("#form-get-voucher").attr("action", action);
       } else {
         const action = urlLoginGoogle;
-        $("#questionare-form").attr("action", action);
+        $("#form-get-voucher").attr("action", action);
       }
 
-      $("#questionare-form").submit();
+      $("#form-get-voucher").submit();
     }
   });
 
-  $("#form-send-otp").submit(function(e) {
-    e.preventDefault();
-
+  $("#send-otp, #get-voucher").click(function() {
     const partnerChecked = $(".partner:checked").length;
     const termConditionNotChecked = $("#check-term-condition:not(:checked)").length;
 
     if (partnerChecked == 0) {
       showAlert("Harap pilih Lokasi Penukaran Voucher!")
     } else if (termConditionNotChecked > 0) {
-        showAlert("Harap ceklis semua Terms & Conditions!")
+      showAlert("Harap ceklis semua Terms & Conditions!")
     } else {
-      e.currentTarget.submit();
+      const urlSendOtp = $(this).data("url");
+      $("#form-get-voucher").attr("action", urlSendOtp);
+      $("#form-get-voucher").submit();
     }
   });
 });

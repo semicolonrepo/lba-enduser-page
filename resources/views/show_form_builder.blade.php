@@ -1,4 +1,4 @@
-@if ($formBuilder->type === 'text')
+@if ($formBuilder->type === 'text' || $formBuilder->type === 'number')
   <div class="mb-3">
     <label class="form-label" for="{{ $formBuilder->name }}">{{ $formBuilder->label }} : </label>
     <input type="{{ $formBuilder->type }}" name="{{ $formBuilder->name }}" id="{{ $formBuilder->name }}" 
