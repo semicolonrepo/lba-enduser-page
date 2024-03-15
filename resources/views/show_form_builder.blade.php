@@ -1,23 +1,24 @@
 @if ($formBuilder->type === 'number')
   <div class="mb-3">
     <label class="form-label" for="{{ $formBuilder->name }}">{{ $formBuilder->label }} : </label>
-    <input type="text" name="{{ $formBuilder->name }}" id="{{ $formBuilder->name }}"
+    <input type="{{ $formBuilder->type }}" name="{{ $formBuilder->name }}" id="{{ $formBuilder->name }}" 
       class="input-number {{ $formBuilder->className }} @if ($errors->has($formBuilder->name)) is-invalid @endif" value="{{ old($formBuilder->name) }}"
       min="{{ optional($formBuilder)->min }}" max="{{ optional($formBuilder)->max }}">
     <span class="invalid-feedback">{{ $errors->first($formBuilder->name) }}</span>
   </div>
 
   <script>
-    document.querySelector('.input-number').addEventListener('input', function(e) {
+    document.querySelector('.input-number').addEventListener("keydown", function(e) {
+      // prevent: "e", "=", ",", "-", "."
+      if ([69, 187, 188, 189, 190].includes(e.keyCode)) {
+        e.preventDefault();
+      }
+
       const input = e.target;
       const inputValue = input.value;
       const inputMin = input.min;
       const inputMax = input.max;
 
-      const regex = /^[0-9]*$/;
-      if (!regex.test(inputValue)) {
-        input.value = inputValue.replace(/\D/g, '');
-      }
       if (inputMin && (Number(inputValue) < Number(inputMin))) {
         input.value = inputMin;
       }
