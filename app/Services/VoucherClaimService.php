@@ -81,11 +81,11 @@ class VoucherClaimService
             return false;
         }
 
-        if (!$this->validateProduct($campaignId, $productId)) {
+        if (!$this->validatePartner()) {
             return false;
         }
 
-        if (!$this->validatePartner()) {
+        if (!$this->validateProduct($campaignId, $productId)) {
             return false;
         }
 
@@ -119,16 +119,19 @@ class VoucherClaimService
         $partner = session('partner_id');
 
         if (empty($partner)) {
-            session()->forget('partner_id');
             return false;
         }
 
         if ($partner === 'internal') {
-            $this->findVoucherSql->whereNull('vouchers.provider_id');
+            $isValid = $this->findVoucherSql->whereNull('vouchers.provider_id');
         }
 
         if ($partner !== 'internal') {
-            $this->findVoucherSql->where('vouchers.provider_id', $partner);
+            $isValid = $this->findVoucherSql->where('vouchers.provider_id', $partner);
+        }
+
+        if ($isValid->get()->isEmpty()) {
+            return false;
         }
 
         return true;

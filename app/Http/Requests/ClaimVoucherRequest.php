@@ -40,7 +40,7 @@ class ClaimVoucherRequest extends FormRequest
     public function rules(): array
     {
         $arrayRules = [];
-        $arrayRules['partner'] = 'required|integer';
+        $arrayRules['partner'] = 'required|string';
         $arrayRules['utm_source'] = 'nullable|string';
 
         foreach ($this->campaignProductForms as $key => $form) {
@@ -54,10 +54,17 @@ class ClaimVoucherRequest extends FormRequest
 
             if ($form->type === 'text') {
                 $arrayRules[$form->name] = 'required|string';
+                $arrayRules[$form->name] .= ($form->subtype === 'email') ? "|email" : '';
             }
 
             if ($form->type === 'textarea') {
                 $arrayRules[$form->name] = 'required|string';
+            }
+
+            if ($form->type === 'number') {
+                $arrayRules[$form->name] = 'required|numeric';
+                $arrayRules[$form->name] .= isset($form->min) ? "|gte:$form->min" : '';
+                $arrayRules[$form->name] .= isset($form->max) ? "|lte:$form->max" : '';
             }
         }
 
@@ -78,6 +85,8 @@ class ClaimVoucherRequest extends FormRequest
             $messages[$form->name . '.numeric'] = "The $form->label field must be a number.";
             $messages[$form->name . '.string'] = "The $form->label field must be a string.";
             $messages[$form->name . '.array'] = "The $form->label field must be a array.";
+            $messages[$form->name . '.gte'] = "The $form->label field must be must be greater than or equal to :gte";
+            $messages[$form->name . '.lte'] = "The $form->label field must be must be less than or equal to :lte.";
         }
 
         return $messages;
