@@ -39,7 +39,7 @@ class VoucherClaimService
             $sessionWA = $this->getAuthSession('customer_user_wa');
             $sessionGmail = $this->getAuthSession('customer_user_gmail');
 
-            $formCampaignProduct = $this->campaignProductService->getFormSettingArray($campaignId, $productId);
+            $formCampaignProduct = $this->campaignProductService->getFormSettingArray($campaignId, $productId) ?? [];
             $formCampaignProductJson = $this->campaignProductService->sanitizeFormJson($formCampaignProduct, session('voucher_claim_request_session'));
             DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
                 ->update([
