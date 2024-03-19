@@ -31,7 +31,7 @@
 
             $urlRedirectGoogle = route($routeName, $urlParams);
           @endphp
-          <form action="{{ $urlRedirectGoogle }}" method="POST">
+          <form action="{{ $urlRedirectGoogle }}" method="GET">
             @csrf
             <button type="submit" class="d-flex justify-content-center align-items-center">
               <img src="{{ asset('assets/lba-1/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">

@@ -40,7 +40,11 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
 
     Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show')->middleware('activity.log');
 
-    Route::get('/product/{productId}/voucher/view/{voucherCode}', [VoucherController::class, 'show'])->name('voucher::show')->middleware('activity.log');
+    Route::get('/product/{productId}/voucher/view/{voucherCode}', [VoucherController::class, 'show'])->name('voucher::show')->middleware(
+        'activity.log',
+        'verify.voucher.claimed',
+        'verify.voucher.permission'
+    );
     Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware(
         'set.voucher.claim.session',
         'voucherAuth',
@@ -66,6 +70,7 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
 
     Route::get('/product/{productId}/otp/login', [OneTimePasswordController::class, 'login'])->name('otp::login');
     Route::middleware('throttle:5,1')->group(function () {
+        Route::post('/product/{productId}/otp/send/direct', [OneTimePasswordController::class, 'send'])->name('otp::send::direct');
         Route::post('/product/{productId}/otp/send', [OneTimePasswordController::class, 'send'])->name('otp::send')->middleware(
             'set.voucher.claim.session',
         );
@@ -86,6 +91,7 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::get('/rating/{voucherCode}/google/redirect', [GoogleAuthRatingController::class, 'redirect'])->name('google::redirect::rating');
 
     Route::get('/product/{productId}/google/login', [GoogleAuthController::class, 'login'])->name('google::login');
+    Route::get('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect');
     Route::post('/product/{productId}/google/redirect', [GoogleAuthController::class, 'redirect'])->name('google::redirect')
         ->middleware(
             'set.voucher.claim.session',

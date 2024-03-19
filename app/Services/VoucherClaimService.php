@@ -39,6 +39,8 @@ class VoucherClaimService
             $sessionWA = $this->getAuthSession('customer_user_wa');
             $sessionGmail = $this->getAuthSession('customer_user_gmail');
 
+            $formCampaignProduct = $this->campaignProductService->getFormSettingArray($campaignId, $productId);
+            $formCampaignProductJson = $this->campaignProductService->sanitizeFormJson($formCampaignProduct, session('voucher_claim_request_session'));
             DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
                 ->update([
                     "product_id" => $productId,
@@ -46,12 +48,12 @@ class VoucherClaimService
                     "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
                     "claim_date" => date('Y-m-d H:i:s'),
                     "ip_address" => request()->ip(),
+                    "campaign_product_form_json" => $formCampaignProductJson,
                 ]);
 
-            $formSetting = $this->campaignProductService->getFormSettingArray($campaignId, $productId);
-            $sanitizeArray = $this->campaignProductService->sanitizeFormArray($formSetting, session('voucher_claim_request_session'), $voucher->code);
+            $formCampaignProductArray = $this->campaignProductService->sanitizeFormArray($formCampaignProduct, session('voucher_claim_request_session'), $voucher->code);
             DB::table('campaign_product_questionares')
-                ->insert($sanitizeArray);
+                ->insert($formCampaignProductArray);
 
             $voucher = $this->voucherService->showVoucher($voucher->code);
             $this->sendNotif($voucher);
