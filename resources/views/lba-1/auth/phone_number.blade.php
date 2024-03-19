@@ -16,7 +16,7 @@
 
             if (isset($productId)) {
                 $urlParams['productId'] = $productId;
-                $routeName = 'otp::send';
+                $routeName = 'otp::send::direct';
             }
 
             if (isset($voucherCode)) {

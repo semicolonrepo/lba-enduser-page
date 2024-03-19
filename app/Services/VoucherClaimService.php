@@ -15,6 +15,7 @@ class VoucherClaimService
     public function __construct(
         private CampaignService $campaignService,
         private VoucherService $voucherService,
+        private CampaignProductService $campaignProductService,
     ) {}
 
     public function run($campaignId, $productId) {
@@ -38,6 +39,8 @@ class VoucherClaimService
             $sessionWA = $this->getAuthSession('customer_user_wa');
             $sessionGmail = $this->getAuthSession('customer_user_gmail');
 
+            $formCampaignProduct = $this->campaignProductService->getFormSettingArray($campaignId, $productId) ?? [];
+            $formCampaignProductJson = $this->campaignProductService->sanitizeFormJson($formCampaignProduct, session('voucher_claim_request_session'));
             DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
                 ->update([
                     "product_id" => $productId,
@@ -45,45 +48,12 @@ class VoucherClaimService
                     "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
                     "claim_date" => date('Y-m-d H:i:s'),
                     "ip_address" => request()->ip(),
+                    "campaign_product_form_json" => $formCampaignProductJson,
                 ]);
 
-            $campaignData = DB::table('campaigns')
-                ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
-                ->where('campaigns.id', $campaignId)
-                ->select('brands.name as brand')
-                ->first();
-
-            if (strtoupper($campaignData->brand) === 'MILO' || strtoupper($campaignData->brand) === 'BEARBRAND') {
-                DB::table('campaign_product_questionares')
-                    ->insert([
-                        [
-                            'product_id' => $productId,
-                            'campaign_id' => $campaignId,
-                            'voucher_generate_id' => $voucher->id,
-                            'voucher_generate_code' => $voucher->code,
-                            'question' => 'Nama',
-                            'answer' => session('name_form'),
-                            'type' => 'text',
-                            "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
-                            "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s'),
-                        ],
-                        [
-                            'product_id' => $productId,
-                            'campaign_id' => $campaignId,
-                            'voucher_generate_id' => $voucher->id,
-                            'voucher_generate_code' => $voucher->code,
-                            'question' => 'No. Handphone',
-                            'answer' => session('phone_number_form'),
-                            'type' => 'text',
-                            "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
-                            "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
-                            'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s'),
-                        ]
-                    ]);
-            }
+            $formCampaignProductArray = $this->campaignProductService->sanitizeFormArray($formCampaignProduct, session('voucher_claim_request_session'), $voucher->code);
+            DB::table('campaign_product_questionares')
+                ->insert($formCampaignProductArray);
 
             $voucher = $this->voucherService->showVoucher($voucher->code);
             $this->sendNotif($voucher);
@@ -113,11 +83,11 @@ class VoucherClaimService
             return false;
         }
 
-        if (!$this->validateProduct($campaignId, $productId)) {
+        if (!$this->validatePartner()) {
             return false;
         }
 
-        if (!$this->validatePartner()) {
+        if (!$this->validateProduct($campaignId, $productId)) {
             return false;
         }
 
@@ -151,16 +121,19 @@ class VoucherClaimService
         $partner = session('partner_id');
 
         if (empty($partner)) {
-            session()->forget('partner_id');
             return false;
         }
 
         if ($partner === 'internal') {
-            $this->findVoucherSql->whereNull('vouchers.provider_id');
+            $isValid = $this->findVoucherSql->whereNull('vouchers.provider_id');
         }
 
         if ($partner !== 'internal') {
-            $this->findVoucherSql->where('vouchers.provider_id', $partner);
+            $isValid = $this->findVoucherSql->where('vouchers.provider_id', $partner);
+        }
+
+        if ($isValid->get()->isEmpty()) {
+            return false;
         }
 
         return true;

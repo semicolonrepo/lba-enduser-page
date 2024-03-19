@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\ActivityLogMiddleware;
 use App\Http\Middleware\GetVoucherAuthMiddleware;
 use App\Http\Middleware\RatingAuthMiddleware;
+use App\Http\Middleware\SetVoucherClaimSessionMiddleware;
 use App\Http\Middleware\ValidateCampaignMiddleware;
 use App\Http\Middleware\VerifyCampaignHasRatingMiddleware;
 use App\Http\Middleware\VerifyVoucherClaimedMiddleware;
@@ -80,5 +81,6 @@ class Kernel extends HttpKernel
         'verify.voucher.permission' => VerifyVoucherPermissionMiddleware::class,
         'verify.voucher.has.rating' => VerifyVoucherHasRatingMiddleware::class,
         'verify.campaign.has.rating' => VerifyCampaignHasRatingMiddleware::class,
+        'set.voucher.claim.session' => SetVoucherClaimSessionMiddleware::class,
     ];
 }
