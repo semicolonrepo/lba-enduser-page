@@ -29,7 +29,7 @@ class ClaimVoucherRequest extends FormRequest
     protected function prepareForValidation()
     {
         $campaignData = $this->campaignService->getCampaign($this->route('brand'), $this->route('campaign'));
-        $this->campaignProductForms = $this->campaignProductService->getFormSettingArray($campaignData->id, $this->route('productId'));
+        $this->campaignProductForms = $this->campaignProductService->getFormSettingArray($campaignData->id, $this->route('productId')) ?? [];
     }
 
     /**
@@ -43,30 +43,28 @@ class ClaimVoucherRequest extends FormRequest
         $arrayRules['partner'] = 'required|string';
         $arrayRules['utm_source'] = 'nullable|string';
 
-        if (!empty($this->campaignProductForms)) {
-            foreach ($this->campaignProductForms as $key => $form) {
-                if ($form->type === 'checkbox-group') {
-                    $arrayRules[$form->name] = 'required|array';
-                }
+        foreach ($this->campaignProductForms as $key => $form) {
+            if ($form->type === 'checkbox-group') {
+                $arrayRules[$form->name] = 'required|array';
+            }
 
-                if ($form->type === 'select') {
-                    $arrayRules[$form->name] = 'required|string';
-                }
+            if ($form->type === 'select') {
+                $arrayRules[$form->name] = 'required|string';
+            }
 
-                if ($form->type === 'text') {
-                    $arrayRules[$form->name] = 'required|string';
-                    $arrayRules[$form->name] .= ($form->subtype === 'email') ? "|email" : '';
-                }
+            if ($form->type === 'text') {
+                $arrayRules[$form->name] = 'required|string';
+                $arrayRules[$form->name] .= ($form->subtype === 'email') ? "|email" : '';
+            }
 
-                if ($form->type === 'textarea') {
-                    $arrayRules[$form->name] = 'required|string';
-                }
+            if ($form->type === 'textarea') {
+                $arrayRules[$form->name] = 'required|string';
+            }
 
-                if ($form->type === 'number') {
-                    $arrayRules[$form->name] = 'required|numeric';
-                    $arrayRules[$form->name] .= isset($form->min) ? "|gte:$form->min" : '';
-                    $arrayRules[$form->name] .= isset($form->max) ? "|lte:$form->max" : '';
-                }
+            if ($form->type === 'number') {
+                $arrayRules[$form->name] = 'required|numeric';
+                $arrayRules[$form->name] .= isset($form->min) ? "|gte:$form->min" : '';
+                $arrayRules[$form->name] .= isset($form->max) ? "|lte:$form->max" : '';
             }
         }
 
