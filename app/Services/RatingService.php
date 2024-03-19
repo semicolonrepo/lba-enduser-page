@@ -54,6 +54,7 @@ class RatingService
                 'phone_number' => $voucher->phone_number,
                 'email' => $voucher->email,
                 'type' => $form->type,
+                'form_name_identifier' => $form->name,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ];

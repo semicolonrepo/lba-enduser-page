@@ -51,6 +51,7 @@ class CampaignProductService
                 'type' => $form->type,
                 'phone_number' => $voucher->phone_number,
                 'email' => $voucher->email,
+                'form_name_identifier' => $form->name,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ];
