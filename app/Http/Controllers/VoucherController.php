@@ -53,12 +53,7 @@ class VoucherController extends Controller
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
         $voucher = $this->voucherService->showVoucher($voucherCode);
 
-        $authWA = DB::table('auth_wa')
-        ->where('uuid', session('customer_user_wa'))->first();
-        $authGmail = DB::table('auth_gmail')
-        ->where('uuid', session('customer_user_gmail'))->first();
-
-        if ($voucherCode && $campaignData && ($authGmail->email == $voucher->email || $authWA->phone_number == $voucher->phone_number)) {
+        if ($voucherCode && $campaignData) {
             $viewTemplate = $campaignData->page_template_code . '.voucher_redeem';
             return view($viewTemplate, [
                 'voucher' => $voucher,
