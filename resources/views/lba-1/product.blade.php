@@ -1,5 +1,9 @@
 @extends('lba-1.master')
 
+@section('css')
+  @vite('resources/css/qty-voucher.css')
+@endsection
+
 @section('content')
 <!--====================  product image slider ====================-->
 <div class="product-image-slider-wrapper">
@@ -30,6 +34,12 @@
               </span>
             </div>
           </div>
+        </div>
+        <p class="text-center mt-4 mb-2">Jumlah Voucher</p>
+        <div class="d-flex justify-content-center">
+          <button id="decrement" class="lba-1">-</button>
+          <input type="text" max="5" name="quantity" id="quantity" readonly>
+          <button id="increment" class="lba-1">+</button>
         </div>
       </div>
     </div>
@@ -145,5 +155,5 @@
 @endsection
 
 @section('js')
-@vite('resources/js/lba-1/product.js')
+@vite(['resources/js/lba-1/product.js', 'resources/css/qty-voucher.css', 'resources/js/qty-voucher.js'])
 @endsection

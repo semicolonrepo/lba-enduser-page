@@ -8,6 +8,9 @@ export default defineConfig({
                 'resources/css/app.css', 
                 'resources/js/app.js',
 
+                'resources/css/qty-voucher.css',
+                'resources/js/qty-voucher.js',
+
                 'resources/css/lba-1/custom.css',
                 'resources/js/lba-1/product.js',
 

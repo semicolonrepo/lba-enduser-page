@@ -1,5 +1,9 @@
 @extends('lba-2.master')
 
+@section('css')
+  @vite('resources/css/qty-voucher.css')
+@endsection
+
 @section('content')
 
 <!--====================  product image  ====================-->
@@ -36,6 +40,12 @@
                 <p>SEKARANG HANYA <span class="d-inline-block">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</span></p>
               @endif
             </h3>
+            <p class="text-center mt-4 mb-2">Jumlah Voucher</p>
+            <div class="d-flex justify-content-center">
+              <button id="decrement">-</button>
+              <input type="text" max="5" name="quantity" id="quantity" readonly>
+              <button id="increment">+</button>
+            </div>
           </div>
         </div>
       </div>
@@ -278,5 +288,5 @@
 
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.0/autoNumeric.min.js" integrity="sha512-IBnOW5h97x4+Qk4l3EcqmRTFKTgXTd4HGiY3C/GJKT5iJeJci9dgsFw4UAoVfi296E01zoDNb3AZsFrvcJJvPA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-@vite('resources/js/lba-2/product.js')
+@vite(['resources/js/lba-2/product.js', 'resources/css/qty-voucher.css', 'resources/js/qty-voucher.js'])
 @endsection
