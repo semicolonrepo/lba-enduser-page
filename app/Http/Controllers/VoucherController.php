@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\CampaignService;
 use App\Services\VoucherClaimService;
 use App\Services\VoucherService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class VoucherController extends Controller
