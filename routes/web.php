@@ -40,10 +40,10 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
 
     Route::get('/product/{productId}', [ProductController::class, 'show'])->name('product::show')->middleware('activity.log');
 
-    Route::get('/product/{productId}/voucher/view/{voucherCode}', [VoucherController::class, 'show'])->name('voucher::show')->middleware(
+    Route::get('/product/{productId}/voucher/view/{voucherIdentifier}', [VoucherController::class, 'show'])->name('voucher::show')->middleware(
         'activity.log',
-        'verify.voucher.claimed',
-        'verify.voucher.permission'
+        'verify.voucher.claimed:voucherIdentifier',
+        'verify.voucher.permission:voucherIdentifier',
     );
     Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware(
         'set.voucher.claim.session',
@@ -55,16 +55,16 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
         'activity.log',
         'rating.auth',
         'verify.campaign.has.rating',
-        'verify.voucher.claimed',
-        'verify.voucher.permission',
+        'verify.voucher.claimed:voucherCode',
+        'verify.voucher.permission:voucherCode',
         'verify.voucher.has.rating',
     );
     Route::post('/rating/{voucherCode}', [RatingController::class, 'store'])->name('rating::store')->middleware(
         'activity.log',
         'rating.auth',
         'verify.campaign.has.rating',
-        'verify.voucher.claimed',
-        'verify.voucher.permission',
+        'verify.voucher.claimed:voucherCode',
+        'verify.voucher.permission:voucherCode',
         'verify.voucher.has.rating',
     );
 

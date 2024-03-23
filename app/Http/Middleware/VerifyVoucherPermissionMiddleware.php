@@ -19,12 +19,19 @@ class VerifyVoucherPermissionMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, $verifyBy): Response
     {
         $brand = $request->route('brand');
         $campaign =  $request->route('campaign');
-        $voucherCode = $request->route('voucherCode');
-        $voucher = $this->voucherService->showVoucher($voucherCode);
+
+        if ($verifyBy === 'voucherCode') {
+            $voucher = $this->voucherService->showVoucher($request->route('voucherCode'));
+        }
+
+        if ($verifyBy === 'voucherIdentifier') {
+            $voucher = $this->voucherService->showVoucherByIdentifier($request->route('voucherIdentifier'))->first();
+        }
+
 
         $authWA = DB::table('auth_wa')
         ->where('uuid', session('customer_user_wa'))->first();
