@@ -19,6 +19,11 @@
     "isEntry": true,
     "src": "resources/css/qty-voucher.css"
   },
+  "resources/css/voucher-redeem.css": {
+    "file": "assets/voucher-redeem-80d1821a.css",
+    "isEntry": true,
+    "src": "resources/css/voucher-redeem.css"
+  },
   "resources/js/app.js": {
     "file": "assets/app-ddee773b.js",
     "isEntry": true,
@@ -38,5 +43,10 @@
     "file": "assets/qty-voucher-192b388d.js",
     "isEntry": true,
     "src": "resources/js/qty-voucher.js"
+  },
+  "resources/js/voucher-redeem.js": {
+    "file": "assets/voucher-redeem-8a265494.js",
+    "isEntry": true,
+    "src": "resources/js/voucher-redeem.js"
   }
 }
