@@ -1,0 +1,14 @@
+.swiper-button-prev::after, 
+.swiper-button-next::after {
+  color: green;
+  font-size: 25px;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  top: 30%;
+}
+
+.swiper-pagination-bullet-active {
+  background: green !important;
+}
