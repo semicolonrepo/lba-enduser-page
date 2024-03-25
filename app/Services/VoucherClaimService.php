@@ -21,15 +21,22 @@ class VoucherClaimService
     public function run($campaignId, $productId) {
         $validate = $this->validate($campaignId, $productId);
 
-        if (!$validate) {
-            return false;
+        if (!$validate['status']) {
+            return [
+                'message' => $validate['message'],
+                'status' => false
+            ];
         }
 
         $vouchers = $this->findVoucherSql->take(session('claim_qty'))->get();
         $this->claim($vouchers, $campaignId, $productId);
         session()->forget('partner_id');
 
-        return $vouchers;
+        return [
+            'message' => 'Berhasil',
+            'status' => true,
+            'data' => $vouchers,
+        ];
     }
 
     protected function claim($vouchers, $campaignId, $productId) {
@@ -79,30 +86,55 @@ class VoucherClaimService
         $this->startQuery();
 
         if (!$this->validateLimitIpAddress($campaignId)) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
         if (!$this->validateEligible($campaignId, $productId)) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
         if (!$this->validateLimitUsage($campaignId)) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
         if (!$this->validateLimitClaimQty($campaignId, $productId)) {
-            return false;
+            $totalVoucherClaimed = $this->getTotalVoucherClaimed($campaignId, $productId);
+            $totalLimitVoucherClaim = $this->getTotalLimitVoucherClaim($campaignId);
+            $totalRemains = $totalLimitVoucherClaim - $totalVoucherClaimed;
+
+            return [
+                'message' => "Voucher yang anda bisa ambil tersisa $totalRemains",
+                'status' => false
+            ];
         }
 
         if (!$this->validatePartner()) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
         if (!$this->validateProduct($campaignId, $productId)) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
-        return true;
+        return [
+            'message' => 'Berhasil claim voucher!',
+            'status' => true
+        ];
     }
 
     protected function validateLimitIpAddress($campaignId) {
