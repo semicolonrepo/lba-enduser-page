@@ -27,8 +27,8 @@ class VoucherController extends Controller
                 'productId' => $productId,
             ];
 
-            if ($vouchers) {
-                $voucher = $this->voucherService->showVoucher($vouchers->first()->code);
+            if ($vouchers['status']) {
+                $voucher = $this->voucherService->showVoucher($vouchers['data']->first()->code);
                 $arrayRoute['voucherIdentifier'] = $voucher->claim_identifier;
             }
 
@@ -36,8 +36,8 @@ class VoucherController extends Controller
                 $arrayRoute['utm_source'] = $utmSource;
             }
 
-            if (!$vouchers) {
-                return redirect()->route('product::show', $arrayRoute)->with('failed', 'Voucher sudah diclaim atau habis!');
+            if (!$vouchers['status']) {
+                return redirect()->route('product::show', $arrayRoute)->with('failed', $vouchers['message']);
             }
 
             return redirect()->route('voucher::show', $arrayRoute);
