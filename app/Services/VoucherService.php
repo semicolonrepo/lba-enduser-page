@@ -90,6 +90,43 @@ class VoucherService
         ];
     }
 
+    public function showVoucherByIdentifier($voucherIdentifier) {
+        return DB::table('voucher_generates')
+        ->join('vouchers', 'vouchers.id', '=', 'voucher_generates.voucher_id')
+        ->join('campaigns', 'campaigns.id', '=', 'vouchers.campaign_id')
+        ->leftJoin('brands', 'brands.id', '=', 'campaigns.brand_id')
+        ->leftJoin('providers', 'providers.id', '=', 'vouchers.provider_id')
+        ->leftJoin('products', 'products.id', '=', 'voucher_generates.product_id')
+        ->where('voucher_generates.claim_identifier', $voucherIdentifier)
+        ->where('voucher_generates.is_active', true)
+        ->where('vouchers.is_active', true)
+        ->where('campaigns.is_active', true)
+        ->where('vouchers.expires_at', '>', date('Y-m-d H:i:s'))
+        ->where('campaigns.expires_at', '>', date('Y-m-d H:i:s'))
+        ->select(
+            'voucher_generates.id',
+            'voucher_generates.code',
+            'voucher_generates.phone_number',
+            'voucher_generates.email',
+            'voucher_generates.claim_date',
+            'voucher_generates.is_has_rating',
+            'voucher_generates.rating_json',
+            'vouchers.id as voucher_id',
+            'vouchers.title as voucher_title',
+            'vouchers.limit_usage_user',
+            'vouchers.expires_at',
+            'vouchers.description',
+            'providers.name as provider_name',
+            'voucher_generates.product_id',
+            'products.name as product_name',
+            'brands.name as brand_name',
+            'brands.photo as brand_photo',
+            'campaigns.id as campaign_id',
+            'voucher_generates.claim_identifier',
+            DB::raw("(SELECT auth_gmail.name FROM auth_gmail WHERE auth_gmail.email = voucher_generates.email LIMIT 1) as auth_gmail_name"),
+        )->get();
+    }
+
     public function showVoucher($voucherGenerateCode) {
        return DB::table('voucher_generates')
         ->join('vouchers', 'vouchers.id', '=', 'voucher_generates.voucher_id')
@@ -97,7 +134,6 @@ class VoucherService
         ->leftJoin('brands', 'brands.id', '=', 'campaigns.brand_id')
         ->leftJoin('providers', 'providers.id', '=', 'vouchers.provider_id')
         ->leftJoin('products', 'products.id', '=', 'voucher_generates.product_id')
-        ->leftJoin('auth_gmail', 'auth_gmail.email', '=', 'voucher_generates.email')
         ->where('voucher_generates.code', $voucherGenerateCode)
         ->where('voucher_generates.is_active', true)
         ->where('vouchers.is_active', true)
@@ -105,21 +141,26 @@ class VoucherService
         ->where('vouchers.expires_at', '>', date('Y-m-d H:i:s'))
         ->where('campaigns.expires_at', '>', date('Y-m-d H:i:s'))
         ->select(
+            'voucher_generates.id',
             'voucher_generates.code',
             'voucher_generates.phone_number',
             'voucher_generates.email',
             'voucher_generates.claim_date',
+            'voucher_generates.is_has_rating',
+            'voucher_generates.rating_json',
             'vouchers.id as voucher_id',
             'vouchers.title as voucher_title',
             'vouchers.limit_usage_user',
             'vouchers.expires_at',
             'vouchers.description',
             'providers.name as provider_name',
+            'voucher_generates.product_id',
             'products.name as product_name',
             'brands.name as brand_name',
             'brands.photo as brand_photo',
-            'auth_gmail.name as auth_gmail_name',
+            DB::raw("(SELECT auth_gmail.name FROM auth_gmail WHERE auth_gmail.email = voucher_generates.email LIMIT 1) as auth_gmail_name"),
             'campaigns.id as campaign_id',
+            'voucher_generates.claim_identifier',
         )->first();
     }
 

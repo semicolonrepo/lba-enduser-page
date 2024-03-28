@@ -29,6 +29,7 @@ class CampaignService
                     'campaigns.template_background',
                     'campaigns.template_cover_json',
                     'campaigns.template_thankyou_json',
+                    'campaigns.formbuilder_rating_json',
                     'page_templates.code as page_template_code',
                 )
         ->join('page_templates', 'page_templates.id', '=', 'campaigns.page_template_id')

@@ -25,24 +25,32 @@ class VoucherClaimService
     public function __construct(
         private CampaignService $campaignService,
         private VoucherService $voucherService,
+        private CampaignProductService $campaignProductService,
     ) {}
 
     public function run($campaignId, $productId, $transaction_number=NULL) {
         $validate = $this->validate($campaignId, $productId, $transaction_number);
 
-        if (!$validate) {
-            return false;
+        if (!$validate['status']) {
+            return [
+                'message' => $validate['message'],
+                'status' => false
+            ];
         }
 
-        $voucher = $this->findVoucherSql->first();
-        $this->claim($voucher, $campaignId, $productId, $transaction_number);
+        $vouchers = $this->findVoucherSql->take(session('claim_qty'))->get();
+        $this->claim($vouchers, $campaignId, $productId);
         session()->forget('partner_id');
 
-        return $voucher;
+        return [
+            'message' => 'Berhasil',
+            'status' => true,
+            'data' => $vouchers,
+        ];
     }
 
-    protected function claim($voucher, $campaignId, $productId, $transaction_number=NULL) {
-        DB::transaction(function () use ($voucher, $campaignId, $productId, $transaction_number) {
+    protected function claim($vouchers, $campaignId, $productId) {
+        DB::transaction(function () use ($vouchers, $campaignId, $productId) {
             $isCampaignAuthByGmail = $this->campaignService->getCampaignAuths($campaignId, 'GMAIL')->first();
             $isCampaignAuthByWA = $this->campaignService->getCampaignAuths($campaignId, 'WHATSAPP')->first();
 
@@ -54,18 +62,32 @@ class VoucherClaimService
                 $sessionGmail = $this->getAuthSession('customer_user_gmail')->email;
             }
 
-            DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
+            $formCampaignProduct = $this->campaignProductService->getFormSettingArray($campaignId, $productId) ?? [];
+            $formCampaignProductJson = $this->campaignProductService->sanitizeFormJson($formCampaignProduct, session('voucher_claim_request_session'));
+
+            $claimIdentifier = $campaignId . $productId . uniqid();
+            foreach ($vouchers as $key => $voucher) {
+                DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
                 ->update([
                     "product_id" => $productId,
                     "email" => ($isCampaignAuthByGmail) ? $sessionGmail : null,
                     "phone_number" =>($isCampaignAuthByWA) ? $sessionWA : null,
                     "claim_date" => date('Y-m-d H:i:s'),
                     "ip_address" => request()->ip(),
+                    "campaign_product_form_json" => $formCampaignProductJson,
+                    "claim_identifier" => $claimIdentifier,
                 ]);
 
+                $formCampaignProductArray = $this->campaignProductService->sanitizeFormArray($formCampaignProduct, session('voucher_claim_request_session'), $voucher->code);
+                DB::table('campaign_product_questionares')
+                    ->insert($formCampaignProductArray);
+            }
+        });
+
+        foreach ($vouchers as $key => $voucher) {
             $voucher = $this->voucherService->showVoucher($voucher->code);
             $this->sendNotif($voucher);
-        });
+        }
     }
 
     protected function sendNotif($voucher) {
@@ -80,26 +102,55 @@ class VoucherClaimService
         $this->startQuery();
 
         if (!$this->validateLimitIpAddress($campaignId)) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
         if (!$this->validateEligible($campaignId, $productId)) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
-        if (!$this->validateLimitUsage($campaignId, $transaction_number)) {
-            return false;
+        if (!$this->validateLimitUsage($campaignId)) {
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
+        }
+
+        if (!$this->validateLimitClaimQty($campaignId, $productId)) {
+            $totalVoucherClaimed = $this->getTotalVoucherClaimed($campaignId, $productId);
+            $totalLimitVoucherClaim = $this->getTotalLimitVoucherClaim($campaignId);
+            $totalRemains = $totalLimitVoucherClaim - $totalVoucherClaimed;
+
+            return [
+                'message' => "Voucher yang anda bisa ambil tersisa $totalRemains",
+                'status' => false
+            ];
+        }
+
+        if (!$this->validatePartner()) {
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
         if (!$this->validateProduct($campaignId, $productId)) {
-            return false;
+            return [
+                'message' => 'Voucher sudah diclaim atau habis!',
+                'status' => false
+            ];
         }
 
-        if (!$this->validatePartner($transaction_number)) {
-            return false;
-        }
-
-        return true;
+        return [
+            'message' => 'Berhasil claim voucher!',
+            'status' => true
+        ];
     }
 
     protected function validateLimitIpAddress($campaignId) {
@@ -125,25 +176,23 @@ class VoucherClaimService
         return true;
     }
 
-    protected function validatePartner($transaction_number=NULL) {
+    protected function validatePartner() {
+        $partner = session('partner_id');
 
-        if($transaction_number != null) {
-            $partner = DB::table('voucher_transaction')->where('transaction_number', $transaction_number)->first()->partner_id;
-        }
-        else {
-            $partner = session('partner_id');
-            if (empty($partner)) {
-                session()->forget('partner_id');
-                return false;
-            }
+        if (empty($partner)) {
+            return false;
         }
 
         if ($partner === 'internal') {
-            $this->findVoucherSql->whereNull('vouchers.provider_id');
+            $isValid = $this->findVoucherSql->whereNull('vouchers.provider_id');
         }
 
         if ($partner !== 'internal') {
-            $this->findVoucherSql->where('vouchers.provider_id', $partner);
+            $isValid = $this->findVoucherSql->where('vouchers.provider_id', $partner);
+        }
+
+        if ($isValid->get()->isEmpty()) {
+            return false;
         }
 
         return true;
@@ -166,15 +215,23 @@ class VoucherClaimService
         return true;
     }
 
-    protected function validateLimitUsage($campaignId, $transaction_number=NULL) {
+    protected function validateLimitClaimQty($campaignId, $productId) {
+        $totalVoucherClaimed = $this->getTotalVoucherClaimed($campaignId, $productId);
+        $totalLimitVoucherClaim = $this->getTotalLimitVoucherClaim($campaignId);
+        $claimQty = session('claim_qty');
 
-        if($transaction_number != NULL) {
-            $sessionWA = DB::table('voucher_transaction')->where('transaction_number', $transaction_number)->first()->customer_phone;
-            $sessionGmail = DB::table('voucher_transaction')->where('transaction_number', $transaction_number)->first()->customer_email;
-        }else {
-            $sessionWA = $this->getAuthSession('customer_user_wa')->phone_number;
-            $sessionGmail = $this->getAuthSession('customer_user_gmail')->email;
+        $isValid = $this->findVoucherSql->havingRaw("($totalLimitVoucherClaim - $totalVoucherClaimed) >= $claimQty");
+
+        if ($isValid->get()->isEmpty()) {
+            return false;
         }
+
+        return true;
+    }
+
+    protected function validateLimitUsage($campaignId) {
+        $sessionWA = $this->getAuthSession('customer_user_wa');
+        $sessionGmail = $this->getAuthSession('customer_user_gmail');
         
         $arrayVoucherUsedBinding = [];
         $countVouvherUsedRaw = "SELECT COUNT(*) FROM voucher_generates as subquery WHERE subquery.voucher_id = vouchers.id AND (1!=1";
@@ -229,6 +286,7 @@ class VoucherClaimService
             ->leftJoin('campaign_products', 'campaign_products.campaign_id', '=', 'campaigns.id')
             ->leftJoin('voucher_term_products', 'voucher_term_products.voucher_id', '=', 'voucher_generates.voucher_id')
             ->select(
+                DB::raw('MIN(voucher_generates.id) as id'),
                 'voucher_generates.code',
                 'voucher_generates.phone_number',
                 'voucher_generates.email',
@@ -238,6 +296,7 @@ class VoucherClaimService
                 'vouchers.limit_usage_user',
                 'vouchers.expires_at',
                 'providers.name as provider_name',
+                'voucher_generates.claim_identifier',
             )->groupBy(
                 'voucher_generates.code',
                 'voucher_generates.phone_number',
@@ -249,6 +308,7 @@ class VoucherClaimService
                 'vouchers.limit_usage_user',
                 'vouchers.provider_id',
                 'providers.name',
+                'voucher_generates.claim_identifier',
             );
     }
 
@@ -263,5 +323,62 @@ class VoucherClaimService
             } else {
                 return new AuthData(null, $auth ? $auth->phone_number : null);
             }
+    }
+
+    protected function getTotalLimitVoucherClaim($campaignId) {
+        $vouchers = DB::table('vouchers')
+            ->where('campaign_id', $campaignId)
+            ->where('expires_at', '>', date('Y-m-d H:i:s'))
+            ->where('is_active', true);
+
+        $partner = session('partner_id');
+        if ($partner === 'internal') {
+            $vouchers->whereNull('provider_id');
+        }
+
+        if ($partner !== 'internal') {
+            $vouchers->where('provider_id', $partner);
+        }
+
+        return $vouchers->sum('limit_usage_user');
+    }
+
+    protected function getTotalVoucherClaimed($campaignId, $productId) {
+        $sessionWA = $this->getAuthSession('customer_user_wa');
+        $sessionGmail = $this->getAuthSession('customer_user_gmail');
+
+        $voucherGenerates = DB::table('voucher_generates as vg')
+            ->join('vouchers as v', 'v.id', '=', 'vg.voucher_id')
+            ->join('campaigns as c', 'c.id', '=', 'v.campaign_id')
+            ->leftJoin('campaign_products as cp', 'cp.campaign_id', '=', 'c.id')
+            ->leftJoin('voucher_term_products as vtp', 'vtp.voucher_id', '=', 'vg.voucher_id')
+            ->where('cp.product_id', $productId)
+            ->where('v.campaign_id', $campaignId)
+            ->where('vtp.product_id', $productId);
+
+        $partner = session('partner_id');
+        if ($partner === 'internal') {
+            $voucherGenerates->whereNull('v.provider_id');
+        }
+
+        if ($partner !== 'internal') {
+            $voucherGenerates->where('v.provider_id', $partner);
+        }
+
+        $isCampaignAuthByGmail = $this->campaignService->getCampaignAuths($campaignId, 'GMAIL')->first();
+        $isCampaignAuthByWA = $this->campaignService->getCampaignAuths($campaignId, 'WHATSAPP')->first();
+
+        if ($isCampaignAuthByGmail && $isCampaignAuthByWA) {
+            $voucherGenerates->where(function ($query) use ($sessionGmail, $sessionWA) {
+                $query->where('vg.email', $sessionGmail->email)
+                    ->orWhere('vg.phone_number', $sessionWA->phone_number);
+            });
+        } elseif ($isCampaignAuthByGmail) {
+            $voucherGenerates->where('vg.email', $sessionGmail->email);
+        } elseif ($isCampaignAuthByWA) {
+            $voucherGenerates->where('vg.phone_number', $sessionWA->phone_number);
+        }
+
+        return $voucherGenerates->count();
     }
 }

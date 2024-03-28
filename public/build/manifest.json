@@ -14,6 +14,16 @@
     "isEntry": true,
     "src": "resources/css/lba-2/custom.css"
   },
+  "resources/css/qty-voucher.css": {
+    "file": "assets/qty-voucher-47126f3e.css",
+    "isEntry": true,
+    "src": "resources/css/qty-voucher.css"
+  },
+  "resources/css/voucher-redeem.css": {
+    "file": "assets/voucher-redeem-80d1821a.css",
+    "isEntry": true,
+    "src": "resources/css/voucher-redeem.css"
+  },
   "resources/js/app.js": {
     "file": "assets/app-ddee773b.js",
     "isEntry": true,
@@ -25,8 +35,18 @@
     "src": "resources/js/lba-1/product.js"
   },
   "resources/js/lba-2/product.js": {
-    "file": "assets/product-2c19175f.js",
+    "file": "assets/product-ef70f3ea.js",
     "isEntry": true,
     "src": "resources/js/lba-2/product.js"
+  },
+  "resources/js/qty-voucher.js": {
+    "file": "assets/qty-voucher-f8143562.js",
+    "isEntry": true,
+    "src": "resources/js/qty-voucher.js"
+  },
+  "resources/js/voucher-redeem.js": {
+    "file": "assets/voucher-redeem-8a265494.js",
+    "isEntry": true,
+    "src": "resources/js/voucher-redeem.js"
   }
 }

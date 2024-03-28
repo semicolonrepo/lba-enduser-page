@@ -1,19 +1,23 @@
 @extends('lba-1.master')
 
+@section('css')
+  <link rel="stylesheet" href="{{ asset('assets/plugins/swiper-bundle.min.css') }}"/>
+  @vite('resources/css/voucher-redeem.css')
+@endsection
+
 @section('content')
 
 <?php
 require_once base_path('vendor/autoload.php');
 use Hbgl\Barcode\Code128Encoder;
 
-try {
-  $encoded_voucher = Code128Encoder::encode($voucher->code);
-  $hasEncoded = true;
-} catch (\Exception $e) {
-  $hasEncoded = false;
-}
-
 $thankpage = json_decode($data->template_thankyou_json, true);
+
+if ($vouchers->first()->provider_name == 'Indomaret') {
+  $voucherText = 'i-Kupon';
+} else {
+  $voucherText = 'voucher';
+}
 ?>
 
 <div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--70">
@@ -29,7 +33,7 @@ $thankpage = json_decode($data->template_thankyou_json, true);
         </p>
 
         <h3 class="text-center space-mb--5">Congratulation!</h3>
-        <h5 class="text-center lh-base">Kamu berhasil mendapatkan voucher <br> {{ $voucher->product_name }}</h5>
+        <h5 class="text-center lh-base">Kamu berhasil mendapatkan <br> {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
       </div>
     </div>
   </div>
@@ -40,14 +44,19 @@ $thankpage = json_decode($data->template_thankyou_json, true);
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <p class="section-title text-center" style="font-weight:700; font-size:24px; color: green">
-            {{$voucher->code}}
-            @if($hasEncoded)
-            <br><div class="code128 text-center">{{ htmlspecialchars($encoded_voucher) }}</div>
-            @else
-            <p></p>
-            @endif
-        </p>
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            @foreach ($vouchers as $voucher)
+              <div class="swiper-slide d-flex justify-content-center align-items-center flex-column">
+                <p class="section-title text-center voucher-code" style="font-weight:700; font-size:24px; color: green">{{ $voucher->code }}</p>
+                <div class="code128 text-center mb-4">{{ htmlspecialchars(Code128Encoder::encode($voucher->code)) }}</div>
+              </div>
+            @endforeach
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -58,29 +67,52 @@ $thankpage = json_decode($data->template_thankyou_json, true);
     <div class="row">
       <div class="col-12">
         <p class="text-center space-mt--30 space-mb--15" style="font-size: 16px;">
-          Voucher <b>berlaku hingga {{ date('d M Y', strtotime($voucher->expires_at)) }}</b> dan dapat digunakan di <b>{{ $voucher->provider_name }} terdekat</b>.
+          {{ $voucherText == 'voucher' ? Str::ucfirst($voucherText) : $voucherText }} <b>berlaku hingga {{ date('d M Y', strtotime($vouchers->first()->expires_at)) }}</b> dan dapat digunakan di <b>{{ $vouchers->first()->provider_name }} terdekat</b>.
         </p>
 
         <p class="text-center space-mb--5" style="font-size: 16px;">
-          Kami juga telah mengirimkan kode voucher beserta <b>cara pemakaian nya</b> melalui @if($voucher->email) <b>{{$voucher->email}}</b> @endif @if($voucher->email && $voucher->phone_number) dan @endif @if($voucher->phone_number) <b>{{$voucher->phone_number}}</b> nomor @endif kamu ya.
+          Kami juga telah mengirimkan {{ $voucherText }} beserta <b>cara pemakaian nya</b> melalui @if($vouchers->first()->email) <b>{{$vouchers->first()->email}}</b> @endif @if($vouchers->first()->email && $vouchers->first()->phone_number) dan @endif @if($vouchers->first()->phone_number) <b>{{$vouchers->first()->phone_number}}</b> nomor @endif kamu ya.
         </p>
 
-        @php
-        if($thankpage != null) {
-        $thankBlock = $thankpage['blocks'];
-        @endphp
+        @if($thankpage != null)
+          @php
+          $thankBlock = $thankpage['blocks'];
+          @endphp
+
           @foreach ($thankBlock as $block)
             @if ($block['type'] == 'paragraph')
               @if ($block['data']['text'] != '')
               <p class="text-center" style="font-size: 16px;">{!! $block['data']['text'] !!}</p>
               @endif
             @endif
+
+            @if ($block['type'] == 'youtubeEmbed')
+              @php
+                $urlParts = parse_url($block['data']['url']);
+                parse_str($urlParts['query'], $query);
+                $videoId = $query['v'];
+              @endphp
+              <div class="text-center embed-responsive embed-responsive-1by1 space-mt--20">
+                <iframe style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
+              </div>
+            @endif
+
+            @if ($block['type'] == 'image')
+              <div class="mt-2">
+                <img src="{{ $block['data']['file']['url'] }}" alt="{{ $block['data']['caption'] }}" class="w-100 rounded-2">
+              </div>
+            @endif
           @endforeach
-        @php
-        }
-        @endphp
+        @endif
       </div>
       <div class="col-12 mt-4 gap-2 d-flex flex-column">
+        <div class="shop-product-button mb-2">
+          <a class="w-100" data-brand="{{ $brand }}" data-campaign="{{ $campaign }}" id="rating-product">
+            <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
+              Nilai Produk
+            </button>
+          </a>
+        </div>
         <div class="shop-product-button">
           <a href="https://t.me/LetsbuyAsia" target="_blank" class="w-100">
             <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
@@ -116,4 +148,9 @@ $thankpage = json_decode($data->template_thankyou_json, true);
   </div>
 </div>
 <!--====================  End of footer Component  ====================-->
+@endsection
+
+@section('js')
+  <script src="{{ asset('assets/plugins/swiper-bundle.min.js') }}"></script>
+  @vite('resources/js/voucher-redeem.js')
 @endsection

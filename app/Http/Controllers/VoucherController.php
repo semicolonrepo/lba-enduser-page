@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\CampaignService;
 use App\Services\VoucherClaimService;
 use App\Services\VoucherService;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\TransactionModel;
@@ -185,7 +184,7 @@ class VoucherController extends Controller
     function claim($brand, $campaign, $productId) {
         try {
             $campaignData = $this->campaignService->getCampaign($brand, $campaign);
-            $voucher = $this->voucherClaimService->run($campaignData->id, $productId);
+            $vouchers = $this->voucherClaimService->run($campaignData->id, $productId);
             $utmSource = request()->query('utm_source');
 
             $arrayRoute = [
@@ -194,16 +193,17 @@ class VoucherController extends Controller
                 'productId' => $productId,
             ];
 
-            if ($voucher) {
-                $arrayRoute['voucherCode'] = $voucher->code;
+            if ($vouchers['status']) {
+                $voucher = $this->voucherService->showVoucher($vouchers['data']->first()->code);
+                $arrayRoute['voucherIdentifier'] = $voucher->claim_identifier;
             }
 
             if ($utmSource) {
                 $arrayRoute['utm_source'] = $utmSource;
             }
 
-            if (!$voucher) {
-                return redirect()->route('product::show', $arrayRoute)->with('failed', 'Voucher sudah diclaim atau habis!');
+            if (!$vouchers['status']) {
+                return redirect()->route('product::show', $arrayRoute)->with('failed', $vouchers['message']);
             }
 
             return redirect()->route('voucher::show', $arrayRoute);
@@ -215,24 +215,19 @@ class VoucherController extends Controller
         }
     }
 
-    public function show($brand, $campaign, $productId, $voucherCode, $transactionNumber=NULL) {
+
+    public function show($brand, $campaign, $productId, $voucherIdentifier) {
         $campaignData = $this->campaignService->getCampaign($brand, $campaign);
-        $voucher = $this->voucherService->showVoucher($voucherCode);
+        $vouchers = $this->voucherService->showVoucherByIdentifier($voucherIdentifier);
 
-        if($transactionNumber != NULL) {
-            $authWA = DB::table('voucher_transaction')->where('transaction_number', $transactionNumber)->first()->customer_phone;
-            $authGmail = DB::table('voucher_transaction')->where('transaction_number', $transactionNumber)->first()->customer_email;
-        }
-        else {
-            $authWA = optional(DB::table('auth_wa')->where('uuid', session('customer_user_wa'))->first())->phone_number;
-            $authGmail = optional(DB::table('auth_gmail')->where('uuid', session('customer_user_gmail'))->first())->email;
-        }
-
-        if ($voucherCode && $campaignData && ($authGmail == $voucher->email || $authWA == $voucher->phone_number)) {
+        if ($vouchers && $campaignData) {
             $viewTemplate = $campaignData->page_template_code . '.voucher_redeem';
             return view($viewTemplate, [
-                'voucher' => $voucher,
+                'vouchers' => $vouchers,
                 'data' => $campaignData,
+                'brand' => $brand,
+                'campaign' => $campaign,
+                'voucherIdentifier' => $voucherIdentifier,
             ]);
         }
 

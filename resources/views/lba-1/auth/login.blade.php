@@ -7,26 +7,37 @@
       <div class="col-12">
         <span class="auth-page-separator text-center space-mt--20 space-mb--20">Login untuk melanjutkan</span>
         <div class="auth-page-social-login">
-          <button class="d-flex justify-content-center align-items-center">
-            <img src="{{ asset('assets/lba-1/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
-            
-            @php
-              $urlParams = request()->query();
-              $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
-              $urlParams['brand'] = $brand;
-              $urlParams['campaign'] = $campaign;
+          @php
+            $urlParams = request()->query();
+            $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
+            $urlParams['brand'] = $brand;
+            $urlParams['campaign'] = $campaign;
+            $routeName = null;
+
+            if (isset($productId)) {
               $urlParams['productId'] = $productId;
+              $routeName = 'google::redirect';
+            }
 
-              // Include utm_source in the URL parameters if present
-              if ($utmSource !== null) {
-                  $urlParams['utm_source'] = $utmSource;
-              }
+            if (isset($voucherCode)) {
+              $urlParams['voucherCode'] = $voucherCode;
+              $routeName = 'google::redirect::rating';
+            }
 
-              $urlRedirectGoogle = route('google::redirect', $urlParams);
-            @endphp
-            
-            <a href="{{ $urlRedirectGoogle }}">Login dengan Google</a>
-          </button>
+            // Include utm_source in the URL parameters if present
+            if ($utmSource !== null) {
+              $urlParams['utm_source'] = $utmSource;
+            }
+
+            $urlRedirectGoogle = route($routeName, $urlParams);
+          @endphp
+          <form action="{{ $urlRedirectGoogle }}" method="GET">
+            @csrf
+            <button type="submit" class="d-flex justify-content-center align-items-center">
+              <img src="{{ asset('assets/lba-1/img/icons/google.svg') }}" class="injectable space-mr--10 position-static" style="transform: unset">
+              Login dengan Google
+            </button>
+          </form>
         </div>
       </div>
     </div>

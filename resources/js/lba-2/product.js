@@ -25,41 +25,66 @@ function getOS() {
     return os;
   }
 
+function checkingBrowser() {
+    if (inapp.isInApp() && getOS() === 'Android') {
+        const currentURL = window.location.href;
+        window.location.href = `intent:${currentURL}#Intent;end`;
+    }
+}
+
+checkingBrowser();
+
+  new AutoNumeric.multiple('.autonumeric', {
+    allowDecimalPadding: false,
+    lZero: "keep",
+    minimumValue : '0',
+    decimalPlaces : 0,
+    digitGroupSeparator : '',
+    unformatOnSubmit: true
+  });
+
 $(document).ready(function () {
   const primaryColor = $(".body-wrapper").data("primary-color");
 
   let selectedPartners = $('#list-partner .select-partner[data-partner-checked="true"]');
   selectedPartners.css("border-color", primaryColor);
+  $(".name-form").change(function() {
+    $(".name-form-selected").val($(this).val());
+  });
+
+  $(".phone-number-form").change(function() {
+    $(".phone-number-form-selected").val($(this).val());
+  });
 
   $(".partner").change(function() {
     $(".partner-selected").val($(this).val());
-    const termConditionChecked = $("#check-term-condition:checked").length;
+    const termConditionNotChecked = $(".check-term-condition:not(:checked)").length;
 
     $("#list-partner .select-partner").css("border-color", "");
     $(this).parent().css("border-color", primaryColor);
 
-    if (termConditionChecked) {
-      $("#get-voucher").prop("disabled", false);
-      $("#get-voucher").css("background-color", primaryColor);
-      $("#get-voucher").css("cursor", "pointer");
+    if (termConditionNotChecked > 0) {
+        $("#get-voucher").prop("disabled", true);
+        $("#get-voucher").css("background-color", "#9CA3AF");
+        $("#get-voucher").css("cursor", "unset");
     } else {
-      $("#get-voucher").prop("disabled", true);
-      $("#get-voucher").css("background-color", "#9CA3AF");
-      $("#get-voucher").css("cursor", "unset");
+        $("#get-voucher").prop("disabled", false);
+        $("#get-voucher").css("background-color", primaryColor);
+        $("#get-voucher").css("cursor", "pointer");
     }
   });
 
-  $("#check-term-condition").change(function(event) {
+  $(".form-check-input").change(function(event) {
     const partnerChecked = $(".partner:checked").length;
-
-    if (event.currentTarget.checked && partnerChecked) {
-      $("#get-voucher").prop("disabled", false);
-      $("#get-voucher").css("background-color", primaryColor);
-      $("#get-voucher").css("cursor", "pointer");
+    const termConditionNotChecked = $(".check-term-condition:not(:checked)").length;
+    if (termConditionNotChecked > 0 || partnerChecked == 0) {
+        $("#get-voucher").prop("disabled", true);
+        $("#get-voucher").css("background-color", "#9CA3AF");
+        $("#get-voucher").css("cursor", "unset");
     } else {
-      $("#get-voucher").prop("disabled", true);
-      $("#get-voucher").css("background-color", "#9CA3AF");
-      $("#get-voucher").css("cursor", "unset");
+        $("#get-voucher").prop("disabled", false);
+        $("#get-voucher").css("background-color", primaryColor);
+        $("#get-voucher").css("cursor", "pointer");
     }
   });
 
@@ -71,41 +96,60 @@ $(document).ready(function () {
     }, 2000);
   }
 
-  $("#login-google").click(function() {
-    const partnerChecked = $(".partner:checked").length;
-    const termConditionChecked = $("#check-term-condition:checked").length;
-
-    if (partnerChecked == 0) {
-      showAlert("Harap pilih Lokasi Penukaran Voucher!")
-    } else if (termConditionChecked == 0) {
-      showAlert("Harap ceklis Terms & Conditions!")
-    } else {
-        const partner = $(".partner:checked").val();
-        const separator = $(this).data("url").indexOf('?') !== -1 ? '&' : '?';
-        const urlLoginGoogle = $(this).data("url") + separator + 'partner=' + partner;
-
-        if (inapp.isInApp() && getOS() === 'Android') {
-            window.location = `intent:${urlLoginGoogle}#Intent;end`;
-        }else if(inapp.isInApp() && getOS() === 'iOS'){
-            window.open(urlLoginGoogle, "_blank");
+  $("#get-voucher").click(function() {
+    const brand = $(this).data("brand");
+    if (brand.toUpperCase() == 'MILO' || brand.toUpperCase() == 'BEARBRAND') {
+        if ($("input[name='name_form']").val() == '') {
+          showAlert("Harap isi Nama Anda!")
+        } else if ($("input[name='phone_number_form']").val() == '') {
+          showAlert("Harap isi Nomor Handphone Anda!")
         } else {
-            window.location.href = urlLoginGoogle;
+          $("#get-voucher").submit();
         }
     }
   });
 
-  $("#form-send-otp").submit(function(e) {
-    e.preventDefault();
-
+  $("#login-google").click(function() {
     const partnerChecked = $(".partner:checked").length;
-    const termConditionChecked = $("#check-term-condition:checked").length;
+    const termConditionNotChecked = $(".check-term-condition:not(:checked)").length;
+    const brand = $(this).data("brand");
 
     if (partnerChecked == 0) {
       showAlert("Harap pilih Lokasi Penukaran Voucher!")
-    } else if (termConditionChecked == 0) {
-      showAlert("Harap ceklis Terms & Conditions!")
+    } else if (termConditionNotChecked > 0) {
+      showAlert("Harap ceklis semua Terms & Conditions!")
     } else {
-      e.currentTarget.submit();
+      const partner = $(".partner:checked").val();
+      const separator = $(this).data("url").indexOf('?') !== -1 ? '&' : '?';
+      const urlLoginGoogle = $(this).data("url") + separator + 'partner=' + partner;
+
+      if (inapp.isInApp() && getOS() === 'Android') {
+        const action = `intent:${urlLoginGoogle}#Intent;end`;
+        $("#form-get-voucher").attr("action", action);
+      } else if(inapp.isInApp() && getOS() === 'iOS'){
+        const action = urlLoginGoogle;
+        $("#form-get-voucher").attr("action", action);
+      } else {
+        const action = urlLoginGoogle;
+        $("#form-get-voucher").attr("action", action);
+      }
+
+      $("#form-get-voucher").submit();
+    }
+  });
+
+  $("#send-otp, #get-voucher").click(function() {
+    const partnerChecked = $(".partner:checked").length;
+    const termConditionNotChecked = $(".check-term-condition:not(:checked)").length;
+
+    if (partnerChecked == 0) {
+      showAlert("Harap pilih Lokasi Penukaran Voucher!")
+    } else if (termConditionNotChecked > 0) {
+      showAlert("Harap ceklis semua Terms & Conditions!")
+    } else {
+      const urlSendOtp = $(this).data("url");
+      $("#form-get-voucher").attr("action", urlSendOtp);
+      $("#form-get-voucher").submit();
     }
   });
 });

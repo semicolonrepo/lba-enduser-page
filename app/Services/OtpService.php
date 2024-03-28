@@ -175,10 +175,12 @@ class OtpService
                 'uuid' => Str::uuid(),
                 'one_time_password_id' => $otp->id,
                 'phone_number' => $phoneNumber,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
 
             $authWAUuid = DB::table('auth_wa')->where('id', $authWAId)->value('uuid');
-            Session::put('customer_user_wa', $authWAUuid, 60);
+            Session::put('customer_user_wa', $authWAUuid);
 
             return true;
         }

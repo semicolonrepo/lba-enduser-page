@@ -23,15 +23,9 @@ class GetVoucherAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $partnerId = $request->input('partner');
         $brand = $request->route('brand');
         $campaign =  $request->route('campaign');
         $productId =  $request->route('productId');
-
-        if ($partnerId) {
-            session(['partner_id' => $partnerId]);
-        }
-
         $utmSource = $request->query('utm_source');
 
         $validateAuth = $this->voucherService->validateAuth($brand, $campaign);

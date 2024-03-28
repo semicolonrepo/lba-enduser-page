@@ -13,14 +13,23 @@
             $utmSource = isset($urlParams['utm_source']) ? $urlParams['utm_source'] : null;
             $urlParams['brand'] = $brand;
             $urlParams['campaign'] = $campaign;
-            $urlParams['productId'] = $productId;
+
+            if (isset($productId)) {
+                $urlParams['productId'] = $productId;
+                $routeName = 'otp::send::direct';
+            }
+
+            if (isset($voucherCode)) {
+                $urlParams['voucherCode'] = $voucherCode;
+                $routeName = 'otp::send::rating';
+            }
 
             // Include utm_source in the URL parameters if present
             if ($utmSource !== null) {
                 $urlParams['utm_source'] = $utmSource;
             }
 
-            $urlOtpSend = route('otp::send', $urlParams);
+            $urlOtpSend = route($routeName, $urlParams);
           @endphp
 
           <form action="{{ $urlOtpSend }}" method="post">
