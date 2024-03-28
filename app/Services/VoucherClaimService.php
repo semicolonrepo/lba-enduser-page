@@ -8,6 +8,16 @@ use App\Notifications\ClaimVoucher;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\AnonymousNotifiable;
 
+class AuthData {
+    public $email;
+    public $phone_number;
+
+    public function __construct($email = null, $phoneNumber = null) {
+        $this->email = $email;
+        $this->phone_number = $phoneNumber;
+    }
+}
+
 class VoucherClaimService
 {
     protected $findVoucherSql;
@@ -18,8 +28,8 @@ class VoucherClaimService
         private CampaignProductService $campaignProductService,
     ) {}
 
-    public function run($campaignId, $productId) {
-        $validate = $this->validate($campaignId, $productId);
+    public function run($campaignId, $productId, $transaction_number=NULL) {
+        $validate = $this->validate($campaignId, $productId, $transaction_number);
 
         if (!$validate['status']) {
             return [
@@ -43,8 +53,14 @@ class VoucherClaimService
         DB::transaction(function () use ($vouchers, $campaignId, $productId) {
             $isCampaignAuthByGmail = $this->campaignService->getCampaignAuths($campaignId, 'GMAIL')->first();
             $isCampaignAuthByWA = $this->campaignService->getCampaignAuths($campaignId, 'WHATSAPP')->first();
-            $sessionWA = $this->getAuthSession('customer_user_wa');
-            $sessionGmail = $this->getAuthSession('customer_user_gmail');
+
+            if($transaction_number != NULL) {
+                $sessionWA = DB::table('voucher_transaction')->where('transaction_number', $transaction_number)->first()->customer_phone;
+                $sessionGmail = DB::table('voucher_transaction')->where('transaction_number', $transaction_number)->first()->customer_email;
+            }else {
+                $sessionWA = $this->getAuthSession('customer_user_wa')->phone_number;
+                $sessionGmail = $this->getAuthSession('customer_user_gmail')->email;
+            }
 
             $formCampaignProduct = $this->campaignProductService->getFormSettingArray($campaignId, $productId) ?? [];
             $formCampaignProductJson = $this->campaignProductService->sanitizeFormJson($formCampaignProduct, session('voucher_claim_request_session'));
@@ -54,8 +70,8 @@ class VoucherClaimService
                 DB::table('voucher_generates')->where('voucher_generates.code', $voucher->code)
                 ->update([
                     "product_id" => $productId,
-                    "email" => ($isCampaignAuthByGmail) ? $sessionGmail->email : null,
-                    "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
+                    "email" => ($isCampaignAuthByGmail) ? $sessionGmail : null,
+                    "phone_number" =>($isCampaignAuthByWA) ? $sessionWA : null,
                     "claim_date" => date('Y-m-d H:i:s'),
                     "ip_address" => request()->ip(),
                     "campaign_product_form_json" => $formCampaignProductJson,
@@ -82,7 +98,7 @@ class VoucherClaimService
         Notification::send($notifiable, new ClaimVoucher($voucher));
     }
 
-    protected function validate($campaignId, $productId) {
+    protected function validate($campaignId, $productId, $transaction_number) {
         $this->startQuery();
 
         if (!$this->validateLimitIpAddress($campaignId)) {
@@ -216,20 +232,20 @@ class VoucherClaimService
     protected function validateLimitUsage($campaignId) {
         $sessionWA = $this->getAuthSession('customer_user_wa');
         $sessionGmail = $this->getAuthSession('customer_user_gmail');
-
+        
         $arrayVoucherUsedBinding = [];
         $countVouvherUsedRaw = "SELECT COUNT(*) FROM voucher_generates as subquery WHERE subquery.voucher_id = vouchers.id AND (1!=1";
 
         $isCampaignAuthByGmail = $this->campaignService->getCampaignAuths($campaignId, 'GMAIL')->first();
         if ($isCampaignAuthByGmail) {
             $countVouvherUsedRaw .= " OR subquery.email = ?";
-            $arrayVoucherUsedBinding[] = $sessionGmail->email;
+            $arrayVoucherUsedBinding[] = $sessionGmail;
         }
 
         $isCampaignAuthByWA = $this->campaignService->getCampaignAuths($campaignId, 'WHATSAPP')->first();
         if ($isCampaignAuthByWA) {
             $countVouvherUsedRaw .= " OR subquery.phone_number = ?";
-            $arrayVoucherUsedBinding[] = $sessionWA->phone_number;
+            $arrayVoucherUsedBinding[] = $sessionWA;
         }
 
         $isValid = $this->findVoucherSql
@@ -297,9 +313,16 @@ class VoucherClaimService
     }
 
     protected function getAuthSession($sessionKey) {
-        return DB::table('auth_' . Str::afterLast($sessionKey, '_'))
+        $prefix = Str::afterLast($sessionKey, '_');
+        $auth = DB::table('auth_' . $prefix)
             ->where('uuid', session($sessionKey))
             ->first();
+
+            if ($prefix == 'email') {
+                return new AuthData($auth ? $auth->email : null);
+            } else {
+                return new AuthData(null, $auth ? $auth->phone_number : null);
+            }
     }
 
     protected function getTotalLimitVoucherClaim($campaignId) {

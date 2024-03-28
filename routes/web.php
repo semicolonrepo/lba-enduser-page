@@ -51,6 +51,9 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     );
     Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
 
+    Route::post('/product/{productId}/voucher/pay', [VoucherController::class, 'pay'])->name('voucher::pay');
+    Route::get('/product/{productId}/voucher/pay', [VoucherController::class, 'pay'])->name('voucher::pay');
+
     Route::get('/rating/{voucherCode}', [RatingController::class, 'show'])->name('rating::show')->middleware(
         'activity.log',
         'rating.auth',
