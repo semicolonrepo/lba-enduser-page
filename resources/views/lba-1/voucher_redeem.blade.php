@@ -12,6 +12,12 @@ require_once base_path('vendor/autoload.php');
 use Hbgl\Barcode\Code128Encoder;
 
 $thankpage = json_decode($data->template_thankyou_json, true);
+
+if ($vouchers->first()->provider_name == 'Indomaret') {
+  $voucherText = 'i-Kupon';
+} else {
+  $voucherText = 'voucher';
+}
 ?>
 
 <div class="product-content-header-area border-bottom--thick space-pb--25 space-pt--70">
@@ -27,7 +33,7 @@ $thankpage = json_decode($data->template_thankyou_json, true);
         </p>
 
         <h3 class="text-center space-mb--5">Congratulation!</h3>
-        <h5 class="text-center lh-base">Kamu berhasil mendapatkan voucher <br> {{ $vouchers->first()->product_name }}</h5>
+        <h5 class="text-center lh-base">Kamu berhasil mendapatkan <br> {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
       </div>
     </div>
   </div>
@@ -61,11 +67,11 @@ $thankpage = json_decode($data->template_thankyou_json, true);
     <div class="row">
       <div class="col-12">
         <p class="text-center space-mt--30 space-mb--15" style="font-size: 16px;">
-          Voucher <b>berlaku hingga {{ date('d M Y', strtotime($vouchers->first()->expires_at)) }}</b> dan dapat digunakan di <b>{{ $vouchers->first()->provider_name }} terdekat</b>.
+          {{ $voucherText == 'voucher' ? Str::ucfirst($voucherText) : $voucherText }} <b>berlaku hingga {{ date('d M Y', strtotime($vouchers->first()->expires_at)) }}</b> dan dapat digunakan di <b>{{ $vouchers->first()->provider_name }} terdekat</b>.
         </p>
 
         <p class="text-center space-mb--5" style="font-size: 16px;">
-          Kami juga telah mengirimkan kode voucher beserta <b>cara pemakaian nya</b> melalui @if($vouchers->first()->email) <b>{{$vouchers->first()->email}}</b> @endif @if($vouchers->first()->email && $vouchers->first()->phone_number) dan @endif @if($vouchers->first()->phone_number) <b>{{$vouchers->first()->phone_number}}</b> nomor @endif kamu ya.
+          Kami juga telah mengirimkan {{ $voucherText }} beserta <b>cara pemakaian nya</b> melalui @if($vouchers->first()->email) <b>{{$vouchers->first()->email}}</b> @endif @if($vouchers->first()->email && $vouchers->first()->phone_number) dan @endif @if($vouchers->first()->phone_number) <b>{{$vouchers->first()->phone_number}}</b> nomor @endif kamu ya.
         </p>
 
         @if($thankpage != null)

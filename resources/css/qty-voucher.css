@@ -28,7 +28,7 @@
   border-bottom-right-radius: 6px;
 }
 
-#quantity {
+#claim-qty {
   width: 125px;
   text-align: center;
   border: 1px solid #4e4e4e;
@@ -36,6 +36,6 @@
   border-right: 0;
 }
 
-#decrement.lba-1, #increment.lba-1 {
+#decrement.lba-1, #increment.lba-1, #claim-qty.lba-1 {
   border-radius: 0 !important;
 }

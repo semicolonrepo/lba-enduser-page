@@ -45,7 +45,7 @@
               <p class="text-center mt-4 mb-2">Jumlah Voucher</p>
               <div class="d-flex justify-content-center">
                 <button type="button" id="decrement">-</button>
-                <input type="text" max="{{ $product->limit_claim }}" name="claim_qty" id="quantity" readonly>
+                <input type="text" max="{{ $product->limit_claim }}" name="claim_qty" id="claim-qty" readonly>
                 <button type="button" id="increment">+</button>
               </div>
             </div>

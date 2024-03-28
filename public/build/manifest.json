@@ -15,7 +15,7 @@
     "src": "resources/css/lba-2/custom.css"
   },
   "resources/css/qty-voucher.css": {
-    "file": "assets/qty-voucher-6bee38eb.css",
+    "file": "assets/qty-voucher-47126f3e.css",
     "isEntry": true,
     "src": "resources/css/qty-voucher.css"
   },
@@ -40,7 +40,7 @@
     "src": "resources/js/lba-2/product.js"
   },
   "resources/js/qty-voucher.js": {
-    "file": "assets/qty-voucher-192b388d.js",
+    "file": "assets/qty-voucher-f8143562.js",
     "isEntry": true,
     "src": "resources/js/qty-voucher.js"
   },

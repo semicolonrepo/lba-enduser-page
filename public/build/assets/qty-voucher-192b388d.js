@@ -1,1 +1,0 @@
-$(document).ready(function(){let t=1,n=$("#quantity").attr("max");$("#quantity").val(t),$("#increment").click(function(){t<n&&(t++,$("#quantity").val(t))}),$("#decrement").click(function(){t>1&&(t--,$("#quantity").val(t))})});

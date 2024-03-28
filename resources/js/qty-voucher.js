@@ -1,19 +1,25 @@
 $(document).ready(function(){
   let number = 1;
-  let max = $('#quantity').attr('max');
-  $('#quantity').val(number);
+  let max = $('#claim-qty').attr('max');
+  $('#claim-qty').val(number);
 
   $('#increment').click(function(){
     if(number < max) {
       number++;
-      $('#quantity').val(number);
+      $('#claim-qty').val(number);
     }
   });
 
   $('#decrement').click(function(){
     if(number > 1) {
       number--;
-      $('#quantity').val(number);
+      $('#claim-qty').val(number);
     }
   });
+
+  if (max == 1) {
+    $('#increment, #decrement').css('display', 'none');
+    $('#claim-qty').css('border', '1px solid #4e4e4e');
+    $('#claim-qty').css('border-radius', '6px');
+  }
 });
