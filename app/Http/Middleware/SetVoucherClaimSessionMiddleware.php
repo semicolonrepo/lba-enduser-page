@@ -25,6 +25,7 @@ class SetVoucherClaimSessionMiddleware
         $voucherClaimRequestSession = session('voucher_claim_request_session');
 
         session(['partner_id' => $voucherClaimRequestSession['partner']]);
+        session(['claim_qty' => $voucherClaimRequestSession['claim_qty']]);
 
         if(isset($voucherClaimRequestSession['utm_source'])) {
             session(['utm_source_session' => $voucherClaimRequestSession['utm_source']]);

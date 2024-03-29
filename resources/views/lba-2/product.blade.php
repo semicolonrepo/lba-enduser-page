@@ -1,5 +1,9 @@
 @extends('lba-2.master')
 
+@section('css')
+  @vite('resources/css/qty-voucher.css')
+@endsection
+
 @section('content')
 
 <!--====================  product image  ====================-->
@@ -20,109 +24,115 @@
   </div>
 </div>
 
-<!--====================  product content ====================-->
-<div style="margin-top:-100px" class="product-content-header-area space-pt--100 space-pb--25">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="product-content-header justify-content-center">
-          <div class="product-content-header__main-info">
-            <h3 class="title text-center fw-bold" style="font-size: 24px">
-              @if($product->normal_price == 0)
-                GRATIS
-              @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
-                <p>{{ formatCurrency($product->normal_price) }}</p>
-              @else
-                <p>SEKARANG HANYA <span class="d-inline-block">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</span></p>
+<form method="POST" id="form-get-voucher">
+  @csrf
+  <!--====================  product content ====================-->
+  <div style="margin-top:-100px" class="product-content-header-area space-pt--100 space-pb--25">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="product-content-header justify-content-center">
+            <div class="product-content-header__main-info">
+              <h3 class="title text-center fw-bold" style="font-size: 24px">
+                @if($product->normal_price == 0)
+                  GRATIS
+                @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
+                  <p>{{ formatCurrency($product->normal_price) }}</p>
+                @else
+                  <p>SEKARANG HANYA <span class="d-inline-block">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</span></p>
+                @endif
+              </h3>
+              <p class="text-center mt-4 mb-2">Jumlah Voucher</p>
+              <div class="d-flex justify-content-center">
+                <button type="button" id="decrement">-</button>
+                <input type="text" max="{{ $product->limit_claim }}" name="claim_qty" id="claim-qty" readonly>
+                <button type="button" id="increment">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- product content description -->
+  @if ($product->description)
+  <div class="product-content-description space-pb--25 pt-3">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-10">
+          <p class="section-title fw-bold m-0">Tentang Produk:</p>
+          <p class="section-title space-mb--25 lh-sm" style="font-size: 16px">
+            {!! $product->description !!}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  @endif
+
+  <div class="accordion accordion-flush">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="term-condition">
+        <button class="accordion-button accordion-lba-2 collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panel-term-condition" aria-expanded="false" aria-controls="panel-term-condition">
+          Syarat dan Ketentuan
+        </button>
+      </h2>
+      <div id="panel-term-condition" class="accordion-collapse collapse" aria-labelledby="term-condition">
+        <div class="accordion-body campaign-term-condition">
+          {!! $data->campaign_detail !!}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+        <button class="accordion-button accordion-lba-2 collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+          Lokasi Merchant
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+        <div class="accordion-body">
+          <ul>
+          @forelse ($merchantCities as $merchantCity)
+            <li>{{ $merchantCity->name }}</li>
+          @empty
+            -
+          @endforelse
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grand-total space-pb--15" style="border-radius: 0 0 12px 12px">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="total-shipping pb-0">
+            <h3 class="section-title fw-bold text-center mb-1">Pilih Lokasi Penukaran Voucher</h3>
+            <h6 class="text-center mb-3">Klik pada logo merchant</h6>
+            <div class="row" id="list-partner" style="row-gap: 16px">
+              @foreach ($retailer as $retailPartner)
+              <div class="col-6">
+                <label for="{{ $retailPartner->id }}" class="select-partner" data-partner-checked="{{ session('partner') == $retailPartner->id ? 'true' : 'false' }}">
+                  <img src="{{ env('BASE_URL_DASHBOARD').'/assets/provider/images/'.$retailPartner->photo }}" height="45px">
+                  <input type="radio" name="partner" class="d-none partner" value="{{ $retailPartner->id }}" id="{{ $retailPartner->id }}" {{ session('partner') == $retailPartner->id ? 'checked' : '' }}>
+                </label>
+              </div>
+              @endforeach
+              @if($internal->isNotEmpty())
+              <div class="col-6">
+                <label for="internal" class="select-partner" data-partner-checked="{{ session('partner') == 'internal' ? 'true' : 'false' }}">
+                  <p class="m-0 internal-partner">Merchant Partner Kami</p>
+                  <input type="radio" name="partner" class="d-none partner" value="internal" id="internal" {{ session('partner') == 'internal' ? 'checked' : '' }}>
+                </label>
+              </div>
               @endif
-            </h3>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- product content description -->
-@if ($product->description)
-<div class="product-content-description space-pb--25 pt-3">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-10">
-        <p class="section-title fw-bold m-0">Tentang Produk:</p>
-        <p class="section-title space-mb--25 lh-sm" style="font-size: 16px">
-          {!! $product->description !!}
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-@endif
-
-<div class="accordion accordion-flush">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="term-condition">
-      <button class="accordion-button accordion-lba-2 collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panel-term-condition" aria-expanded="false" aria-controls="panel-term-condition">
-        Syarat dan Ketentuan
-      </button>
-    </h2>
-    <div id="panel-term-condition" class="accordion-collapse collapse" aria-labelledby="term-condition">
-      <div class="accordion-body campaign-term-condition">
-        {!! $data->campaign_detail !!}
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-      <button class="accordion-button accordion-lba-2 collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-        Lokasi Merchant
-      </button>
-    </h2>
-    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-      <div class="accordion-body">
-        <ul>
-        @forelse ($merchantCities as $merchantCity)
-          <li>{{ $merchantCity->name }}</li>
-        @empty
-          -
-        @endforelse
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="grand-total space-pb--15" style="border-radius: 0 0 12px 12px">
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="total-shipping pb-0">
-          <h3 class="section-title fw-bold text-center mb-1">Pilih Lokasi Penukaran Voucher</h3>
-          <h6 class="text-center mb-3">Klik pada logo merchant</h6>
-          <div class="row" id="list-partner" style="row-gap: 16px">
-            @foreach ($retailer as $retailPartner)
-            <div class="col-6">
-              <label for="{{ $retailPartner->id }}" class="select-partner" data-partner-checked="{{ session('partner') == $retailPartner->id ? 'true' : 'false' }}">
-                <img src="{{ env('BASE_URL_DASHBOARD').'/assets/provider/images/'.$retailPartner->photo }}" height="45px">
-                <input type="radio" name="partner" class="d-none partner" value="{{ $retailPartner->id }}" id="{{ $retailPartner->id }}" {{ session('partner') == $retailPartner->id ? 'checked' : '' }}>
-              </label>
-            </div>
-            @endforeach
-            @if($internal->isNotEmpty())
-            <div class="col-6">
-              <label for="internal" class="select-partner" data-partner-checked="{{ session('partner') == 'internal' ? 'true' : 'false' }}">
-                <p class="m-0 internal-partner">Merchant Partner Kami</p>
-                <input type="radio" name="partner" class="d-none partner" value="internal" id="internal" {{ session('partner') == 'internal' ? 'checked' : '' }}>
-              </label>
-            </div>
-            @endif
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12">
-        <form method="POST" id="form-get-voucher">
-          @csrf
+        <div class="col-12">
           <div class="alert alert-danger m-0 mt-2 d-none" role="alert" id="alert"></div>
           <div class="total-shipping pb-2 pt-0">
             @if ($product->questionares_json != null)
@@ -137,7 +147,8 @@
                 <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-1" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
                 <label class="form-check-label" for="check-term-condition-1">
                   Saya berusia lebih dari 18 tahun. Saya menyetujui
-                  <a href="https://bearbrand.co.id/term-condition" class="term-condition-link link-primary" target="_blank">Syarat dan Ketentuan</a>
+                  <a href="{{ strtoupper($brand) === 'MILO' ? 'https://www.milo.co.id/terms-and-conditions' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'https://www.bearbrand.co.id/term-condition' : '' }}"
+                    class="term-condition-link link-primary" target="_blank">Syarat dan Ketentuan</a>
                   yang berlaku.*
                 </label>
               </div>
@@ -145,14 +156,18 @@
                 <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-2" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
                 <label class="form-check-label" for="check-term-condition-2">
                   Saya memberikan persetujuan kepada PT Nestlé Indonesia dan afiliasinya ("Nestlé") untuk memproses data pribadi saya dengan mengacu pada 
-                  <a href="https://www.bearbrand.co.id/privacy-policy" class="term-condition-link link-primary" target="_blank">Kebijakan Kerahasiaan</a> 
-                  BEAR BRAND, saya dapat menarik persetujuan saya kapan saja.*
+                  <a href="{{ strtoupper($brand) === 'MILO' ? 'https://www.milo.co.id/privacy-policy' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'https://www.bearbrand.co.id/privacy-policy' : '' }}" 
+                    class="term-condition-link link-primary" target="_blank">Kebijakan Kerahasiaan</a>
+                  {{ strtoupper($brand) === 'MILO' ? 'MILO' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'BEAR BRAND' : '' }}
+                  , saya dapat menarik persetujuan saya kapan saja.*
                 </label>
               </div>
               <div class="form-check mb-4">
                 <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-3" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
                 <label class="form-check-label" for="check-term-condition-3">
-                  Saya bersedia menerima segala informasi mengenai materi promosi, penawaran, dan diskon dari BEAR BRAND serta segala bentuk komunikasi lainnya dari Nestlé dan produknya melalui: Buletin dan email, SMS, nomor telepon.*
+                  Saya bersedia menerima segala informasi mengenai materi promosi, penawaran, dan diskon dari 
+                  {{ strtoupper($brand) === 'MILO' ? 'MILO' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'BEAR BRAND' : '' }}
+                  serta segala bentuk komunikasi lainnya dari Nestlé dan produknya melalui: Buletin dan email, SMS, nomor telepon.*
                 </label>
               </div>
             @else
@@ -253,12 +268,12 @@
               </div>
             @endif
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<!--====================  End of product content  ====================-->
+  <!--====================  End of product content  ====================-->
+</form>
 
 <div class="category-slider-area space-pb--25 ">
   <div class="container">
@@ -278,5 +293,5 @@
 
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.0/autoNumeric.min.js" integrity="sha512-IBnOW5h97x4+Qk4l3EcqmRTFKTgXTd4HGiY3C/GJKT5iJeJci9dgsFw4UAoVfi296E01zoDNb3AZsFrvcJJvPA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-@vite('resources/js/lba-2/product.js')
+@vite(['resources/js/lba-2/product.js', 'resources/css/qty-voucher.css', 'resources/js/qty-voucher.js'])
 @endsection
