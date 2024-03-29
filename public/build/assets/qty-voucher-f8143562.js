@@ -1,0 +1,1 @@
+$(document).ready(function(){let c=1,e=$("#claim-qty").attr("max");$("#claim-qty").val(c),$("#increment").click(function(){c<e&&(c++,$("#claim-qty").val(c))}),$("#decrement").click(function(){c>1&&(c--,$("#claim-qty").val(c))}),e==1&&($("#increment, #decrement").css("display","none"),$("#claim-qty").css("border","1px solid #4e4e4e"),$("#claim-qty").css("border-radius","6px"))});

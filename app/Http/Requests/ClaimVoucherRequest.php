@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\LimitClaimCampaignProductRule;
 use App\Services\CampaignProductService;
 use App\Services\CampaignService;
 use Illuminate\Foundation\Http\FormRequest;
@@ -9,6 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class ClaimVoucherRequest extends FormRequest
 {
     protected $campaignProductForms;
+    protected $campaignId;
 
     public function __construct(
         private CampaignService $campaignService,
@@ -29,6 +31,7 @@ class ClaimVoucherRequest extends FormRequest
     protected function prepareForValidation()
     {
         $campaignData = $this->campaignService->getCampaign($this->route('brand'), $this->route('campaign'));
+        $this->campaignId = $campaignData->id;
         $this->campaignProductForms = $this->campaignProductService->getFormSettingArray($campaignData->id, $this->route('productId')) ?? [];
     }
 
@@ -42,6 +45,11 @@ class ClaimVoucherRequest extends FormRequest
         $arrayRules = [];
         $arrayRules['partner'] = 'required|string';
         $arrayRules['utm_source'] = 'nullable|string';
+        $arrayRules['claim_qty'] = [
+            'required',
+            'integer',
+            new LimitClaimCampaignProductRule($this->campaignId, $this->route('productId'))
+        ];
 
         foreach ($this->campaignProductForms as $key => $form) {
             if ($form->type === 'checkbox-group') {
