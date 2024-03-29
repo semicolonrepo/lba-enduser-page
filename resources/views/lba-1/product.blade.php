@@ -109,25 +109,58 @@
               </div>
               @endif
             </div>
-          </div>
-        </div>
-        @if ($product->questionares_json != null)
-        <div class="col-12">
-          <h3 class="section-title fw-bold text-center mb-3">Isi data dan dapatkan vouchernya</h3>
-          @foreach (json_decode($product->questionares_json) as $formBuilder)
-            @include('show_form_builder')
-          @endforeach
-        </div>
-        @endif
-        <div class="col12">
-          <div class="form-check pb-2">
-            <input class="form-check-input" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}">
-            <label class="form-check-label" for="check-term-condition">
-              I have read and agreed to the
-              <a href="{{ route('term-condition') }}/{{(strtoupper($brand) === 'MILO') ? 'milo' : '' }}{{(strtoupper($brand) === 'BEARBRAND') ? 'bear-brand' : '' }}" class="term-condition-link link-primary" target="_blank">
-                Terms and Conditions
-              </a>
-            </label>
+            @if ($product->questionares_json != null)
+            <div class="col-12">
+                <h3 class="section-title fw-bold text-center mb-3">Isi data dan dapatkan vouchernya</h3>
+                <form method="POST" id="questionare-form">
+                    @csrf
+                    @foreach (json_decode($product->questionares_json) as $formBuilder)
+                    @include('show_form_builder')
+                    @endforeach
+                </form>
+            </div>
+            @endif
+            <div class="col12">
+              @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')
+                <div class="form-check">
+                  <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-1" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+                  <label class="form-check-label" for="check-term-condition-1">
+                    Saya berusia lebih dari 18 tahun. Saya menyetujui
+                    <a href="{{ strtoupper($brand) === 'MILO' ? 'https://www.milo.co.id/terms-and-conditions' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'https://www.bearbrand.co.id/term-condition' : '' }}"
+                      class="term-condition-link link-primary" target="_blank">Syarat dan Ketentuan</a>
+                    yang berlaku.*
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-2" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+                  <label class="form-check-label" for="check-term-condition-2">
+                    Saya memberikan persetujuan kepada PT Nestlé Indonesia dan afiliasinya ("Nestlé") untuk memproses data pribadi saya dengan mengacu pada 
+                    <a href="{{ strtoupper($brand) === 'MILO' ? 'https://www.milo.co.id/privacy-policy' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'https://www.bearbrand.co.id/privacy-policy' : '' }}" 
+                      class="term-condition-link link-primary" target="_blank">Kebijakan Kerahasiaan</a>
+                    {{ strtoupper($brand) === 'MILO' ? 'MILO' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'BEAR BRAND' : '' }}
+                    , saya dapat menarik persetujuan saya kapan saja.*
+                  </label>
+                </div>
+                <div class="form-check mb-4">
+                  <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-3" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+                  <label class="form-check-label" for="check-term-condition-3">
+                    Saya bersedia menerima segala informasi mengenai materi promosi, penawaran, dan diskon dari 
+                    {{ strtoupper($brand) === 'MILO' ? 'MILO' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'BEAR BRAND' : '' }}
+                    serta segala bentuk komunikasi lainnya dari Nestlé dan produknya melalui: Buletin dan email, SMS, nomor telepon.*
+                  </label>
+                </div>
+              @else
+                <div class="form-check mb-4">
+                  <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
+                  <label class="form-check-label" for="check-term-condition">
+                    I have read and agreed to the
+                    <a href="{{ route('term-condition') }}/{{(strtoupper($brand) === 'MILO') ? 'milo' : '' }}{{(strtoupper($brand) === 'BEARBRAND') ? 'bear-brand' : '' }}" class="term-condition-link link-primary" target="_blank">
+                      Terms and Conditions
+                    </a>
+                  </label>
+                </div>
+              @endif
+            </div>
           </div>
         </div>
       </div>
