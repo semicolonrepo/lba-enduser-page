@@ -85,7 +85,7 @@ class VoucherClaimService
     protected function validate($campaignId, $productId) {
         $this->startQuery();
 
-        if (!$this->validateLimitIpAddress($campaignId)) {
+        if (!$this->validateLimitationRule($campaignId)) {
             return [
                 'message' => 'Voucher sudah diclaim atau habis!',
                 'status' => false
@@ -146,6 +146,10 @@ class VoucherClaimService
             )
             ->first();
 
+        if (empty($campaign)) {
+            return true;
+        }
+
         $claimedInTime = DB::table('voucher_generates')
             ->join('vouchers', 'vouchers.id', '=', 'voucher_generates.voucher_id')
             ->where('vouchers.campaign_id', $campaignId)
@@ -154,6 +158,52 @@ class VoucherClaimService
             ->count();
 
         if ($campaign->ip_address_limit_voucher && $claimedInTime >= $campaign->ip_address_limit_voucher) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function validateLimitBrowserType($campaignId) {
+        $campaign = DB::table('campaigns')
+            ->where('campaigns.id', $campaignId)
+            ->select(
+                'browser_type_limit_voucher',
+                'browser_type_limit_time',
+            )
+            ->first();
+
+        if (empty($campaign)) {
+            return true;
+        }
+
+        $claimedInTime = DB::table('voucher_generates')
+            ->join('vouchers', 'vouchers.id', '=', 'voucher_generates.voucher_id')
+            ->where('vouchers.campaign_id', $campaignId)
+            ->where('voucher_generates.browser', request()->header('user-agent'))
+            ->where('voucher_generates.claim_date', '>=', now()->subMinutes($campaign->browser_type_limit_time))
+            ->count();
+
+        if ($campaign->browser_type_limit_voucher && $claimedInTime >= $campaign->browser_type_limit_voucher) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function validateLimitationRule($campaignId){
+        $ruleSetting = DB::table('campaigns')
+            ->where('campaigns.id', $campaignId)
+            ->select(
+                'rule_ip_and_browser_limit',
+            )
+            ->first();
+
+        if ($ruleSetting->rule_ip_and_browser_limit === 'OR' && (!$this->validateLimitIpAddress($campaignId) || !$this->validateLimitBrowserType($campaignId))) {
+            return false;
+        }
+
+        if ($ruleSetting->rule_ip_and_browser_limit === 'AND' && (!$this->validateLimitIpAddress($campaignId) && !$this->validateLimitBrowserType($campaignId))) {
             return false;
         }
 
