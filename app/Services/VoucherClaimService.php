@@ -58,6 +58,7 @@ class VoucherClaimService
                     "phone_number" =>($isCampaignAuthByWA) ? $sessionWA->phone_number : null,
                     "claim_date" => date('Y-m-d H:i:s'),
                     "ip_address" => request()->ip(),
+                    "browser" => request()->header('user-agent'),
                     "campaign_product_form_json" => $formCampaignProductJson,
                     "claim_identifier" => $claimIdentifier,
                 ]);
