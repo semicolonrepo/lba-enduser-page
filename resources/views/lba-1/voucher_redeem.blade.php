@@ -1,6 +1,7 @@
 @extends('lba-1.master')
 
 @section('css')
+  <meta name="csrf_token" content="{{ csrf_token() }}" />
   <link rel="stylesheet" href="{{ asset('assets/plugins/swiper-bundle.min.css') }}"/>
   @vite('resources/css/voucher-redeem.css')
 @endsection
@@ -93,7 +94,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
                 $videoId = $query['v'];
               @endphp
               <div class="text-center embed-responsive embed-responsive-1by1 space-mt--20">
-                <iframe style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
+                <iframe id='test' style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item youtube-embed" data-url-activity="{{route('youtube::activity', ['campaignId'=> $data->id])}}" data-video-id="{{$videoId}}" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
               </div>
             @endif
 
@@ -151,6 +152,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
 @endsection
 
 @section('js')
+  <script src="https://cdn.jsdelivr.net/npm/jquery.iframetracker@2.1.0/dist/jquery.iframetracker.min.js"></script>
   <script src="{{ asset('assets/plugins/swiper-bundle.min.js') }}"></script>
   @vite('resources/js/voucher-redeem.js')
 @endsection
