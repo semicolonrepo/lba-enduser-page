@@ -14,6 +14,8 @@ class CampaignYoutubeActivity extends Model
     protected $fillable = [
         'link',
         'campaign_id',
-        'total_click',
+        'product_id',
+        'phone_number',
+        'email',
     ];
 }

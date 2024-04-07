@@ -94,7 +94,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
                 $videoId = $query['v'];
               @endphp
               <div class="text-center embed-responsive embed-responsive-1by1 space-mt--20">
-                <iframe id='test' style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item youtube-embed" data-url-activity="{{route('youtube::activity', ['campaignId'=> $data->id])}}" data-video-id="{{$videoId}}" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
+                <iframe id='test' style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item youtube-embed" data-url-activity="{{route('youtube::activity', ['campaignId'=> $data->id, 'productId' => $productId])}}" data-video-id="{{$videoId}}" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
               </div>
             @endif
 

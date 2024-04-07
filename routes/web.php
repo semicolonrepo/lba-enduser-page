@@ -34,7 +34,7 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->
 Route::get('/term-condition', [TermConditionController::class, 'index'])->name('term-condition');
 Route::get('/term-condition/bear-brand', [TermConditionController::class, 'bearBrand'])->name('term-condition::bear-brand');
 Route::get('/term-condition/milo', [TermConditionController::class, 'milo'])->name('term-condition::milo');
-Route::post('/youtube/activity/{campaignId}', [YoutubeEmbedController::class, 'clicked'])->name('youtube::activity');
+Route::post('/youtube/activity/{campaignId}/{productId}', [YoutubeEmbedController::class, 'clicked'])->name('youtube::activity');
 
 Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(function() {
     Route::get('/', [CampaignController::class, 'index'])->name('index')->middleware('activity.log');
