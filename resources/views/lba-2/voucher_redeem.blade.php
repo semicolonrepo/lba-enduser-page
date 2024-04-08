@@ -129,13 +129,25 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
           </a>
         </div>
         @endif
-        <div class="shop-product-button">
-          <a href="https://t.me/LetsbuyAsia" target="_blank" class="w-100">
-            <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
-              Join Komunitas
-            </button>
-          </a>
-        </div>
+        @if($thankpage != null)
+          @php
+          $thankBlock = $thankpage['blocks'];
+          @endphp
+
+          @foreach ($thankBlock as $block)
+            @if ($block['type'] == 'AnyButton')
+              @if ($block['data']['text'] != '')
+              <div class="shop-product-button">
+                <a href="{{$block['data']['link']}}" target="_blank" class="w-100">
+                    <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
+                    {{$block['data']['text']}}
+                    </button>
+                </a>
+              </div>
+              @endif
+            @endif
+          @endforeach
+        @endif
         {{-- <div class="shop-product-button">
           <a href="#" class="w-100">
             <button class="buy w-100" style="background-color: unset; color: #4e4e4e; border: 1px solid {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
