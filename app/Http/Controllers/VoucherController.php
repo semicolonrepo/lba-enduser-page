@@ -59,6 +59,7 @@ class VoucherController extends Controller
                 'vouchers' => $vouchers,
                 'data' => $campaignData,
                 'brand' => $brand,
+                'productId' => $productId,
                 'campaign' => $campaign,
                 'voucherIdentifier' => $voucherIdentifier,
             ]);
