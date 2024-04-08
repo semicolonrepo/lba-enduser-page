@@ -35,6 +35,19 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
 
         <h3 class="text-center space-mb--5">Selamat!</h3>
         <h5 class="text-center lh-sm">Kamu berhasil mendapatkan {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
+        @if($thankpage != null)
+          @php
+          $thankBlock = $thankpage['blocks'];
+          @endphp
+
+          @foreach ($thankBlock as $block)
+            @if ($block['type'] == 'text_header')
+              @if ($block['data']['text'] != '')
+              <h5 class="text-{{$block['data']['alignment']}} lh-sm mt-1">{!! $block['data']['text'] !!}</h5>
+              @endif
+            @endif
+          @endforeach
+        @endif
       </div>
     </div>
   </div>
