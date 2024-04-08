@@ -39,3 +39,9 @@
 #decrement.lba-1, #increment.lba-1, #claim-qty.lba-1 {
   border-radius: 0 !important;
 }
+
+.greyscale {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    pointer-events: none !important;
+}

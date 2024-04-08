@@ -7,6 +7,7 @@ use App\Models\VouchersModel;
 use App\Services\CampaignService;
 use App\Services\VoucherService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -29,18 +30,27 @@ class ProductController extends Controller
 
             if($productData) {
 
-                $retailPartner = VouchersModel::select('providers.id', 'providers.name', 'providers.photo')
-                    ->join('providers', 'vouchers.provider_id', '=', 'providers.id')
+                $retailPartner = VouchersModel::join('providers', 'vouchers.provider_id', '=', 'providers.id')
+                    ->leftJoin('voucher_generates', function ($join) {
+                        $join->on('voucher_generates.voucher_id', '=', 'vouchers.id')
+                            ->whereNull('voucher_generates.claim_date');
+                    })
                     ->where('vouchers.campaign_id', $campaignData->id)
                     ->where('providers.is_active', true)
                     ->where('vouchers.is_active', true)
-                    ->distinct('providers.name')
+                    ->groupBy('providers.id', 'providers.name', 'providers.photo')
+                    ->select('providers.id', 'providers.name', 'providers.photo', DB::raw('COUNT(voucher_generates.id) as remaining_vouchers'))
                     ->get();
 
-                $retailInternal = VouchersModel::select('providers.id', 'providers.name')
+                $retailInternal = VouchersModel::select('providers.id', 'providers.name', DB::raw('COUNT(voucher_generates.id) as remaining_vouchers'))
                     ->leftJoin('providers', 'vouchers.provider_id', '=', 'providers.id')
+                    ->leftJoin('voucher_generates', function ($join) {
+                        $join->on('voucher_generates.voucher_id', '=', 'vouchers.id')
+                            ->whereNull('voucher_generates.claim_date');
+                    })
                     ->where('vouchers.campaign_id', $campaignData->id)
                     ->whereNull('vouchers.provider_id')
+                    ->groupBy('providers.id', 'providers.name')
                     ->get();
 
                 $merchantCities = VouchersModel::select('indonesia_cities.name')
