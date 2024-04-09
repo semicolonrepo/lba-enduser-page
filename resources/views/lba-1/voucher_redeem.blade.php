@@ -107,6 +107,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
         @endif
       </div>
       <div class="col-12 mt-4 gap-2 d-flex flex-column">
+        @if(!empty(json_decode($data->formbuilder_rating_json)))
         <div class="shop-product-button mb-2">
           <a class="w-100" data-brand="{{ $brand }}" data-campaign="{{ $campaign }}" id="rating-product">
             <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
@@ -114,13 +115,26 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
             </button>
           </a>
         </div>
-        <div class="shop-product-button">
-          <a href="https://t.me/LetsbuyAsia" target="_blank" class="w-100">
-            <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
-              Join Komunitas
-            </button>
-          </a>
-        </div>
+        @endif
+        @if($thankpage != null)
+          @php
+          $thankBlock = $thankpage['blocks'];
+          @endphp
+
+          @foreach ($thankBlock as $block)
+            @if ($block['type'] == 'AnyButton')
+              @if ($block['data']['text'] != '')
+              <div class="shop-product-button">
+                <a href="{{$block['data']['link']}}" target="_blank" class="w-100">
+                    <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
+                    {{$block['data']['text']}}
+                    </button>
+                </a>
+              </div>
+              @endif
+            @endif
+          @endforeach
+        @endif
         {{-- <div class="shop-product-button">
           <a href="#" class="w-100">
             <button class="buy w-100" style="background-color: unset; color: #4e4e4e; border: 1px solid {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">

@@ -45,6 +45,7 @@
                   @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
                     <p class="text-black fw-bold">{{ formatCurrency($product->normal_price) }}</p>
                   @else
+                    <p class="text-black">{{$data->description_product_price_template}}</p>
                     <p style="text-decoration: line-through; color: red; font-size: 19px">{{ formatCurrency($product->normal_price) }}</p>
                     <p class="text-black fw-bold" style="margin-top: -20px;">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</p>
                   @endif
@@ -95,8 +96,8 @@
               @foreach ($retailer as $retailPartner)
               <div class="col-6">
                 <label for="{{ $retailPartner->id }}" class="select-partner">
-                  <img src="{{ env('BASE_URL_DASHBOARD').'/assets/provider/images/'.$retailPartner->photo }}" height="45px">
-                  <input type="radio" name="partner" class="d-none partner" value="{{ $retailPartner->id }}" id="{{ $retailPartner->id }}">
+                  <img src="{{ env('BASE_URL_DASHBOARD').'/assets/provider/images/'.$retailPartner->photo }}" height="45px" class="{{ $retailPartner->remaining_vouchers == 0 ? 'greyscale' : ''}}">
+                  <input {{ $retailPartner->remaining_vouchers == 0 ? 'disabled' : ''}} type="radio" name="partner" class="d-none partner" value="{{ $retailPartner->id }}" id="{{ $retailPartner->id }}">
                 </label>
               </div>
               @endforeach
@@ -104,7 +105,7 @@
               <div class="col-6">
                 <label for="internal" class="select-partner">
                   <p class="m-0 internal-partner">Merchant Partner Kami</p>
-                  <input type="radio" name="partner" class="d-none partner" value="internal" id="internal">
+                  <input {{ $internal->first()->remaining_vouchers == 0 ? 'disabled' : ''}} type="radio" name="partner" class="d-none partner" value="internal" id="internal">
                 </label>
               </div>
               @endif
@@ -134,8 +135,8 @@
                 <div class="form-check">
                   <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-2" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
                   <label class="form-check-label" for="check-term-condition-2">
-                    Saya memberikan persetujuan kepada PT Nestlé Indonesia dan afiliasinya ("Nestlé") untuk memproses data pribadi saya dengan mengacu pada 
-                    <a href="{{ strtoupper($brand) === 'MILO' ? 'https://www.milo.co.id/privacy-policy' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'https://www.bearbrand.co.id/privacy-policy' : '' }}" 
+                    Saya memberikan persetujuan kepada PT Nestlé Indonesia dan afiliasinya ("Nestlé") untuk memproses data pribadi saya dengan mengacu pada
+                    <a href="{{ strtoupper($brand) === 'MILO' ? 'https://www.milo.co.id/privacy-policy' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'https://www.bearbrand.co.id/privacy-policy' : '' }}"
                       class="term-condition-link link-primary" target="_blank">Kebijakan Kerahasiaan</a>
                     {{ strtoupper($brand) === 'MILO' ? 'MILO' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'BEAR BRAND' : '' }}
                     , saya dapat menarik persetujuan saya kapan saja.*
@@ -144,7 +145,7 @@
                 <div class="form-check mb-4">
                   <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-3" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
                   <label class="form-check-label" for="check-term-condition-3">
-                    Saya bersedia menerima segala informasi mengenai materi promosi, penawaran, dan diskon dari 
+                    Saya bersedia menerima segala informasi mengenai materi promosi, penawaran, dan diskon dari
                     {{ strtoupper($brand) === 'MILO' ? 'MILO' : '' }}{{ strtoupper($brand) === 'BEARBRAND' ? 'BEAR BRAND' : '' }}
                     serta segala bentuk komunikasi lainnya dari Nestlé dan produknya melalui: Buletin dan email, SMS, nomor telepon.*
                   </label>
@@ -172,7 +173,7 @@
 <!-- <a href="#" class="w-100"> -->
   <div class="shop-product-button">
     <!-- button use primary color -->
-    <button form="form-get-product" id="get-voucher" type="submit" class="buy w-100" disabled 
+    <button form="form-get-product" id="get-voucher" type="submit" class="buy w-100" disabled
       style="background-color: #9CA3AF; cursor: unset">
         Dapatkan Voucher Sekarang
     </button>
