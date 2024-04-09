@@ -39,7 +39,7 @@
                 @elseif($product->normal_price != 0 && $product->subsidi_price == 0)
                   <p>{{ formatCurrency($product->normal_price) }}</p>
                 @else
-                  <p>SEKARANG HANYA <span class="d-inline-block">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</span></p>
+                  <p>{{$data->description_product_price_template}} <span class="d-inline-block">{{ formatCurrency($product->normal_price -  $product->subsidi_price) }}</span></p>
                 @endif
               </h3>
               <p class="text-center mt-4 mb-2">Jumlah Voucher</p>
