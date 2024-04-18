@@ -34,7 +34,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
         </p>
 
         <h3 class="text-center space-mb--5">Selamat!</h3>
-        <h5 class="text-center lh-sm">Kamu berhasil mendapatkan {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
+        <h5 class="text-center lh-sm mb-4">Kamu berhasil mendapatkan {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
         @if($thankpage != null)
           @php
           $thankBlock = $thankpage['blocks'];
