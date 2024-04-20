@@ -26,4 +26,30 @@ $(document).ready(function () {
     const voucherCode = $('.swiper-slide-active').find('.voucher-code').text();
     $('#rating-product').attr('href', urlRating + voucherCode);
   }
+
+    const arrayIdClicked = [];
+    $('iframe').iframeTracker({
+        blurCallback: function(event) {
+            if (!arrayIdClicked.includes(this._overId)) {
+                arrayIdClicked.push(this._overId);
+
+                $.ajax({
+                    url: this.activityUrl,
+                    type: 'POST',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')},
+                    data:  {
+                        'link_video' : this.videoLink
+                    },
+                    success: function(res) {
+
+                    }
+                });
+            }
+		},
+        overCallback: function(element, event) {
+			this._overId = $(element).data('video-id');
+            this.activityUrl = $(element).data('url-activity');
+            this.videoLink = $(element).attr('src');
+		},
+    });
 });

@@ -1,6 +1,7 @@
 @extends('lba-2.master')
 
 @section('css')
+  <meta name="csrf_token" content="{{ csrf_token() }}" />
   <link rel="stylesheet" href="{{ asset('assets/plugins/swiper-bundle.min.css') }}"/>
   @vite('resources/css/voucher-redeem.css')
 @endsection
@@ -33,7 +34,20 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
         </p>
 
         <h3 class="text-center space-mb--5">Selamat!</h3>
-        <h5 class="text-center lh-sm">Kamu berhasil mendapatkan {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
+        <h5 class="text-center lh-sm mb-4">Kamu berhasil mendapatkan {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
+        @if($thankpage != null)
+          @php
+          $thankBlock = $thankpage['blocks'];
+          @endphp
+
+          @foreach ($thankBlock as $block)
+            @if ($block['type'] == 'text_header')
+              @if ($block['data']['text'] != '')
+              <h5 class="text-{{$block['data']['alignment']}} lh-sm mt-1">{!! $block['data']['text'] !!}</h5>
+              @endif
+            @endif
+          @endforeach
+        @endif
       </div>
     </div>
   </div>
@@ -93,7 +107,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
                 $videoId = $query['v'];
               @endphp
               <div class="text-center embed-responsive embed-responsive-1by1 space-mt--20">
-                <iframe style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
+                <iframe id='test' style="width:100%; aspect-ratio: 16/9; border-radius: 8px;" class="embed-responsive-item youtube-embed" data-url-activity="{{route('youtube::activity', ['campaignId'=> $data->id, 'productId' => $productId])}}" data-video-id="{{$videoId}}" src="https://www.youtube.com/embed/{{ $videoId }}" allowfullscreen></iframe>
               </div>
             @endif
 
@@ -115,13 +129,25 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
           </a>
         </div>
         @endif
-        <div class="shop-product-button">
-          <a href="https://t.me/LetsbuyAsia" target="_blank" class="w-100">
-            <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
-              Join Komunitas
-            </button>
-          </a>
-        </div>
+        @if($thankpage != null)
+          @php
+          $thankBlock = $thankpage['blocks'];
+          @endphp
+
+          @foreach ($thankBlock as $block)
+            @if ($block['type'] == 'AnyButton')
+              @if ($block['data']['text'] != '')
+              <div class="shop-product-button">
+                <a href="{{$block['data']['link']}}" target="_blank" class="w-100">
+                    <button class="buy w-100" style="background-color: {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
+                    {{$block['data']['text']}}
+                    </button>
+                </a>
+              </div>
+              @endif
+            @endif
+          @endforeach
+        @endif
         {{-- <div class="shop-product-button">
           <a href="#" class="w-100">
             <button class="buy w-100" style="background-color: unset; color: #4e4e4e; border: 1px solid {{ $data->template_primary_color }}; border-radius: 10px; line-height: 1">
@@ -154,6 +180,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
 
 
 @section('js')
+  <script src="https://cdn.jsdelivr.net/npm/jquery.iframetracker@2.1.0/dist/jquery.iframetracker.min.js"></script>
   <script src="{{ asset('assets/plugins/swiper-bundle.min.js') }}"></script>
   @vite('resources/js/voucher-redeem.js')
 @endsection
