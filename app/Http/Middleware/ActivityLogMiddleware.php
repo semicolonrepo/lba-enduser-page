@@ -29,6 +29,20 @@ class ActivityLogMiddleware
         $authGmail = DB::table('auth_gmail')
         ->where('uuid', session('customer_user_gmail'))->first();
         $campaignData = $this->campaignService->getCampaign($request->route('brand'), $request->route('campaign'));
+        $url = $request->fullUrl();
+
+        $voucherCodes = null;
+        if (strpos($url, 'voucher/view/') !== false) {
+            $position = strpos($url, 'voucher/view/') + strlen('voucher/view/');
+            $voucherIdentifier = substr($url, $position);
+
+            $voucherCodes = DB::table('voucher_generates')
+                ->where('claim_identifier', $voucherIdentifier)
+                ->selectRaw('GROUP_CONCAT(code) as code')
+                ->groupBy('claim_identifier')
+                ->pluck('code')
+                ->first();
+        }
 
         $data = [
             'ip_address' => $request->ip(),
@@ -40,10 +54,11 @@ class ActivityLogMiddleware
             'product_id' => $request->route('productId') ?? null,
             'brand_id' => $campaignData->brand_id,
             'campaign_id' => $campaignData->id,
-            'full_url' => $request->fullUrl(),
+            'full_url' => $url,
             'device_type' => Browser::deviceType(),
             'platform_name' => Browser::platformName(),
             'device_model' => Browser::deviceModel(),
+            'voucher_codes' => $voucherCodes ?? null,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ];
