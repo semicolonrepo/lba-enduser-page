@@ -142,6 +142,8 @@
               @endforeach
             @endif
 
+            <div class="g-recaptcha mb-3" data-sitekey="{{ config('services.google_recaptcha.site_key') }}" data-action="claim-voucher" data-expired-callback="expCallback"></div>
+
             @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')
               <div class="form-check">
                 <input class="form-check-input check-term-condition" type="checkbox" id="check-term-condition-1" data-primary-color="{{ $data->template_primary_color }}" {{ session('termStatus') ? 'checked' : '' }}>
@@ -292,6 +294,12 @@
 @endsection
 
 @section('js')
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/autonumeric/4.10.0/autoNumeric.min.js" integrity="sha512-IBnOW5h97x4+Qk4l3EcqmRTFKTgXTd4HGiY3C/GJKT5iJeJci9dgsFw4UAoVfi296E01zoDNb3AZsFrvcJJvPA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    const expCallback = function() {
+      grecaptcha.reset();
+   };
+</script>
 @vite(['resources/js/lba-2/product.js', 'resources/css/qty-voucher.css', 'resources/js/qty-voucher.js'])
 @endsection

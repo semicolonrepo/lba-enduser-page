@@ -8,6 +8,7 @@ use App\Http\Middleware\RatingAuthMiddleware;
 use App\Http\Middleware\SetVoucherClaimSessionMiddleware;
 use App\Http\Middleware\ValidateCampaignMiddleware;
 use App\Http\Middleware\VerifyCampaignHasRatingMiddleware;
+use App\Http\Middleware\VerifyGoogleRecaptchaMiddleware;
 use App\Http\Middleware\VerifyVoucherClaimedMiddleware;
 use App\Http\Middleware\VerifyVoucherHasRatingMiddleware;
 use App\Http\Middleware\VerifyVoucherPermissionMiddleware;
@@ -82,5 +83,6 @@ class Kernel extends HttpKernel
         'verify.voucher.has.rating' => VerifyVoucherHasRatingMiddleware::class,
         'verify.campaign.has.rating' => VerifyCampaignHasRatingMiddleware::class,
         'set.voucher.claim.session' => SetVoucherClaimSessionMiddleware::class,
+        'verify.google.recaptcha' => VerifyGoogleRecaptchaMiddleware::class,
     ];
 }
