@@ -122,7 +122,9 @@
             </div>
             @endif
 
+            @if($data->enabled_recaptcha)
             <div class="g-recaptcha mb-3" data-sitekey="{{ config('services.google_recaptcha.site_key') }}" data-action="claim-voucher" data-expired-callback="expCallback"></div>
+            @endif
 
             <div class="col12">
               @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')

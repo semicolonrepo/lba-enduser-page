@@ -31,7 +31,8 @@ class CampaignService
                     'campaigns.template_thankyou_json',
                     'campaigns.formbuilder_rating_json',
                     'page_templates.code as page_template_code',
-                    'campaigns.description_product_price_template'
+                    'campaigns.description_product_price_template',
+                    'campaigns.enabled_recaptcha',
                 )
         ->join('page_templates', 'page_templates.id', '=', 'campaigns.page_template_id')
         ->join('brands', 'campaigns.brand_id', '=', 'brands.id')
