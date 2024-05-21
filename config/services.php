@@ -37,4 +37,10 @@ return [
         'redirect' => env('GOOGLE_CLIENT_REDIRECT'),
     ],
 
+    'google_recaptcha' => [
+        'site_key' => env('GOOGLE_RECAPTCHA_SITE_KEY'),
+        'secret_key' => env('GOOGLE_RECAPTCHA_SECRET_KEY'),
+        'verify_url' => env('GOOGLE_RECAPTCHA_VERIFY_URL'),
+    ],
+
 ];
