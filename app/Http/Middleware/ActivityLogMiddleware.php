@@ -34,7 +34,15 @@ class ActivityLogMiddleware
         $voucherCodes = null;
         if (strpos($url, 'voucher/view/') !== false) {
             $position = strpos($url, 'voucher/view/') + strlen('voucher/view/');
-            $voucherIdentifier = substr($url, $position);
+            $restOfUrl = substr($url, $position);
+
+            $endPosition = strpos($restOfUrl, '?');
+
+            if ($endPosition !== false) {
+                $voucherIdentifier = substr($restOfUrl, 0, $endPosition);
+            } else {
+                $voucherIdentifier = $restOfUrl;
+            }
 
             $voucherCodes = DB::table('voucher_generates')
                 ->where('claim_identifier', $voucherIdentifier)
