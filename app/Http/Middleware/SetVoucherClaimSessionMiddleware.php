@@ -28,7 +28,10 @@ class SetVoucherClaimSessionMiddleware
 
         session(['partner_id' => $voucherClaimRequestSession['partner']]);
         session(['claim_qty' => $voucherClaimRequestSession['claim_qty']]);
-        session(['g_recaptcha_response' => $voucherClaimRequestSession['g-recaptcha-response']]);
+
+        if (isset($voucherClaimRequestSession['g-recaptcha-response'])) {
+            session(['g_recaptcha_response' => $voucherClaimRequestSession['g-recaptcha-response']]);
+        }
 
         if(isset($voucherClaimRequestSession['utm_source'])) {
             session(['utm_source_session' => $voucherClaimRequestSession['utm_source']]);
