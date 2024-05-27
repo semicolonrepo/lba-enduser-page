@@ -121,6 +121,11 @@
                 </form>
             </div>
             @endif
+
+            @if($data->enabled_recaptcha)
+            <div class="g-recaptcha mb-3" data-sitekey="{{ config('services.google_recaptcha.site_key') }}" data-action="claim-voucher" data-expired-callback="expCallback"></div>
+            @endif
+
             <div class="col12">
               @if (strtoupper($brand) === 'MILO' || strtoupper($brand) === 'BEARBRAND')
                 <div class="form-check">
@@ -183,5 +188,11 @@
 @endsection
 
 @section('js')
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    const expCallback = function() {
+      grecaptcha.reset();
+   };
+</script>
 @vite(['resources/js/lba-1/product.js', 'resources/css/qty-voucher.css', 'resources/js/qty-voucher.js'])
 @endsection

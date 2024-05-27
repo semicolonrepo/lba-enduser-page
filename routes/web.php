@@ -50,8 +50,12 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
     Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware(
         'set.voucher.claim.session',
         'voucherAuth',
+        'verify.google.recaptcha',
     );
-    Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware('voucherAuth');
+    Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware(
+        'voucherAuth',
+        'verify.google.recaptcha',
+    );
 
     Route::get('/rating/{voucherCode}', [RatingController::class, 'show'])->name('rating::show')->middleware(
         'activity.log',
