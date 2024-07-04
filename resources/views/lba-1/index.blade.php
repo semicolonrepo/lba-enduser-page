@@ -15,7 +15,7 @@
     @if ($block['type'] == 'carousel')
       <div class="hero-slider bg-color--grey space-y--10">
         <div class="container">
-          <div class="row row-10">
+          <div class="row row-10" style="height: 225px">
             <div class="col-12">
               <div class="hero-slider-wrapper">
 
@@ -24,7 +24,7 @@
                   @if ($item['caption'] != null || $item['caption'] != '')
                   <a href="{{ $item['caption'] }}" target="_blank">
                   @endif
-                    <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
+                    <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}"  style="background-position: center; background-size: contain">
                         <!--<div class="container">
                             <div class="row">
                                 <div class="col-12">
@@ -98,10 +98,9 @@
 
                     $urlProduct = route('product::show', $urlParams);
                 @endphp
-                <div class="col-6" style="cursor: pointer;" onclick="window.location.href='{{$urlProduct}}';">
-                  <div class="grid-product space-mb--20">
+                <div class="col-6 space-mb--20" style="cursor: pointer;" onclick="window.location.href='{{$urlProduct}}';">
+                  <div class="grid-product h-100">
                     <div class="grid-product__image">
-
                         <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="">
                       </a>
                     </div>

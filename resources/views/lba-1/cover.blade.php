@@ -20,7 +20,7 @@
               <div class="hero-slider-wrapper" style="height: 100%; margin-left:-12px; margin-right:-12px; margin-bottom:-8px;">
 
                 @foreach ($block['data']['items'] as $item)
-                  <div class="cover-hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
+                  <div class="cover-hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}" style="background-position: center; background-size: contain;">
                       <!--<div class="container">
                           <div class="row">
                               <div class="col-12">
