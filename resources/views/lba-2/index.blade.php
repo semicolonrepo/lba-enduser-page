@@ -29,7 +29,7 @@
       @endif
 
         <div class="container">
-          <div class="row row-10">
+          <div class="row row-10" style="height: 220px">
             <div class="col-12">
               <div class="hero-slider-wrapper" style="margin-left:-12px; margin-right:-12px; margin-bottom:-8px;">
 
@@ -37,7 +37,7 @@
                   @if ($item['caption'] != null || $item['caption'] != '')
                   <a href="{{ $item['caption'] }}" target="_blank">
                   @endif
-                    <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}">
+                    <div class="hero-slider-item d-flex bg-img" data-bg="{{ $item['url'] }}" style="background-position: center; background-size: contain">
                         <!--<div class="container">
                             <div class="row">
                                 <div class="col-12">
@@ -114,10 +114,10 @@
 
                     $urlProduct = route('product::show', $urlParams);
                 @endphp
-                <div class="col-6" style="cursor: pointer;" onclick="window.location.href='{{$urlProduct}}';">
-                  <div class="grid-product space-mb--20" style="border:1px {{$data->template_primary_color}} solid">
+                <div class="col-6 space-mb--20" style="cursor: pointer;" onclick="window.location.href='{{$urlProduct}}';">
+                  <div class="grid-product h-100" style="border:1px {{$data->template_primary_color}} solid">
                     <div class="grid-product__image">
-                        <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="" style="height: 150px">
+                        <img src="{{ env('BASE_URL_DASHBOARD').'/assets/product/images/'.$stock->photo }}" class="img-fluid" alt="">
                       </a>
                     </div>
                     <div class="grid-product__content">
@@ -128,7 +128,7 @@
                           <p>{{$stock->name}}</p>
                       @endif
                         </h3>
-                        <div class="price space-mt--10">
+                      <div class="price space-mt--10">
                         <span class="discounted-price">
                         @if($stock->normal_price == 0)
                             Gratis

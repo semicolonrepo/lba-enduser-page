@@ -34,7 +34,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
         </p>
 
         <h3 class="text-center space-mb--5">Congratulation!</h3>
-        <h5 class="text-center lh-base mb-4">Kamu berhasil mendapatkan <br> {{ $voucherText . ' ' . $vouchers->first()->product_name }}</h5>
+        <h5 class="text-center lh-base mb-4">Kamu berhasil mendapatkan {{ $voucherText }} <br> {{ $vouchers->first()->product_name }}</h5>
         @if($thankpage != null)
           @php
           $thankBlock = $thankpage['blocks'];
@@ -81,7 +81,7 @@ if ($vouchers->first()->provider_name == 'Indomaret') {
     <div class="row">
       <div class="col-12">
         <p class="text-center space-mt--30 space-mb--15" style="font-size: 16px;">
-          {{ $voucherText == 'voucher' ? Str::ucfirst($voucherText) : $voucherText }} <b>berlaku hingga {{ date('d M Y', strtotime($vouchers->first()->expires_at)) }}</b> dan dapat digunakan di <b>{{ $vouchers->first()->provider_name }} terdekat</b>.
+          {{ $voucherText == 'voucher' ? Str::ucfirst($voucherText) : $voucherText }} berlaku hingga <b>{{ date('d M Y', strtotime($vouchers->first()->expires_at)) }}</b> dan dapat digunakan di <b>{{ $vouchers->first()->provider_name }}</b>.
         </p>
 
         <p class="text-center space-mb--5" style="font-size: 16px;">
