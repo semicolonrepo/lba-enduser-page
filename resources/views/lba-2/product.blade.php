@@ -84,6 +84,7 @@
         </div>
       </div>
     </div>
+    @if($merchantCities->isNotEmpty())
     <div class="accordion-item">
       <h2 class="accordion-header" id="panelsStayOpen-headingThree">
         <button class="accordion-button accordion-lba-2 collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
@@ -102,6 +103,7 @@
         </div>
       </div>
     </div>
+    @endif
   </div>
 
   <div class="grand-total space-pb--15" style="border-radius: 0 0 12px 12px">
