@@ -50,6 +50,7 @@ class ProductController extends Controller
                     })
                     ->where('vouchers.campaign_id', $campaignData->id)
                     ->whereNull('vouchers.provider_id')
+                    ->where('vouchers.is_active', true)
                     ->groupBy('providers.id', 'providers.name')
                     ->get();
 
