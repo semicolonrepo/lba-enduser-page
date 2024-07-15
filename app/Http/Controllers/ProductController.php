@@ -58,6 +58,7 @@ class ProductController extends Controller
                     ->join('voucher_term_indonesia_cities', 'voucher_term_indonesia_cities.voucher_id', 'vouchers.id')
                     ->join('indonesia_cities', 'indonesia_cities.id', 'voucher_term_indonesia_cities.indonesia_city_id')
                     ->where('vouchers.campaign_id', $campaignData->id)
+                    ->where('vouchers.is_active', true)
                     ->distinct()
                     ->get();
 
