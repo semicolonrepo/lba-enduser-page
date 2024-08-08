@@ -31,10 +31,12 @@ class ProductController extends Controller
             if($productData) {
 
                 $retailPartner = VouchersModel::join('providers', 'vouchers.provider_id', '=', 'providers.id')
+                    ->join('voucher_term_products', 'voucher_term_products.voucher_id', 'vouchers.id')
                     ->leftJoin('voucher_generates', function ($join) {
                         $join->on('voucher_generates.voucher_id', '=', 'vouchers.id')
                             ->whereNull('voucher_generates.claim_date');
                     })
+                    ->where('voucher_term_products.product_id', $productId)
                     ->where('vouchers.campaign_id', $campaignData->id)
                     ->where('providers.is_active', true)
                     ->where('vouchers.is_active', true)
@@ -43,11 +45,13 @@ class ProductController extends Controller
                     ->get();
 
                 $retailInternal = VouchersModel::select('providers.id', 'providers.name', DB::raw('COUNT(voucher_generates.id) as remaining_vouchers'))
+                    ->join('voucher_term_products', 'voucher_term_products.voucher_id', 'vouchers.id')
                     ->leftJoin('providers', 'vouchers.provider_id', '=', 'providers.id')
                     ->leftJoin('voucher_generates', function ($join) {
                         $join->on('voucher_generates.voucher_id', '=', 'vouchers.id')
                             ->whereNull('voucher_generates.claim_date');
                     })
+                    ->where('voucher_term_products.product_id', $productId)
                     ->where('vouchers.campaign_id', $campaignData->id)
                     ->whereNull('vouchers.provider_id')
                     ->where('vouchers.is_active', true)
