@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use hisorange\BrowserDetect\Parser as Browser;
+use Illuminate\Support\Facades\Log;
 
 class ActivityLogMiddleware
 {
@@ -23,6 +24,7 @@ class ActivityLogMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        Log::info("ActivityLogMiddleware: Starting - {$request->fullUrl()}");
 
         $authWA = DB::table('auth_wa')
         ->where('uuid', session('customer_user_wa'))->first();
@@ -71,8 +73,18 @@ class ActivityLogMiddleware
             'updated_at' => date('Y-m-d H:i:s'),
         ];
 
-        DB::table('activity_logs')
-            ->insert($data);
+        DB::table('activity_logs')->insert($data);
+
+        $queries = DB::getQueryLog();
+        $lastQuery = end($queries);
+
+        if ($lastQuery) {
+            Log::info('ActivityLogMiddleware SQL Query Executed: ', $lastQuery);
+        } else {
+            Log::info('No SQL queries were logged.');
+        }
+
+        DB::disableQueryLog();
 
         return $next($request);
     }

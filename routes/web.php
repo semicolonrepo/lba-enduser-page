@@ -48,11 +48,13 @@ Route::middleware('validate.campaign')->prefix('/{brand}/{campaign}')->group(fun
         'verify.voucher.permission:voucherIdentifier',
     );
     Route::post('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware(
+        'activity.log',
         'set.voucher.claim.session',
         'voucherAuth',
         'verify.google.recaptcha',
     );
     Route::get('/product/{productId}/voucher/claim', [VoucherController::class, 'claim'])->name('voucher::claim')->middleware(
+        'activity.log',
         'voucherAuth',
         'verify.google.recaptcha',
     );
